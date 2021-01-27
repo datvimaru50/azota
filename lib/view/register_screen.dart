@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:azt/view/login_screen.dart';
-import 'package:azt/view/notificationScreenTeacher.dart';
+import 'package:azt/view/notificationScreen.dart';
 
 class RegisterScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -126,7 +126,7 @@ class RegisterScreen extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            NotificationScreenTeacher()),
+                                            NotificationScreen()),
                                   );
                                 }
                               },

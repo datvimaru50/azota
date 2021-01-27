@@ -46,6 +46,23 @@ class Login {
 
   }
 
+
+  static Future<Login> getUserInfo(String token) async {
+
+    final response = await http.Client().get(AZO_AUTH_INFO, headers: {
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.authorizationHeader: "Bearer "+token
+    });
+
+    if(response.statusCode == 200){
+      final user = json.decode(response.body);
+      return Login.fromJson(user);
+    } else {
+      return throw 'Có lỗi xảy ra';
+    }
+
+  }
+
 }
 
 class Data{

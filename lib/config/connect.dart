@@ -5,6 +5,7 @@ const SERVER_NAME = "https://api.tryhsk.com/api";
 
 const AZO_REGISTER = "$AZT_SERVER_NAME/auth/register";
 const AZO_LOGIN = "$AZT_SERVER_NAME/auth/login";
+const AZO_AUTH_INFO = "$AZT_SERVER_NAME/auth/info";
 
 const HKS_REGISTER = "$SERVER_NAME/auth/register";
 const HKS_LOGIN = "$SERVER_NAME/auth/login";

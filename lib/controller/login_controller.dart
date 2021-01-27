@@ -8,7 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:azt/view/notificationScreenTeacher.dart';
+import 'package:azt/view/notificationScreen.dart';
 import 'package:azt/models/authen.dart';
 
 // Login controller, handle different type of logins
@@ -29,16 +29,18 @@ class LoginController extends ControllerMVC {
   static Future<int> loginGetAccessToken(Map<String, dynamic> params) async{
     try{
       var auth = await Login.normalLogin(params);
+      print(auth.toString());
       if(auth.success == 1){
         Prefs.savePrefs(ACCESS_TOKEN, auth.data.rememberToken);
+        print(auth.data.rememberToken);
         return 1;
       } else {
-        return 2;
+        return 0;
       }
 
     } catch (err) {
       return throw Fluttertoast.showToast(
-          msg: err.toString(),
+          msg: 'Sai thông tin đăng nhập!',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,

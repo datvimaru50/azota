@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:azt/view/notification/notificationTeacher.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-class NotificationScreenTeacher extends StatefulWidget {
+class NotificationScreen extends StatefulWidget {
+  NotificationScreen({@required this.topic});
+  final String topic;
+
   @override
-  _NotificationScreenTeacherState createState() => _NotificationScreenTeacherState();
+  _NotificationScreenState createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenTeacherState extends State<NotificationScreenTeacher> {
+class _NotificationScreenState extends State<NotificationScreen> {
   List<Map> notiArray = [];
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
@@ -63,6 +66,10 @@ class _NotificationScreenTeacherState extends State<NotificationScreenTeacher> {
 
     );
 
+    // Subcribe to an Topic: teacher/parent/both
+
+    _firebaseMessaging.subscribeToTopic(widget.topic);
+
     _firebaseMessaging.requestNotificationPermissions(
         const IosNotificationSettings(
             sound: true, badge: true, alert: true, provisional: true));
@@ -71,6 +78,8 @@ class _NotificationScreenTeacherState extends State<NotificationScreenTeacher> {
       assert(token != null);
       print(token);
     });
+
+
   }
 
 }

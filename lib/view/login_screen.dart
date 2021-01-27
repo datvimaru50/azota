@@ -50,7 +50,7 @@ class _LoginFormState extends State<LoginForm> {
    }
    print(loginResult);
    // Wrong username/pass
-   if(loginResult == 2){
+   if(loginResult == 0){
       return Fluttertoast.showToast(
           msg: 'Sai tên đăng nhập hoặc mật khẩu',
           toastLength: Toast.LENGTH_SHORT,
