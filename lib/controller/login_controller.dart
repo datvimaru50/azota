@@ -19,7 +19,8 @@ class LoginController extends ControllerMVC {
   static LoginController get con => _this;
 
   // Normal login with phone number and password
-  static Future<int> loginGetAccessToken(Map<String, dynamic> params) async {
+  // ignore: missing_return
+  static Future loginGetAccessToken(Map<String, dynamic> params) async {
     try {
       var auth = await Login.normalLogin(params);
       print(auth.toString());
@@ -29,7 +30,7 @@ class LoginController extends ControllerMVC {
         return 0;
       }
     } catch (err) {
-      return throw Fluttertoast.showToast(
+      return Fluttertoast.showToast(
           msg: 'Sai thông tin đăng nhập!',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,

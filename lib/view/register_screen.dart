@@ -1,22 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
+import 'package:azt/config/connect.dart';
 import 'package:azt/view/dashboard_screen.dart';
-import 'package:azt/view/login_screen.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:azt/config/connect.dart';
-
-void main() => runApp(RegisterScreen());
+import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:azt/view/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
-  _FormRegister createState() => _FormRegister();
+  _RegisterScreen createState() => _RegisterScreen();
 }
 
-class _FormRegister extends State<RegisterScreen> {
+class _RegisterScreen extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController fullName = new TextEditingController();
   TextEditingController email = new TextEditingController();
@@ -100,7 +98,6 @@ class _FormRegister extends State<RegisterScreen> {
                               top: 10,
                             ),
                             child: TextFormField(
-                              obscureText: true,
                               controller: fullName,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
