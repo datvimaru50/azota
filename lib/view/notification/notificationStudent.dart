@@ -1,16 +1,35 @@
 import 'package:flutter/material.dart';
-// import 'package:azt/view/login_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class NotificationStudent extends StatelessWidget {
+class NotificationStudentItem extends StatefulWidget {
+  NotificationStudentItem({this.className, this.deadline, this.score, this.submitTime, this.webUrl});
+
+  final String className;
+  final String score;
+  final String deadline;
+  final String submitTime;
+  final String webUrl;
+
+  @override
+  _NotifStudentItemState createState() => _NotifStudentItemState();
+}
+
+class _NotifStudentItemState extends State<NotificationStudentItem> with AutomaticKeepAliveClientMixin {
+  bool _clickedStatus = false;
+
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
         onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => LoginScreen()),
-          // );
+          setState(() {
+            _clickedStatus = true;
+          });
+          launch(widget.webUrl);
         },
         child: Container(
           child: Row(
@@ -32,7 +51,7 @@ class NotificationStudent extends StatelessWidget {
                       padding: EdgeInsets.only(
                           top: 10, left: 25, right: 25, bottom: 17),
                       child: Text(
-                        '1A1',
+                        widget.className,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 17,
@@ -42,7 +61,7 @@ class NotificationStudent extends StatelessWidget {
                     ),
                   ],
                 ),
-                color: Color(0xff00c0ef),
+                color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
               ),
               Expanded(
                 child: Container(
@@ -60,11 +79,12 @@ class NotificationStudent extends StatelessWidget {
                                     children: <TextSpan>[
                                       TextSpan(
                                         text: 'Kết quả Bài tập ',
-                                        style: TextStyle(fontSize: 16),
+                                        style: TextStyle(fontSize: 16, color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),),
                                       ),
                                       TextSpan(
-                                        text: ' Ngày 20/01/2021',
+                                        text: ' Ngày ${widget.deadline}',
                                         style: TextStyle(
+                                            color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),
                                       ),
@@ -80,8 +100,10 @@ class NotificationStudent extends StatelessWidget {
                         children: [
                           Padding(
                             padding:
-                                EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                            child: Text('15 phút trước'),
+                            EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                            child: Text(widget.submitTime, style: TextStyle(
+                              color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
+                            )),
                           ),
                         ],
                       ),
@@ -94,7 +116,7 @@ class NotificationStudent extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(10),
                   child: Text(
-                    '10',
+                    widget.score,
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -125,3 +147,4 @@ class NotificationStudent extends StatelessWidget {
     );
   }
 }
+

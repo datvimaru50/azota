@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'dart:ui';
 
+import 'package:azt/view/notification/notificationStudent.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/view/notification/notificationTeacher.dart';
+import 'package:azt/models/firebase_mo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:azt/config/global.dart';
 
 class NotificationScreen extends StatefulWidget {
   NotificationScreen({@required this.topic});
@@ -19,7 +23,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   Widget build(BuildContext context) {
 
-    List<Widget> notifSection = notiArray.length != 0 ? <Widget>[
+    List<Widget> notifSection = notiArray.length != 0 && widget.topic == 'teacher' ? <Widget>[
       ...notiArray.map(
               (Map item) => NotificationTeacherItem(
             className: item['className'],
@@ -29,11 +33,26 @@ class _NotificationScreenState extends State<NotificationScreen> {
             webUrl: item['webUrl'],
           )).toList(),
     ]:
+    notiArray.length != 0 && widget.topic == 'parent' ?
+
+    <Widget>[
+      ...notiArray.map(
+              (Map item) => NotificationStudentItem(
+            className: item['className'],
+            score: item['score'],
+            deadline: item['deadline'],
+            submitTime: item['submitTime'],
+            webUrl: item['webUrl'],
+          )).toList(),
+    ]:
+
         <Widget>[Text('Bạn không có thông báo nào', style: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
         ),
         )];
+
+
 
     return Scaffold(
         appBar: AppBar(
@@ -50,11 +69,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ),
     );
   }
+  //
+  // Future<void> handleNotificationData() async{
+  //   if(Prefs.getPref('noti_'+widget.topic) == null){
+  //     Prefs.savePrefs('noti_'+widget.topic, [].toString());
+  //   } else {
+  //     final dataNotif = await Prefs.getPref('noti_'+widget.topic);
+  //     setState(() {
+  //       notiArray = jsonDecode(dataNotif);
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    // handleNotificationData();
 
     _firebaseMessaging.configure(
       onMessage: (message) async{
@@ -69,15 +101,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
     // Subcribe to an Topic: teacher/parent/both
 
     _firebaseMessaging.subscribeToTopic(widget.topic);
-
-    _firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(
-            sound: true, badge: true, alert: true, provisional: true));
-
-    _firebaseMessaging.getToken().then((String token) {
-      assert(token != null);
-      print(token);
-    });
 
 
   }

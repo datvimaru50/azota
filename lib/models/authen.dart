@@ -38,7 +38,8 @@ class Login {
 
     if(response.statusCode == 200){
       final resBody = json.decode(response.body);
-      print(resBody.toString()); // OK
+      print(Login.fromJson(resBody).data.rememberToken); // OK
+      Prefs.savePrefs(ACCESS_TOKEN, Login.fromJson(resBody).data.rememberToken);
       return Login.fromJson(resBody);
     } else {
       return throw 'Có lỗi xảy ra';
@@ -56,6 +57,7 @@ class Login {
 
     if(response.statusCode == 200){
       final user = json.decode(response.body);
+
       return Login.fromJson(user);
     } else {
       return throw 'Có lỗi xảy ra';

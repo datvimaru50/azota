@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:azt/view/profile_screen.dart';
 import 'package:azt/models/authen.dart';
 import 'package:azt/view/notificationScreen.dart';
-import 'package:azt/view/notificationScreenStudent.dart';
+import 'package:azt/models/firebase_mo.dart';
 import 'package:azt/config/global.dart';
 import 'package:azt/view/splash_screen.dart';
 import 'loading_screen.dart';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -17,8 +19,26 @@ class Dashboard extends StatefulWidget {
 
 
 class _DashboardState extends State<Dashboard> {
-  // String _fullName = 'YOU';
-  // Map<String, dynamic> _roles = {'TEACHER': 1};
+
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _firebaseMessaging.getToken().then((String token) {
+      assert(token != null);
+      SavedToken.saveToken(token);
+      print('Init token: '+token);
+    });
+
+    _firebaseMessaging.onTokenRefresh.listen((token) {
+      assert(token != null);
+      SavedToken.saveToken(token);
+      print('Refresh token: '+token);
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +134,7 @@ class _DashboardState extends State<Dashboard> {
                                           padding: const EdgeInsets.only(
                                               top: 40, bottom: 40, left: 10, right: 10),
                                           child: Text(
-                                            'Thông báo (10)',
+                                            'Thông báo (9)',
                                             style: TextStyle(fontSize: 20),
                                           ),
                                           decoration: BoxDecoration(

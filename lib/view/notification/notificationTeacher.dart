@@ -85,10 +85,11 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem> with Automat
                                       ),
                                       TextSpan(
                                           text: ' nộp bài tập',
-                                          style: TextStyle(fontSize: 16)),
+                                          style: TextStyle(fontSize: 16, color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),)),
                                       TextSpan(
                                         text: ' Ngày '+ widget.deadline,
                                         style: TextStyle(
+                                            color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),
                                       ),
@@ -105,7 +106,9 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem> with Automat
                           Padding(
                             padding:
                             EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                            child: Text(widget.submitTime),
+                            child: Text(widget.submitTime, style: TextStyle(
+                              color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
+                            )),
                           ),
                         ],
                       ),

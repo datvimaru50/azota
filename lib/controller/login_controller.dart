@@ -31,8 +31,6 @@ class LoginController extends ControllerMVC {
       var auth = await Login.normalLogin(params);
       print(auth.toString());
       if(auth.success == 1){
-        Prefs.savePrefs(ACCESS_TOKEN, auth.data.rememberToken);
-        print(auth.data.rememberToken);
         return 1;
       } else {
         return 0;
