@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:azt/config/connect.dart';
 import 'package:azt/view/dashboard_screen.dart';
+import 'package:azt/view/mainHome.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +24,7 @@ class _RegisterScreen extends State<RegisterScreen> {
 
 //post data API
 
-  Future register() async {
+  Future<void> register() async {
     Map mapdata = <String, dynamic>{
       'fullName': fullName.text,
       'email': email.text != null ? null : email.text,
