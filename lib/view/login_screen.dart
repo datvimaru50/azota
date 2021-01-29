@@ -126,12 +126,26 @@ class _LoginFormState extends State<LoginForm> {
 
                                   LoginController.loginGetAccessToken(paramsLogin).then((ok){
                                     print(ok.toString());
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
+                                    Future.delayed(
+                                      Duration(seconds: 1),
+                                          () => {
+                                          Navigator.of(context).pushAndRemoveUntil(
+                                            MaterialPageRoute(
                                             builder: (context) => Dashboard()),
-                                            (Route<dynamic> route) => false);
+                                            (Route<dynamic> route) => false)
+                                          },
+                                    );
+
                                   }).catchError((onError){
-                                    print(onError.toString());
+                                    return Fluttertoast.showToast(
+                                        msg: "Thông tin đăng nhập không hợp lệ",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIos: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+
                                   });
                                 }
 

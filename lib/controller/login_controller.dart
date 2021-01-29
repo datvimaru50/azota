@@ -13,7 +13,18 @@ import 'package:azt/models/authen.dart';
 import 'package:azt/models/anonymous_use.dart';
 
 // Login controller, handle different type of logins
+enum Status {
+  NotLoggedIn,
+  NotRegistered,
+  LoggedIn,
+  Registered,
+  Authenticating,
+  Registering,
+  LoggedOut
+}
+
 class LoginController extends ControllerMVC {
+
   factory LoginController() {
     if (_this == null) _this = LoginController._();
     return _this;
@@ -25,6 +36,8 @@ class LoginController extends ControllerMVC {
 
   /// Allow for easy access to 'the Controller' throughout the application.
   static LoginController get con => _this;
+
+
 
   // Normal login with phone number and password
   static Future<Map<String, dynamic>> loginGetAccessToken(Map<String, dynamic> params) async{
@@ -49,7 +62,7 @@ class LoginController extends ControllerMVC {
     } else {
       result = {
         'status': false,
-        'message': json.decode(response.body)['error']
+        'message': "Login failed"
       };
       return result;
     }
@@ -76,12 +89,26 @@ class LoginController extends ControllerMVC {
 
   }
 
-  static Future<User> getUserInfo(String token) async {
+  static Future<User> getUserInfo() async {
+    final String token = await Prefs.getPref(ACCESS_TOKEN);
 
     final response = await http.Client().get(AZO_AUTH_INFO, headers: {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-      HttpHeaders.authorizationHeader: "Bearer "+token
+      HttpHeaders.authorizationHeader: "Bearer " + token
     });
+
+
+
+    // ???? CÁCH NÀY VÌ SAO K ĐC
+    //
+    // var response = await Prefs.getPref(ACCESS_TOKEN).then((value) => {
+    //   http.Client().get(AZO_AUTH_INFO, headers: {
+    //     HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+    //     HttpHeaders.authorizationHeader: "Bearer "+value
+    //   })
+    // });
+
+
 
     if(response.statusCode == 200){
       final Map<String, dynamic> resBody = json.decode(response.body);
@@ -97,6 +124,7 @@ class LoginController extends ControllerMVC {
 
 
   static Future<AnonymousUser> loginAnonymous() async{
+
     final response = await http.Client().get(AZO_LOGIN_ANONYMOUS, headers: {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
     });
