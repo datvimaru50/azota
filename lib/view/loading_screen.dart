@@ -21,7 +21,7 @@ class _LoadingScreenState extends StateMVC<LoadingScreen> {
         home: new Scaffold(
           body: new Center(
             child: Image.asset(
-              "assets/images/logoCHplay.png",
+              "assets/images/loading.gif",
               height: 100.0,
             ),
           ),
