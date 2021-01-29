@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NotificationTeacherItem extends StatefulWidget {
-  NotificationTeacherItem({this.className, this.deadline, this.student, this.submitTime, this.webUrl});
+  NotificationTeacherItem(
+      {this.className,
+      this.deadline,
+      this.student,
+      this.submitTime,
+      this.webUrl});
 
   final String className;
   final String student;
@@ -14,14 +19,14 @@ class NotificationTeacherItem extends StatefulWidget {
   _NotifTeacherItemState createState() => _NotifTeacherItemState();
 }
 
-class _NotifTeacherItemState extends State<NotificationTeacherItem> with AutomaticKeepAliveClientMixin {
+class _NotifTeacherItemState extends State<NotificationTeacherItem>
+    with AutomaticKeepAliveClientMixin {
   bool _clickedStatus = false;
-
 
   @override
   bool get wantKeepAlive => true;
 
-  @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
@@ -87,7 +92,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem> with Automat
                                           text: ' nộp bài tập',
                                           style: TextStyle(fontSize: 16)),
                                       TextSpan(
-                                        text: ' Ngày '+ widget.deadline,
+                                        text: ' Ngày ' + widget.deadline,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),
@@ -104,7 +109,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem> with Automat
                         children: [
                           Padding(
                             padding:
-                            EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                                EdgeInsets.only(left: 10, top: 10, bottom: 10),
                             child: Text(widget.submitTime),
                           ),
                         ],
@@ -129,5 +134,4 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem> with Automat
       ),
     );
   }
-
 }

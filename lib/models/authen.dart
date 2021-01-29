@@ -6,11 +6,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/config/connect.dart';
-import 'package:azt/config/global.dart';
+// import 'package:azt/config/global.dart';
 
 class Login {
   int code;
@@ -20,35 +20,33 @@ class Login {
 
   Login({this.code, this.message, this.data, this.success});
 
-  factory Login.fromJson(Map<String, dynamic> json){
+  factory Login.fromJson(Map<String, dynamic> json) {
     Login authInfo = new Login(
-      code: json['code'],
-      success: json['success'],
-      message: json['message'],
-      data: Data.fromJson(json['data'])
-    );
+        code: json['code'],
+        success: json['success'],
+        message: json['message'],
+        data: Data.fromJson(json['data']));
     return authInfo;
   }
 
-  static Future<Login> normalLogin(Map<String, dynamic> params) async{
+  static Future<Login> normalLogin(Map<String, dynamic> params) async {
+    final response = await http.Client().post(AZO_LOGIN,
+        body: jsonEncode(params),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
+        });
 
-    final response = await http.Client().post(AZO_LOGIN, body: jsonEncode(params), headers: {
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
-    });
-
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       final resBody = json.decode(response.body);
       print(resBody.toString()); // OK
       return Login.fromJson(resBody);
     } else {
       return throw 'Có lỗi xảy ra';
     }
-
   }
-
 }
 
-class Data{
+class Data {
   String avatar;
   String birthday;
   dynamic classrooms;
@@ -69,50 +67,48 @@ class Data{
   String uploadToken;
   String zaloId;
 
-  Data({
-    this.avatar,
-    this.birthday,
-    this.classrooms,
-    this.createdAt,
-    this.createdBy,
-    this.email,
-    this.emailVerifiedAt,
-    this.fullName,
-    this.gender,
-    this.id,
-    this.note,
-    this.password,
-    this.phone,
-    this.roles,
-    this.status,
-    this.updatedAt,
-    this.rememberToken,
-    this.uploadToken,
-    this.zaloId
-  });
+  Data(
+      {this.avatar,
+      this.birthday,
+      this.classrooms,
+      this.createdAt,
+      this.createdBy,
+      this.email,
+      this.emailVerifiedAt,
+      this.fullName,
+      this.gender,
+      this.id,
+      this.note,
+      this.password,
+      this.phone,
+      this.roles,
+      this.status,
+      this.updatedAt,
+      this.rememberToken,
+      this.uploadToken,
+      this.zaloId});
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    avatar: json["avatar"],
-    birthday: json["birthday"],
-    classrooms: json["classrooms"],
-    createdAt: json["createdAt"],
-    createdBy: json["createdBy"],
-    email: json["email"],
-    emailVerifiedAt: json["emailVerifiedAt"],
-    fullName: json["fullName"],
-    gender: json["gender"],
-    id: json["id"],
-    note: json["note"],
-    password: json["password"],
-    phone: json["phone"],
-    roles: json["roles"],
-    status: json["status"],
-    updatedAt: json["updatedAt"],
-    rememberToken: json["rememberToken"],
-    uploadToken: json["uploadToken"],
-    zaloId: json["zaloId"],
-  );
-
+        avatar: json["avatar"],
+        birthday: json["birthday"],
+        classrooms: json["classrooms"],
+        createdAt: json["createdAt"],
+        createdBy: json["createdBy"],
+        email: json["email"],
+        emailVerifiedAt: json["emailVerifiedAt"],
+        fullName: json["fullName"],
+        gender: json["gender"],
+        id: json["id"],
+        note: json["note"],
+        password: json["password"],
+        phone: json["phone"],
+        roles: json["roles"],
+        status: json["status"],
+        updatedAt: json["updatedAt"],
+        rememberToken: json["rememberToken"],
+        uploadToken: json["uploadToken"],
+        zaloId: json["zaloId"],
+      );
 }
 
 class Register {
@@ -123,13 +119,12 @@ class Register {
 
   Register({this.fullName, this.phone, this.email, this.password});
 
-  factory Register.registerInfo(Map<String, dynamic> json){
+  factory Register.registerInfo(Map<String, dynamic> json) {
     Register registerInfo = new Register(
-      fullName: json['fullName'],
-      phone: json['phone'],
-      email: json['email'],
-      password: json['password']
-    );
+        fullName: json['fullName'],
+        phone: json['phone'],
+        email: json['email'],
+        password: json['password']);
     return registerInfo;
   }
 }

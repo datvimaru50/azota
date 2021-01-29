@@ -10,14 +10,12 @@ class LoginForm extends StatefulWidget {
   _LoginFormState createState() => _LoginFormState();
 }
 
-
 class _LoginFormState extends State<LoginForm> {
-
   final _formKey = GlobalKey<FormState>();
   final numberPhone = TextEditingController();
   final password = TextEditingController();
 
-  String validatePhone(String value){
+  String validatePhone(String value) {
     if (value.isEmpty) {
       return 'Vui lòng nhập số điện thoại';
     }
@@ -29,7 +27,7 @@ class _LoginFormState extends State<LoginForm> {
     return null;
   }
 
-  String validatePassword(String value){
+  String validatePassword(String value) {
     if (value.isEmpty) {
       return 'Vui lòng nhập mật khẩu';
     }
@@ -39,18 +37,17 @@ class _LoginFormState extends State<LoginForm> {
     return null;
   }
 
-  Future<void> handleLogin(params) async{
-   var loginResult =  await LoginController.loginGetAccessToken(params);
-   // Right person
-   if(loginResult == 1){
-     Navigator.of(context).pushAndRemoveUntil(
-         MaterialPageRoute(
-             builder: (context) => Dashboard()),
-             (Route<dynamic> route) => false);
-   }
-   print(loginResult);
-   // Wrong username/pass
-   if(loginResult == 2){
+  Future<void> handleLogin(params) async {
+    var loginResult = await LoginController.loginGetAccessToken(params);
+    // Right person
+    if (loginResult == 1) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => Dashboard()),
+          (Route<dynamic> route) => false);
+    }
+    print(loginResult);
+    // Wrong username/pass
+    if (loginResult == 2) {
       return Fluttertoast.showToast(
           msg: 'Sai tên đăng nhập hoặc mật khẩu',
           toastLength: Toast.LENGTH_SHORT,
@@ -59,7 +56,7 @@ class _LoginFormState extends State<LoginForm> {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
-   }
+    }
   }
 
   @override
@@ -103,16 +100,16 @@ class _LoginFormState extends State<LoginForm> {
                               top: 15,
                             ),
                             child: TextFormField(
-                              controller: numberPhone,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
+                                controller: numberPhone,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  hintText: 'Số điện thoại',
+                                  prefixIcon:
+                                      Icon(Icons.phone_android_outlined),
                                 ),
-                                hintText: 'Số điện thoại',
-                                prefixIcon: Icon(Icons.phone_android_outlined),
-                              ),
-                              validator: (value) => validatePhone(value)
-                            ),
+                                validator: (value) => validatePhone(value)),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
@@ -121,18 +118,17 @@ class _LoginFormState extends State<LoginForm> {
                               top: 10,
                             ),
                             child: TextFormField(
-                              controller: password,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
+                                controller: password,
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  hintText: 'Mật Khẩu',
+                                  prefixIcon: Icon(Icons.lock),
+                                  // suffixIcon: Icon(Icons.remove_red_eye),
                                 ),
-                                hintText: 'Mật Khẩu',
-                                prefixIcon: Icon(Icons.lock),
-                                // suffixIcon: Icon(Icons.remove_red_eye),
-                              ),
-                              validator: (value) => validatePassword(value)
-                            ),
+                                validator: (value) => validatePassword(value)),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
@@ -141,7 +137,6 @@ class _LoginFormState extends State<LoginForm> {
                                 // Validate will return true if the form is valid, or false if
                                 // the form is invalid.
                                 if (_formKey.currentState.validate()) {
-
                                   final paramsLogin = <String, dynamic>{
                                     "phone": numberPhone.text,
                                     "password": password.text,
@@ -149,9 +144,7 @@ class _LoginFormState extends State<LoginForm> {
 
                                   handleLogin(paramsLogin);
                                 }
-
                               },
-
                               child: Text('Đăng Nhập'),
                             ),
                           ),
