@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:azt/view/register_screen.dart';
+import 'package:azt/view/enter_code.dart';
 import 'package:azt/view/login_screen.dart';
 
 void main() {
@@ -74,7 +74,7 @@ class MainHome extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => RegisterScreen()),
+                            builder: (context) => CodeForm()),
                       );
                     },
                     child: Padding(

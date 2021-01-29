@@ -39,29 +39,6 @@ class _LoginFormState extends State<LoginForm> {
     return null;
   }
 
-  Future<void> handleLogin(params) async{
-   var loginResult =  await LoginController.loginGetAccessToken(params);
-   // Right person
-   if(loginResult == 1){
-     Navigator.of(context).pushAndRemoveUntil(
-         MaterialPageRoute(
-             builder: (context) => Dashboard()),
-             (Route<dynamic> route) => false);
-   }
-   print(loginResult);
-   // Wrong username/pass
-   if(loginResult == 0){
-      return Fluttertoast.showToast(
-          msg: 'Sai tên đăng nhập hoặc mật khẩu',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-   }
-  }
-
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -147,7 +124,15 @@ class _LoginFormState extends State<LoginForm> {
                                     "password": password.text,
                                   };
 
-                                  handleLogin(paramsLogin);
+                                  LoginController.loginGetAccessToken(paramsLogin).then((ok){
+                                    print(ok.toString());
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => Dashboard()),
+                                            (Route<dynamic> route) => false);
+                                  }).catchError((onError){
+                                    print(onError.toString());
+                                  });
                                 }
 
                               },

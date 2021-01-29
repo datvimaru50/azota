@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/view/profile_screen.dart';
 import 'package:azt/models/authen.dart';
@@ -8,7 +6,7 @@ import 'package:azt/view/notificationScreen.dart';
 import 'package:azt/models/firebase_mo.dart';
 import 'package:azt/config/global.dart';
 import 'package:azt/view/splash_screen.dart';
-import 'loading_screen.dart';
+import 'package:azt/controller/login_controller.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -54,11 +52,11 @@ class _DashboardState extends State<Dashboard> {
                   if (snapshot.hasData) {
 
                     return FutureBuilder(
-                      future: Login.getUserInfo(snapshot.data.toString()),
+                      future: LoginController.getUserInfo(snapshot.data.toString()),
                       builder: (context, snapshot){
                         if(snapshot.hasData) {
 
-                          var rolesJson = jsonDecode(snapshot.data.data.roles);
+                          var rolesJson = json.decode(snapshot.data.roles);
 
                           return Column(
                             children: <Widget>[
