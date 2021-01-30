@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:azt/controller/homework_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:azt/view/notificationScreen.dart';
+import 'package:azt/view/notificationScreenStudent.dart';
 import 'package:azt/models/core_mo.dart';
 
 class ChooseStudent extends StatefulWidget {
@@ -44,10 +44,8 @@ class _ChooseStudentState extends State<ChooseStudent> {
             future: homeworkHashIdInfo,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                print('thongtin hashid ' +
+                print('thong tin hashid ' +
                     snapshot.data.studentObjs.elementAt(0)['fullName']);
-                // print('thongtin hashid '+ jsonDecode(snapshot.data.studentObjs)[0].toString());
-
                 return Flexible(
                     child: GridView.builder(
                         padding: EdgeInsets.all(8),
@@ -80,9 +78,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                   Navigator.of(context).pushAndRemoveUntil(
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              NotificationScreen(
-                                                topic: 'parent',
-                                              )),
+                                              NotificationScreenStudent()),
                                       (Route<dynamic> route) => false);
                                 }).catchError((error) {
                                   print(error.toString());

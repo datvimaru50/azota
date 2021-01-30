@@ -18,37 +18,53 @@ class SavedToken {
 
   SavedToken({this.code, this.message, this.data, this.success});
 
-  factory SavedToken.fromJson(Map<String, dynamic> json){
+  factory SavedToken.fromJson(Map<String, dynamic> json) {
     SavedToken savedToken = new SavedToken(
         code: json['code'],
         success: json['success'],
         message: json['message'],
-        data: Data.fromJson(json['data'])
-    );
+        data: Data.fromJson(json['data']));
     return savedToken;
   }
 
-
-  static Future<SavedToken> saveToken(String fcmtkn) async {
-    final token = await Prefs.getPref(ACCESS_TOKEN);
-    final response = await http.Client().get(AZO_TOKEN_SAVE + '?token=$fcmtkn', headers: {
+// Function to save firebase token to DB, according to TEACHER
+  static Future<SavedToken> saveToken(String firebaseToken) async {
+    final accessToken = await Prefs.getPref(ACCESS_TOKEN);
+    final response = await http.Client()
+        .get(AZO_TOKEN_SAVE + '?token=$firebaseToken', headers: {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-      HttpHeaders.authorizationHeader: "Bearer "+token
+      HttpHeaders.authorizationHeader: "Bearer " + accessToken
     });
 
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       final tkn = json.decode(response.body);
       return SavedToken.fromJson(tkn);
     } else {
       print('Save token không thành công!');
       return throw 'Có lỗi xảy ra';
     }
-
   }
 
+  // Function to save firebase token to DB, according to PARENT
+  static Future<SavedToken> saveAnonymousToken(String firebaseToken) async {
+    final token = await Prefs.getPref(ANONYMOUS_TOKEN);
+    final response = await http.Client()
+        .get(AZO_TOKEN_SAVE + '?token=$firebaseToken', headers: {
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.authorizationHeader: "Bearer " + token
+    });
+
+    if (response.statusCode == 200) {
+      final tkn = json.decode(response.body);
+      return SavedToken.fromJson(tkn);
+    } else {
+      print('Save token không thành công!');
+      return throw 'Có lỗi xảy ra';
+    }
+  }
 }
 
-class Data{
+class Data {
   int id;
   int userId;
   String token;
@@ -64,11 +80,10 @@ class Data{
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id: json["id"],
-    userId: json["userId"],
-    token: json["token"],
-    createdAt: json["createdAt"],
-    updatedAt: json["updatedAt"],
-  );
+        id: json["id"],
+        userId: json["userId"],
+        token: json["token"],
+        createdAt: json["createdAt"],
+        updatedAt: json["updatedAt"],
+      );
 }
-

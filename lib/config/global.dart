@@ -5,7 +5,9 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 const ACCESS_TOKEN = "accessToken";
+const ANONYMOUS_TOKEN = "anonymousToken";
 const CURRENT_USER = "currentUser";
+const FIREBASE_TOKEN = "firebaseToken";
 
 const VIDEO_SUBCATEGORY_INDEX = "videoCategory";
 const EXAM_CATEGORY_ID = "examCategoryID";
