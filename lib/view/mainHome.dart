@@ -1,12 +1,27 @@
+import 'package:azt/config/global.dart';
+import 'package:azt/models/firebase_mo.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/view/enter_code.dart';
 import 'package:azt/view/login_screen.dart';
+import 'package:azt/models/anonymous_use.dart';
+import 'package:azt/controller/login_controller.dart';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() {
   runApp(MainHome());
 }
 
-class MainHome extends StatelessWidget {
+
+
+class MainHome extends StatefulWidget {
+  @override
+  _MainHomeState createState() => _MainHomeState();
+}
+
+
+class _MainHomeState extends State<MainHome> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +72,7 @@ class MainHome extends StatelessWidget {
                               spreadRadius: 2,
                               blurRadius: 7,
                               offset:
-                                  Offset(0, 3), // changes position of shadow
+                              Offset(0, 3), // changes position of shadow
                             ),
                           ],
                           borderRadius: BorderRadius.circular(5.0),
@@ -93,7 +108,7 @@ class MainHome extends StatelessWidget {
                               spreadRadius: 2,
                               blurRadius: 7,
                               offset:
-                                  Offset(0, 3), // changes position of shadow
+                              Offset(0, 3), // changes position of shadow
                             ),
                           ],
                           borderRadius: BorderRadius.circular(5.0),
@@ -110,8 +125,9 @@ class MainHome extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
             ),
           ],
-        ),
+        )
       ),
     );
   }
+
 }

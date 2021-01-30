@@ -9,7 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:azt/view/notificationScreen.dart';
+import 'package:azt/view/notificationScreenStudent.dart';
 import 'package:azt/models/authen.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -57,9 +57,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
             future: homeworkHashIdInfo,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                print('thongtin hashid '+ snapshot.data.studentObjs.elementAt(0)['fullName']);
-                // print('thongtin hashid '+ jsonDecode(snapshot.data.studentObjs)[0].toString());
-
+                print('thong tin hashid '+ snapshot.data.studentObjs.elementAt(0)['fullName']);
                 return
                   Flexible(
                       child: GridView.builder(
@@ -89,7 +87,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
 
                                     Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
-                                            builder: (context) => NotificationScreen(topic: 'parent',)),
+                                            builder: (context) => NotificationScreenStudent()),
                                             (Route<dynamic> route) => false);
 
                                   }).catchError((error){

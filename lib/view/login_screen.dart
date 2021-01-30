@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:azt/view/dashboard_screen.dart';
+import 'package:azt/view/notificationScreenTeacher.dart';
 import 'package:azt/view/register_screen.dart';
 
 import 'package:azt/controller/login_controller.dart';
@@ -125,14 +125,15 @@ class _LoginFormState extends State<LoginForm> {
                                   };
 
                                   LoginController.loginGetAccessToken(paramsLogin).then((ok){
-                                    print(ok.toString());
+
                                     Future.delayed(
                                       Duration(seconds: 1),
-                                          () => {
+                                          (){
+                                          print('OK Message: '+ok.toString());
                                           Navigator.of(context).pushAndRemoveUntil(
                                             MaterialPageRoute(
-                                            builder: (context) => Dashboard()),
-                                            (Route<dynamic> route) => false)
+                                            builder: (context) => NotificationScreenTeacher()),
+                                            (Route<dynamic> route) => false);
                                           },
                                     );
 

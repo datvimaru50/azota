@@ -2,38 +2,21 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:azt/view/profile_screen.dart';
 import 'package:azt/models/authen.dart';
-import 'package:azt/view/notificationScreen.dart';
-import 'package:azt/models/firebase_mo.dart';
+import 'package:azt/view/notificationScreenStudent.dart';
 import 'package:azt/controller/login_controller.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Dashboard extends StatefulWidget {
   @override
   _DashboardState createState() => new _DashboardState();
 }
 
-
 class _DashboardState extends State<Dashboard> {
   Future<User> userInfo;
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {
     super.initState();
     userInfo = LoginController.getUserInfo();
-
-    _firebaseMessaging.getToken().then((String token) {
-      assert(token != null);
-      SavedToken.saveToken(token);
-      print('Init token: '+token);
-    });
-
-    _firebaseMessaging.onTokenRefresh.listen((token) {
-      assert(token != null);
-      SavedToken.saveToken(token);
-      print('Refresh token: '+token);
-
-    });
   }
 
   @override
@@ -111,9 +94,7 @@ class _DashboardState extends State<Dashboard> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) {
-                                          return NotificationScreen(
-                                            topic: rolesJson['TEACHER'] == 1 && rolesJson['PARENT'] == 1 ? "both" : rolesJson['TEACHER'] == 1 ? "teacher" : "parent",
-                                          );
+                                          return Text('Thông báo');
                                         }),
                                   );
                                 },
@@ -153,7 +134,6 @@ class _DashboardState extends State<Dashboard> {
                     );
 
                   } else if(snapshot.hasError) {
-                    print('Đây là nguyên nhân: '+snapshot.error.toString());
                     return Text("${snapshot.error}");
                   }
                   return CircularProgressIndicator();

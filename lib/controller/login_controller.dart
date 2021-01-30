@@ -8,7 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:azt/view/notificationScreen.dart';
+import 'package:azt/view/notificationScreenStudent.dart';
 import 'package:azt/models/authen.dart';
 import 'package:azt/models/anonymous_use.dart';
 
@@ -67,26 +67,6 @@ class LoginController extends ControllerMVC {
       return result;
     }
 
-    // try{
-    //   var auth = await Login.normalLogin(params);
-    //   print(auth.toString());
-    //   if(auth.success == 1){
-    //     return 1;
-    //   } else {
-    //     return 0;
-    //   }
-    //
-    // } catch (err) {
-    //   return throw Fluttertoast.showToast(
-    //       msg: 'Sai thông tin đăng nhập!',
-    //       toastLength: Toast.LENGTH_SHORT,
-    //       gravity: ToastGravity.CENTER,
-    //       timeInSecForIos: 1,
-    //       backgroundColor: Colors.red,
-    //       textColor: Colors.white,
-    //       fontSize: 16.0);
-    // }
-
   }
 
   static Future<User> getUserInfo() async {
@@ -131,7 +111,9 @@ class LoginController extends ControllerMVC {
 
     if(response.statusCode == 200){
       final responseBody = json.decode(response.body);
-      return AnonymousUser.fromJson(responseBody['data']);
+      var anonymousInfo = responseBody['data'];
+      Prefs.savePrefs(ANONYMOUS_TOKEN, anonymousInfo['rememberToken']);
+      return AnonymousUser.fromJson(anonymousInfo);
     } else {
       return throw 'Có lỗi xảy ra';
     }

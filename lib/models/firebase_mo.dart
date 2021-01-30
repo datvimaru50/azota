@@ -6,6 +6,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
@@ -28,10 +29,28 @@ class SavedToken {
     return savedToken;
   }
 
+// Function to save firebase token to DB, according to TEACHER
+  static Future<SavedToken> saveToken(String firebaseToken) async {
+    final accessToken = await Prefs.getPref(ACCESS_TOKEN);
+    final response = await http.Client().get(AZO_TOKEN_SAVE + '?token=$firebaseToken', headers: {
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.authorizationHeader: "Bearer "+accessToken
+    });
 
-  static Future<SavedToken> saveToken(String fcmtkn) async {
-    final token = await Prefs.getPref(ACCESS_TOKEN);
-    final response = await http.Client().get(AZO_TOKEN_SAVE + '?token=$fcmtkn', headers: {
+    if(response.statusCode == 200){
+      final tkn = json.decode(response.body);
+      return SavedToken.fromJson(tkn);
+    } else {
+      print('Save token không thành công!');
+      return throw 'Có lỗi xảy ra';
+    }
+
+  }
+
+  // Function to save firebase token to DB, according to PARENT
+  static Future<SavedToken> saveAnonymousToken(String firebaseToken) async {
+    final token = await Prefs.getPref(ANONYMOUS_TOKEN);
+    final response = await http.Client().get(AZO_TOKEN_SAVE + '?token=$firebaseToken', headers: {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       HttpHeaders.authorizationHeader: "Bearer "+token
     });
