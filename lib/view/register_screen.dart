@@ -3,9 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:azt/config/connect.dart';
 import 'package:azt/view/dashboard_screen.dart';
-import 'package:azt/view/mainHome.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:azt/view/login_screen.dart';
@@ -17,14 +15,15 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreen extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+
   TextEditingController fullName = new TextEditingController();
   TextEditingController email = new TextEditingController();
   TextEditingController phone = new TextEditingController();
   TextEditingController password = new TextEditingController();
 
-//post data API
+  //post data API
 
-  Future<void> register() async {
+  Future register() async {
     Map mapdata = <String, dynamic>{
       'fullName': fullName.text,
       'email': email.text != null ? null : email.text,
@@ -62,18 +61,14 @@ class _RegisterScreen extends State<RegisterScreen> {
     }
   }
 
-  bool _showPass = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xFFecf0f5),
-        appBar: AppBar(
-          title: Text('Đăng Ký'),
-        ),
         body: Center(
           child: new ListView(
             padding: const EdgeInsets.only(
-              top: 20,
+              top: 40,
             ),
             children: <Widget>[
               Image.network(
@@ -145,54 +140,7 @@ class _RegisterScreen extends State<RegisterScreen> {
 
                                 return null;
                               },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 10,
-                              right: 10,
-                              top: 10,
-                            ),
-                            child: Stack(
-                              alignment: AlignmentDirectional.centerEnd,
-                              children: [
-                                TextFormField(
-                                  controller: password,
-                                  obscureText: _showPass,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    hintText: 'Mật Khẩu',
-                                    prefixIcon: Icon(Icons.lock),
-                                    // suffixIcon: Icon(Icons.remove_red_eye),
-                                  ),
-                                  validator: (value) {
-                                    if (value.isEmpty) {
-                                      return 'Vui lòng nhập mật khẩu';
-                                    }
-                                    if (value.length < 6) {
-                                      return 'Mật khẩu phải trên 6 ký tự';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _showPass = !_showPass;
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 5),
-                                    child: FaIcon(
-                                      _showPass
-                                          ? Icons.remove_red_eye_rounded
-                                          : FontAwesomeIcons.lowVision,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              // validator: (value) => validatePhone(value)
                             ),
                           ),
                           Padding(
@@ -203,12 +151,13 @@ class _RegisterScreen extends State<RegisterScreen> {
                             ),
                             child: TextFormField(
                               controller: email,
+                              initialValue: null,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                hintText: 'Email (không bắt buộc)',
-                                prefixIcon: Icon(Icons.email),
+                                hintText: 'email (không bắt buộc)',
+                                prefixIcon: Icon(Icons.lock),
                               ),
                               // ignore: missing_return
                               validator: (value) {
@@ -220,6 +169,33 @@ class _RegisterScreen extends State<RegisterScreen> {
                                         .hasMatch(value)) {
                                   return 'Email không hợp lệ';
                                 }
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 10,
+                              right: 10,
+                              top: 10,
+                            ),
+                            child: TextFormField(
+                              controller: password,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                hintText: 'Mật Khẩu',
+                                prefixIcon: Icon(Icons.lock),
+                              ),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Vui lòng nhập mật khẩu';
+                                }
+                                if (value.length < 6) {
+                                  return 'Mật khẩu phải trên 6 ký tự';
+                                }
+                                return null;
                               },
                             ),
                           ),
@@ -249,25 +225,24 @@ class _RegisterScreen extends State<RegisterScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       child: OutlineButton.icon(
-                        disabledBorderColor: Colors.blue,
-                        padding: EdgeInsets.only(
-                            top: 5.0, bottom: 5, left: 15, right: 15),
-                        onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => SecondRoute()),
-                          // );
-                        },
-                        icon: Image.network(
-                          'https://i0.wp.com/s1.uphinh.org/2021/01/21/Logo-zalo-png.png',
-                          width: 35,
-                        ),
-                        label: Text(
-                          'Đăng nhập bằng Zalo',
-                          style:
-                              TextStyle(color: Color(0xff17A2B8), fontSize: 18),
-                        ),
-                      ),
+                          disabledBorderColor: Colors.blue,
+                          padding: EdgeInsets.only(
+                              top: 5.0, bottom: 5, left: 20, right: 19),
+                          onPressed: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => SecondRoute()),
+                            // );
+                          },
+                          icon: Image.network(
+                            'https://i0.wp.com/s1.uphinh.org/2021/01/16/zalo.png',
+                            width: 50,
+                          ),
+                          label: Text(
+                            'Đăng nhập bằng Zalo',
+                            style: TextStyle(
+                                color: Color(0xff17A2B8), fontSize: 18),
+                          )),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 10),

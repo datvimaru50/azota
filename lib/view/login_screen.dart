@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/view/dashboard_screen.dart';
 import 'package:azt/view/register_screen.dart';
+
 import 'package:azt/controller/login_controller.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -14,7 +14,6 @@ class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final numberPhone = TextEditingController();
   final password = TextEditingController();
-  bool _showPass = true;
 
   String validatePhone(String value) {
     if (value.isEmpty) {
@@ -38,28 +37,6 @@ class _LoginFormState extends State<LoginForm> {
     return null;
   }
 
-  Future<void> handleLogin(params) async {
-    var loginResult = await LoginController.loginGetAccessToken(params);
-    // Right person
-    if (loginResult == 1) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => Dashboard()),
-          (Route<dynamic> route) => false);
-    }
-    print(loginResult);
-    // Wrong username/pass
-    if (loginResult == 0) {
-      return Fluttertoast.showToast(
-          msg: 'Sai tên đăng nhập hoặc mật khẩu',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
-  }
-
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -72,13 +49,10 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xFFecf0f5),
-        appBar: AppBar(
-          title: Text('Đăng Nhập'),
-        ),
         body: Center(
           child: new ListView(
             padding: const EdgeInsets.only(
-              top: 20,
+              top: 40,
             ),
             children: <Widget>[
               Image.network(
@@ -121,39 +95,18 @@ class _LoginFormState extends State<LoginForm> {
                               right: 10,
                               top: 10,
                             ),
-                            child: Stack(
-                              alignment: AlignmentDirectional.centerEnd,
-                              children: [
-                                TextFormField(
-                                  controller: password,
-                                  obscureText: _showPass,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    hintText: 'Mật Khẩu',
-                                    prefixIcon: Icon(Icons.lock),
-                                    // suffixIcon: Icon(Icons.remove_red_eye),
+                            child: TextFormField(
+                                controller: password,
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  validator: (value) => validatePassword(value),
+                                  hintText: 'Mật Khẩu',
+                                  prefixIcon: Icon(Icons.lock),
+                                  // suffixIcon: Icon(Icons.remove_red_eye),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _showPass = !_showPass;
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 5),
-                                    child: FaIcon(
-                                      _showPass
-                                          ? Icons.remove_red_eye_rounded
-                                          : FontAwesomeIcons.lowVision,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                                validator: (value) => validatePassword(value)),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
@@ -162,14 +115,36 @@ class _LoginFormState extends State<LoginForm> {
                                 // Validate will return true if the form is valid, or false if
                                 // the form is invalid.
                                 if (_formKey.currentState.validate()) {
-                                  if (_formKey.currentState.validate()) {
-                                    final paramsLogin = <String, dynamic>{
-                                      "phone": numberPhone.text,
-                                      "password": password.text,
-                                    };
+                                  final paramsLogin = <String, dynamic>{
+                                    "phone": numberPhone.text,
+                                    "password": password.text,
+                                  };
 
-                                    handleLogin(paramsLogin);
-                                  }
+                                  LoginController.loginGetAccessToken(
+                                          paramsLogin)
+                                      .then((ok) {
+                                    print(ok.toString());
+                                    Future.delayed(
+                                      Duration(seconds: 1),
+                                      () => {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Dashboard()),
+                                                (Route<dynamic> route) => false)
+                                      },
+                                    );
+                                  }).catchError((onError) {
+                                    return Fluttertoast.showToast(
+                                        msg: "Thông tin đăng nhập không hợp lệ",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.CENTER,
+                                        timeInSecForIos: 1,
+                                        backgroundColor: Colors.red,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  });
                                 }
                               },
                               child: Text('Đăng Nhập'),
@@ -188,25 +163,24 @@ class _LoginFormState extends State<LoginForm> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       child: OutlineButton.icon(
-                        disabledBorderColor: Colors.blue,
-                        padding: EdgeInsets.only(
-                            top: 5.0, bottom: 5, left: 15, right: 15),
-                        onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => SecondRoute()),
-                          // );
-                        },
-                        icon: Image.network(
-                          'https://i0.wp.com/s1.uphinh.org/2021/01/21/Logo-zalo-png.png',
-                          width: 35,
-                        ),
-                        label: Text(
-                          'Đăng nhập bằng Zalo',
-                          style:
-                              TextStyle(color: Color(0xff17A2B8), fontSize: 18),
-                        ),
-                      ),
+                          disabledBorderColor: Colors.blue,
+                          padding: EdgeInsets.only(
+                              top: 5.0, bottom: 5, left: 20, right: 19),
+                          onPressed: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => SecondRoute()),
+                            // );
+                          },
+                          icon: Image.network(
+                            'https://i0.wp.com/s1.uphinh.org/2021/01/16/zalo.png',
+                            width: 50,
+                          ),
+                          label: Text(
+                            'Đăng nhập bằng Zalo',
+                            style: TextStyle(
+                                color: Color(0xff17A2B8), fontSize: 20),
+                          )),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 10),

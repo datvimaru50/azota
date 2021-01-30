@@ -9,17 +9,25 @@ class Splash extends StatefulWidget {
 }
 
 class _MyAppState extends State<Splash> {
+  Future<String> accessToken;
+
+  @override
+  void initState() {
+    super.initState();
+    accessToken = Prefs.getPref(ACCESS_TOKEN);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Prefs.getPref(ACCESS_TOKEN),
+        future: accessToken,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            print("TOKEN: " + snapshot.data);
             return Dashboard();
-          } else {
-            return MainHome();
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
           }
+          return MainHome();
         });
   }
 }
