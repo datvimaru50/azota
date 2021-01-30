@@ -29,14 +29,12 @@ class SavedToken {
     return savedToken;
   }
 
-
-  static Future<SavedToken> saveToken(String anonymousToken) async {
-
-    final firebaseToken = await Prefs.getPref(FIREBASE_TOKEN);
-
+// Function to save firebase token to DB, according to TEACHER
+  static Future<SavedToken> saveToken(String firebaseToken) async {
+    final accessToken = await Prefs.getPref(ACCESS_TOKEN);
     final response = await http.Client().get(AZO_TOKEN_SAVE + '?token=$firebaseToken', headers: {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-      HttpHeaders.authorizationHeader: "Bearer "+anonymousToken
+      HttpHeaders.authorizationHeader: "Bearer "+accessToken
     });
 
     if(response.statusCode == 200){
@@ -49,9 +47,10 @@ class SavedToken {
 
   }
 
-  static Future<SavedToken> saveAnonymousToken(String fcmtkn) async {
+  // Function to save firebase token to DB, according to PARENT
+  static Future<SavedToken> saveAnonymousToken(String firebaseToken) async {
     final token = await Prefs.getPref(ANONYMOUS_TOKEN);
-    final response = await http.Client().get(AZO_TOKEN_SAVE + '?token=$fcmtkn', headers: {
+    final response = await http.Client().get(AZO_TOKEN_SAVE + '?token=$firebaseToken', headers: {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       HttpHeaders.authorizationHeader: "Bearer "+token
     });

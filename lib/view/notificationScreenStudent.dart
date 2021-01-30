@@ -5,33 +5,21 @@ import 'package:azt/view/notification/notificationStudent.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/view/notification/notificationTeacher.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:azt/models/firebase_mo.dart';
 
-class NotificationScreen extends StatefulWidget {
-  NotificationScreen({@required this.topic});
-  final String topic;
-
+class NotificationScreenStudent extends StatefulWidget {
   @override
-  _NotificationScreenState createState() => _NotificationScreenState();
+  _NotificationScreenStudentState createState() => _NotificationScreenStudentState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> {
+class _NotificationScreenStudentState extends State<NotificationScreenStudent> {
   List<Map> notiArray = [];
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
 
   Widget build(BuildContext context) {
 
-    List<Widget> notifSection = notiArray.length != 0 && widget.topic == 'teacher' ? <Widget>[
-      ...notiArray.map(
-              (Map item) => NotificationTeacherItem(
-            className: item['className'],
-            student: item['student'],
-            deadline: item['deadline'],
-            submitTime: item['submitTime'],
-            webUrl: item['webUrl'],
-          )).toList(),
-    ]:
-    notiArray.length != 0 && widget.topic == 'parent' ?
+    List<Widget> notifSection = notiArray.length != 0 ?
 
     <Widget>[
       ...notiArray.map(
@@ -50,11 +38,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ),
         )];
 
-
-
     return Scaffold(
         appBar: AppBar(
-          title: Text('Thông báo'),
+          title: Text('Thông báo phụ huynh'),
         ),
         body: Container(
           padding: EdgeInsets.only(top: 40, bottom: 30),
@@ -68,16 +54,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
   //
-  // Future<void> handleNotificationData() async{
-  //   if(Prefs.getPref('noti_'+widget.topic) == null){
-  //     Prefs.savePrefs('noti_'+widget.topic, [].toString());
-  //   } else {
-  //     final dataNotif = await Prefs.getPref('noti_'+widget.topic);
-  //     setState(() {
-  //       notiArray = jsonDecode(dataNotif);
-  //     });
-  //   }
-  // }
 
   @override
   void initState() {
@@ -95,7 +71,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
       },
 
     );
-    _firebaseMessaging.subscribeToTopic(widget.topic);
+
+    _firebaseMessaging.getToken().then((String token) {
+      assert(token != null);
+      SavedToken.saveAnonymousToken(token);
+      print('Init token: '+token);
+    });
+
+    _firebaseMessaging.onTokenRefresh.listen((token) {
+      assert(token != null);
+      SavedToken.saveAnonymousToken(token);
+      print('Refresh token: '+token);
+
+    });
+
 
   }
 

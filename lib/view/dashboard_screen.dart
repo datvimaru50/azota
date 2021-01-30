@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:azt/view/profile_screen.dart';
 import 'package:azt/models/authen.dart';
-import 'package:azt/view/notificationScreen.dart';
+import 'package:azt/view/notificationScreenStudent.dart';
 import 'package:azt/controller/login_controller.dart';
 
 class Dashboard extends StatefulWidget {
@@ -94,9 +94,7 @@ class _DashboardState extends State<Dashboard> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) {
-                                          return NotificationScreen(
-                                            topic: rolesJson['TEACHER'] == 1 && rolesJson['PARENT'] == 1 ? "both" : rolesJson['TEACHER'] == 1 ? "teacher" : "parent",
-                                          );
+                                          return Text('Thông báo');
                                         }),
                                   );
                                 },
