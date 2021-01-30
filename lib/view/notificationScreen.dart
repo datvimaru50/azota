@@ -4,9 +4,7 @@ import 'dart:ui';
 import 'package:azt/view/notification/notificationStudent.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/view/notification/notificationTeacher.dart';
-import 'package:azt/models/firebase_mo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:azt/config/global.dart';
 
 class NotificationScreen extends StatefulWidget {
   NotificationScreen({@required this.topic});
@@ -97,11 +95,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       },
 
     );
-
-    // Subcribe to an Topic: teacher/parent/both
-
     _firebaseMessaging.subscribeToTopic(widget.topic);
-
 
   }
 

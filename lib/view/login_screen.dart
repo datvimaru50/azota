@@ -125,14 +125,15 @@ class _LoginFormState extends State<LoginForm> {
                                   };
 
                                   LoginController.loginGetAccessToken(paramsLogin).then((ok){
-                                    print(ok.toString());
+
                                     Future.delayed(
                                       Duration(seconds: 1),
-                                          () => {
+                                          (){
+                                          print('OK Message: '+ok.toString());
                                           Navigator.of(context).pushAndRemoveUntil(
                                             MaterialPageRoute(
                                             builder: (context) => Dashboard()),
-                                            (Route<dynamic> route) => false)
+                                            (Route<dynamic> route) => false);
                                           },
                                     );
 

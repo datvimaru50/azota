@@ -6,6 +6,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
@@ -29,8 +30,27 @@ class SavedToken {
   }
 
 
-  static Future<SavedToken> saveToken(String fcmtkn) async {
-    final token = await Prefs.getPref(ACCESS_TOKEN);
+  static Future<SavedToken> saveToken(String anonymousToken) async {
+
+    final firebaseToken = await Prefs.getPref(FIREBASE_TOKEN);
+
+    final response = await http.Client().get(AZO_TOKEN_SAVE + '?token=$firebaseToken', headers: {
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.authorizationHeader: "Bearer "+anonymousToken
+    });
+
+    if(response.statusCode == 200){
+      final tkn = json.decode(response.body);
+      return SavedToken.fromJson(tkn);
+    } else {
+      print('Save token không thành công!');
+      return throw 'Có lỗi xảy ra';
+    }
+
+  }
+
+  static Future<SavedToken> saveAnonymousToken(String fcmtkn) async {
+    final token = await Prefs.getPref(ANONYMOUS_TOKEN);
     final response = await http.Client().get(AZO_TOKEN_SAVE + '?token=$fcmtkn', headers: {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       HttpHeaders.authorizationHeader: "Bearer "+token
