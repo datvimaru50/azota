@@ -16,7 +16,7 @@ class NotificationScreenTeacher extends StatefulWidget {
 }
 
 class _NotificationScreenTeacherState extends State<NotificationScreenTeacher> {
-  List<Map> notiArray = [];
+  Iterable notiArray = [];
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   Future<ListNotification> listNotification;
 
@@ -28,7 +28,7 @@ class _NotificationScreenTeacherState extends State<NotificationScreenTeacher> {
     _firebaseMessaging.configure(
       onMessage: (message) async{
         setState(() {
-          notiArray.insert(0, message["data"]);
+          notiArray.toList().insert(0, message["data"]);
         });
 
       },
@@ -52,6 +52,25 @@ class _NotificationScreenTeacherState extends State<NotificationScreenTeacher> {
   @override
   Widget build(BuildContext context) {
 
+    List<Widget> notifSection = notiArray.length != 0 ?
+
+    <Widget>[
+      ...notiArray.where((element) => element['type'] == 'NEW_ANSWER').toList().map(
+              (item) => NotificationTeacherItem(
+            className: item['classroomName'],
+            student: item['studentName'],
+            deadline: item['deadline'],
+            submitTime: item['createdAt'],
+            webUrl: 'https://tinhte.vn',
+          )).toList(),
+    ]:
+
+    <Widget>[Text('Bạn không có thông báo nào', style: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+    ),
+    )];
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Thông báo giáo viên'),
@@ -60,27 +79,10 @@ class _NotificationScreenTeacherState extends State<NotificationScreenTeacher> {
         future: listNotification,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            notiArray = snapshot.data.objs;
             return Column(
 
-              children: <Widget>[
-                Expanded(
-                    child: ListView.builder(
-                        itemCount: snapshot.data.objs.length,
-                        itemBuilder: (BuildContext context, int index){
-
-                          return NotificationTeacherItem(
-                              className: snapshot.data.objs.elementAt(index)['classroomName'],
-                              student: snapshot.data.objs.elementAt(index)['studentName'],
-                              deadline: snapshot.data.objs.elementAt(index)['deadline'],
-                              submitTime: snapshot.data.objs.elementAt(index)['createdAt'],
-                              webUrl: "https://tinhte.vn"
-                          );
-                        }
-
-                    )
-                ),
-
-              ],
+              children: notifSection
             );
 
           } else if (snapshot.hasError) {
