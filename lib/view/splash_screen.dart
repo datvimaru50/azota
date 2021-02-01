@@ -1,6 +1,6 @@
+import 'package:azt/view/notificationScreenTeacher.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/config/global.dart';
-import 'package:azt/view/dashboard_screen.dart';
 import 'package:azt/view/mainHome.dart';
 
 class Splash extends StatefulWidget {
@@ -24,7 +24,7 @@ class _MyAppState extends State<Splash> {
         future: accessToken,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Dashboard();
+            return NotificationScreenTeacher();
           } else if (snapshot.hasError){
             return Text("${snapshot.error}");
           }

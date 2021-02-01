@@ -4,10 +4,10 @@ import 'dart:ui';
 import 'package:azt/view/notification/notificationStudent.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/view/notification/notificationTeacher.dart';
-import 'package:azt/config/global.dart';
+import 'package:azt/controller/notification_controller.dart';
 import 'package:azt/models/firebase_mo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
+import 'package:date_time_format/date_time_format.dart';
 
 class NotificationScreenTeacher extends StatefulWidget {
 
@@ -18,47 +18,12 @@ class NotificationScreenTeacher extends StatefulWidget {
 class _NotificationScreenTeacherState extends State<NotificationScreenTeacher> {
   List<Map> notiArray = [];
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
-
-  Widget build(BuildContext context) {
-
-    List<Widget> notifSection = notiArray.length != 0 ? <Widget>[
-      ...notiArray.map(
-              (Map item) => NotificationTeacherItem(
-            className: item['className'],
-            student: item['student'],
-            deadline: item['deadline'],
-            submitTime: item['submitTime'],
-            webUrl: item['webUrl'],
-          )).toList(),
-    ]:
-
-    <Widget>[Text('Bạn không có thông báo nào', style: TextStyle(
-      fontSize: 24,
-      fontWeight: FontWeight.bold,
-    ),
-    )];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Thông báo giáo viên'),
-      ),
-      body: Container(
-        padding: EdgeInsets.only(top: 40, bottom: 30),
-        child: Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: ListView(
-              children: notifSection
-          ),
-        ),
-      ),
-    );
-  }
+  Future<ListNotification> listNotification;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    listNotification = NotiController.getNoti(1);
 
     _firebaseMessaging.configure(
       onMessage: (message) async{
@@ -83,5 +48,50 @@ class _NotificationScreenTeacherState extends State<NotificationScreenTeacher> {
     });
 
   }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Thông báo giáo viên'),
+      ),
+      body: FutureBuilder<ListNotification>(
+        future: listNotification,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Column(
+
+              children: <Widget>[
+                Expanded(
+                    child: ListView.builder(
+                        itemCount: snapshot.data.objs.length,
+                        itemBuilder: (BuildContext context, int index){
+
+                          return NotificationTeacherItem(
+                              className: snapshot.data.objs.elementAt(index)['classroomName'],
+                              student: snapshot.data.objs.elementAt(index)['studentName'],
+                              deadline: snapshot.data.objs.elementAt(index)['deadline'],
+                              submitTime: snapshot.data.objs.elementAt(index)['createdAt'],
+                              webUrl: "https://tinhte.vn"
+                          );
+                        }
+
+                    )
+                ),
+
+              ],
+            );
+
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          return CircularProgressIndicator();
+        },
+      ),
+    );
+  }
+
+
 
 }

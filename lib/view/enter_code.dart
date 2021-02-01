@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:azt/view/dashboard_screen.dart';
 import 'package:azt/view/choose_student.dart';
 import 'package:azt/models/anonymous_use.dart';
 import 'package:azt/controller/login_controller.dart';
