@@ -4,6 +4,7 @@ import 'package:azt/view/notificationScreenTeacher.dart';
 import 'package:azt/view/register_screen.dart';
 
 import 'package:azt/controller/login_controller.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -45,14 +46,18 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
+  bool _showPass = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xFFecf0f5),
+        appBar: AppBar(
+          title: Text('Đăng Nhập'),
+        ),
         body: Center(
           child: new ListView(
             padding: const EdgeInsets.only(
-              top: 40,
+              top: 20,
             ),
             children: <Widget>[
               Image.network(
@@ -78,16 +83,16 @@ class _LoginFormState extends State<LoginForm> {
                               top: 15,
                             ),
                             child: TextFormField(
-                                controller: numberPhone,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  hintText: 'Số điện thoại',
-                                  prefixIcon:
-                                      Icon(Icons.phone_android_outlined),
+                              controller: numberPhone,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                validator: (value) => validatePhone(value)),
+                                hintText: 'Số điện thoại',
+                                prefixIcon: Icon(Icons.phone_android_outlined),
+                              ),
+                              validator: (value) => validatePhone(value),
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
@@ -95,18 +100,39 @@ class _LoginFormState extends State<LoginForm> {
                               right: 10,
                               top: 10,
                             ),
-                            child: TextFormField(
-                                controller: password,
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
+                            child: Stack(
+                              alignment: AlignmentDirectional.centerEnd,
+                              children: [
+                                TextFormField(
+                                  controller: password,
+                                  obscureText: _showPass,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    hintText: 'Mật Khẩu',
+                                    prefixIcon: Icon(Icons.lock),
+                                    // suffixIcon: Icon(Icons.remove_red_eye),
                                   ),
-                                  hintText: 'Mật Khẩu',
-                                  prefixIcon: Icon(Icons.lock),
-                                  // suffixIcon: Icon(Icons.remove_red_eye),
+                                  validator: (value) => validatePassword(value),
                                 ),
-                                validator: (value) => validatePassword(value)),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _showPass = !_showPass;
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 5),
+                                    child: FaIcon(
+                                      _showPass
+                                          ? Icons.remove_red_eye_rounded
+                                          : FontAwesomeIcons.lowVision,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
@@ -162,24 +188,25 @@ class _LoginFormState extends State<LoginForm> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       child: OutlineButton.icon(
-                          disabledBorderColor: Colors.blue,
-                          padding: EdgeInsets.only(
-                              top: 5.0, bottom: 5, left: 20, right: 19),
-                          onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => SecondRoute()),
-                            // );
-                          },
-                          icon: Image.network(
-                            'https://i0.wp.com/s1.uphinh.org/2021/01/16/zalo.png',
-                            width: 50,
-                          ),
-                          label: Text(
-                            'Đăng nhập bằng Zalo',
-                            style: TextStyle(
-                                color: Color(0xff17A2B8), fontSize: 20),
-                          )),
+                        disabledBorderColor: Colors.blue,
+                        padding: EdgeInsets.only(
+                            top: 5.0, bottom: 5, left: 15, right: 15),
+                        onPressed: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => SecondRoute()),
+                          // );
+                        },
+                        icon: Image.network(
+                          'https://i0.wp.com/s1.uphinh.org/2021/01/21/Logo-zalo-png.png',
+                          width: 35,
+                        ),
+                        label: Text(
+                          'Đăng nhập bằng Zalo',
+                          style:
+                              TextStyle(color: Color(0xff17A2B8), fontSize: 18),
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
