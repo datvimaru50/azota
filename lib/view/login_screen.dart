@@ -178,7 +178,7 @@ class _LoginFormState extends State<LoginForm> {
                                 textColor: Colors.white,
                                 fontSize: 16.0);
                           },
-                          icon: Image(image: AssetImage('assets/logo.png'), width: 50,),
+                          icon: Image(image: AssetImage('assets/zalo.png'), width: 50,),
                           label: Text(
                             'Đăng nhập bằng Zalo',
                             style: TextStyle(

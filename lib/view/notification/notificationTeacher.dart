@@ -41,7 +41,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem> with Automat
           // setState(() {
           //   _clickedStatus = true;
           // });
-          // launch(widget.webUrl);
+          launch(widget.webUrl);
 
 
         },
