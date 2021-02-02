@@ -45,34 +45,30 @@ class _ChooseStudentState extends State<ChooseStudent> {
         ),
       ),
       body: Container(
-        child: new Column(
-          children: <Widget>[
-            FutureBuilder<HomeworkHashIdInfo>(
-              future: homeworkHashIdInfo,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  print('thong tin hashid ' +
-                      snapshot.data.studentObjs.elementAt(0)['fullName']);
-                  return Expanded(
-                    child: GridView.builder(
-                      padding: EdgeInsets.only(top: 10),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 3,
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 20.0,
-                        mainAxisSpacing: 4.0,
-                      ),
-                      itemCount: snapshot.data.studentObjs.length,
-                      itemBuilder: (BuildContext context, int index) {
+        child: FutureBuilder<HomeworkHashIdInfo>(
+          future: homeworkHashIdInfo,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              print('thong tin hashid ' +
+                  snapshot.data.studentObjs.elementAt(0)['fullName']);
+              return CustomScrollView(
+                slivers: <Widget>[
+                  SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 3,
+                      crossAxisCount: 2,
+                      // crossAxisSpacing: 5.0,
+                      // mainAxisSpacing: 4.0,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
                         return Container(
                           alignment: Alignment.center,
-                          color: Colors.black12,
                           child: InkWell(
                             child: Text(
                               snapshot.data.studentObjs
                                   .elementAt(index)['fullName'],
                               style: TextStyle(
-                                  fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black),
                             ),
@@ -94,95 +90,136 @@ class _ChooseStudentState extends State<ChooseStudent> {
                               });
                             },
                           ),
+                          margin: EdgeInsets.only(top: 5, left: 5, right: 5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            border: Border.all(
+                              color: Colors.black12,
+                            ),
+                            color: Color(0xFFfafafa),
+                          ),
                         );
                       },
+                      childCount: snapshot.data.studentObjs.length,
                     ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                return CircularProgressIndicator();
-              },
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 15, left: 35, right: 35),
-                    child: Text(
-                        '(*) Nếu bạn chưa tìm thấy tên con mình. Vui lòng nhập tên và ngày sinh của con bạn!'),
                   ),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(left: 30, right: 30),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              icon: Icon(Icons.phone_android_outlined),
-                              hintText: 'Họ và tên',
+                  SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 1.45,
+                      crossAxisCount: 1,
+                      crossAxisSpacing: 20.0,
+                      mainAxisSpacing: 4.0,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return Container(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: 10, left: 50, right: 50),
+                                child: Text(
+                                    '(*) Nếu bạn chưa tìm thấy tên con mình. Vui lòng nhập tên và ngày sinh của con bạn!'),
+                              ),
+                              Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 50, right: 50),
+                                      child: TextFormField(
+                                        decoration: InputDecoration(
+                                          suffixIcon:
+                                              Icon(Icons.account_circle),
+                                          hintText: 'Họ và tên',
+                                        ),
+                                        validator: (value) {
+                                          if (value.isEmpty) {
+                                            return 'Vui lòng nhập họ tên';
+                                          }
+                                          if (value.length < 6) {
+                                            return 'Họ tên phải trên 6 ký tự';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 50, right: 50),
+                                      child: DateTimePicker(
+                                        decoration: InputDecoration(
+                                          suffixIcon: Icon(Icons.date_range),
+                                          hintText: 'Ngày Sinh ',
+                                        ),
+                                        initialValue: '',
+                                        icon: Icon(Icons.date_range),
+                                        firstDate: DateTime(2000),
+                                        lastDate: DateTime(2100),
+                                        onChanged: (val) => print(val),
+                                        validator: (val) {
+                                          if (val.isEmpty) {
+                                            return 'Vui lòng chọn ngày sinh';
+                                          }
+                                          print(val);
+                                          return null;
+                                        },
+                                        onSaved: (val) => print(val),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          // Validate will return true if the form is valid, or false if
+                                          // the form is invalid.
+                                          if (_formKey.currentState
+                                              .validate()) {
+                                            // Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //       builder: (context) =>
+                                            //           HomePageTeacher()),
+                                            //   // NotificationScreenTeacher()),
+                                            // );
+                                          }
+                                        },
+                                        child: Text('Tiếp Tục'),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black12,
                             ),
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Vui lòng nhập họ tên';
-                              }
-                              if (value.length > 6) {
-                                return 'Họ tên phải trên 6 ký tự';
-                              }
-                              return null;
-                            },
+                            color: Color(0xFFf2f2f2),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 30, right: 30),
-                          child: DateTimePicker(
-                            initialValue: '',
-                            icon: Icon(Icons.date_range),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                            dateLabelText: 'Ngày Sinh',
-                            onChanged: (val) => print(val),
-                            validator: (val) {
-                              if (val.isEmpty) {
-                                return 'Vui lòng chọn ngày sinh';
-                              }
-                              print(val);
-                              return null;
-                            },
-                            onSaved: (val) => print(val),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // Validate will return true if the form is valid, or false if
-                              // the form is invalid.
-                              if (_formKey.currentState.validate()) {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) =>
-                                //           HomePageTeacher()),
-                                //   // NotificationScreenTeacher()),
-                                // );
-                              }
-                            },
-                            child: Text('Tiếp Tục'),
-                          ),
-                        ),
-                      ],
+                          margin: EdgeInsets.only(top: 5),
+                        );
+                      },
+                      childCount: 1,
                     ),
                   ),
                 ],
-              ),
-              // color: Colors.black12,
-            ),
-          ],
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return CircularProgressIndicator();
+          },
         ),
-        margin: const EdgeInsets.only(left: 20, right: 20),
-        color: Color(0xFFf2f2f2),
+        // color: Color(0xFFf2f2f2),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.blue,
+          ),
+          color: Colors.white,
+        ),
       ),
     );
   }
