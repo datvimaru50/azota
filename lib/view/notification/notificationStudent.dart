@@ -110,7 +110,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem> with Automat
                           Padding(
                             padding:
                             EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                            child: Text(DateTimeFormat.relative(DateTime.parse(widget.submitTime), relativeTo: DateTime.now(), levelOfPrecision: 1, appendIfAfter: ' ago')),
+                            child: Text(DateTimeFormat.relative(DateTime.parse(widget.submitTime), relativeTo: DateTime.now(), levelOfPrecision: 1, appendIfAfter: ' ago', abbr: true )),
                           ),
                         ],
                       ),
@@ -141,7 +141,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem> with Automat
             ],
           ),
           margin: EdgeInsets.only(
-            bottom: 10,
+            top: 10,
             left: 10,
             right: 10,
           ),

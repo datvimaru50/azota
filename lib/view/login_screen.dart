@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:azt/view/notificationScreenTeacher.dart';
+import 'package:azt/view/notificationScreen.dart';
 import 'package:azt/view/register_screen.dart';
 
 import 'package:azt/controller/login_controller.dart';
@@ -57,10 +57,7 @@ class _LoginFormState extends State<LoginForm> {
               top: 40,
             ),
             children: <Widget>[
-              Image.network(
-                'https://i0.wp.com/s1.uphinh.org/2021/01/15/logo.png',
-                height: 80,
-              ),
+              Image(image: AssetImage('assets/logo.png')),
               Container(
                 child: Column(
                   children: <Widget>[
@@ -132,7 +129,7 @@ class _LoginFormState extends State<LoginForm> {
                                           print('OK Message: '+ok.toString());
                                           Navigator.of(context).pushAndRemoveUntil(
                                             MaterialPageRoute(
-                                            builder: (context) => NotificationScreenTeacher()),
+                                            builder: (context) => NotificationScreen(role: 'teacher',)),
                                             (Route<dynamic> route) => false);
                                           },
                                     );
@@ -172,19 +169,20 @@ class _LoginFormState extends State<LoginForm> {
                           padding: EdgeInsets.only(
                               top: 5.0, bottom: 5, left: 20, right: 19),
                           onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => SecondRoute()),
-                            // );
+                            return Fluttertoast.showToast(
+                                msg: "Tính năng đang phát triển",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIos: 1,
+                                backgroundColor: Colors.lightBlue,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
                           },
-                          icon: Image.network(
-                            'https://i0.wp.com/s1.uphinh.org/2021/01/16/zalo.png',
-                            width: 50,
-                          ),
+                          icon: Image(image: AssetImage('assets/logo.png'), width: 50,),
                           label: Text(
                             'Đăng nhập bằng Zalo',
                             style: TextStyle(
-                                color: Color(0xff17A2B8), fontSize: 20),
+                                color: Color(0xff17A2B8), fontSize: 18),
                           )),
                     ),
                     Padding(

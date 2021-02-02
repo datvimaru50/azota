@@ -122,7 +122,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem> with Automat
                             padding:
                             EdgeInsets.only(left: 10, top: 10, bottom: 10),
 
-                            child: Text(DateTimeFormat.relative(DateTime.parse(widget.submitTime), relativeTo: DateTime.now(), levelOfPrecision: 1, appendIfAfter: ' ago') , style: TextStyle(
+                            child: Text(DateTimeFormat.relative(DateTime.parse(widget.submitTime), relativeTo: DateTime.now(), levelOfPrecision: 1, appendIfAfter: ' ago', abbr: true) , style: TextStyle(
                               // color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
                             )),
                           ),

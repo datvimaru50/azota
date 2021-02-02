@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:azt/controller/homework_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:azt/view/notificationScreenStudent.dart';
+import 'package:azt/view/notificationScreen.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 
@@ -87,7 +87,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            NotificationScreenStudent()),
+                                            NotificationScreen(role: 'parent',)),
                                         (Route<dynamic> route) => false);
                               }).catchError((error) {
                                 print(error.toString());

@@ -8,7 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:azt/view/notificationScreenStudent.dart';
+import 'package:azt/view/notificationScreen.dart';
 import 'package:azt/models/authen.dart';
 import 'package:azt/models/anonymous_use.dart';
 

@@ -1,4 +1,4 @@
-import 'package:azt/view/notificationScreenTeacher.dart';
+import 'package:azt/view/notificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/config/global.dart';
 import 'package:azt/view/mainHome.dart';
@@ -11,11 +11,13 @@ class Splash extends StatefulWidget {
 
 class _MyAppState extends State<Splash> {
   Future<String> accessToken;
+  Future<String> anonymousToken;
 
   @override
   void initState() {
     super.initState();
     accessToken = Prefs.getPref(ACCESS_TOKEN);
+    anonymousToken = Prefs.getPref(ANONYMOUS_TOKEN);
   }
 
   @override
@@ -24,11 +26,21 @@ class _MyAppState extends State<Splash> {
         future: accessToken,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return NotificationScreenTeacher();
+            return NotificationScreen(role: 'teacher',);
           } else if (snapshot.hasError){
             return Text("${snapshot.error}");
           }
-          return MainHome();
+          return FutureBuilder(
+            future: anonymousToken,
+            builder: (context, snapshot) {
+              if(snapshot.hasData) {
+                return NotificationScreen(role: 'parent',);
+              } else if(snapshot.hasError){
+                return Text("${snapshot.error}");
+              }
+              return MainHome();
+            },
+          );
         });
   }
 }
