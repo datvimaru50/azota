@@ -61,7 +61,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
                       // mainAxisSpacing: 4.0,
                     ),
                     delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
+                      (BuildContext context, int index) {
                         return Container(
                           alignment: Alignment.center,
                           child: InkWell(
@@ -78,13 +78,15 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                   .toString();
 
                               HomeworkController.updateParent(
-                                  stdID, widget.anonymousToken)
+                                      stdID, widget.anonymousToken)
                                   .then((ok) {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            NotificationScreen(role: 'parent',)),
-                                        (Route<dynamic> route) => false);
+                                            NotificationScreen(
+                                              role: 'parent',
+                                            )),
+                                    (Route<dynamic> route) => false);
                               }).catchError((error) {
                                 print(error.toString());
                               });
@@ -111,7 +113,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
                       mainAxisSpacing: 4.0,
                     ),
                     delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
+                      (BuildContext context, int index) {
                         return Container(
                           child: Column(
                             children: [
@@ -127,11 +129,11 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                   children: <Widget>[
                                     Padding(
                                       padding:
-                                      EdgeInsets.only(left: 50, right: 50),
+                                          EdgeInsets.only(left: 50, right: 50),
                                       child: TextFormField(
                                         decoration: InputDecoration(
                                           suffixIcon:
-                                          Icon(Icons.account_circle),
+                                              Icon(Icons.account_circle),
                                           hintText: 'Họ và tên',
                                         ),
                                         validator: (value) {
@@ -147,7 +149,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                     ),
                                     Padding(
                                       padding:
-                                      EdgeInsets.only(left: 50, right: 50),
+                                          EdgeInsets.only(left: 50, right: 50),
                                       child: DateTimePicker(
                                         decoration: InputDecoration(
                                           suffixIcon: Icon(Icons.date_range),
@@ -210,7 +212,9 @@ class _ChooseStudentState extends State<ChooseStudent> {
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }
-            return Center(child: CircularProgressIndicator(),);
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           },
         ),
         // color: Color(0xFFf2f2f2),

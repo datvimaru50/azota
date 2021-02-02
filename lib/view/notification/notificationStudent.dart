@@ -5,7 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class NotificationStudentItem extends StatefulWidget {
-  NotificationStudentItem({this.className, this.deadline, this.score, this.submitTime, this.webUrl});
+  NotificationStudentItem(
+      {this.className,
+      this.deadline,
+      this.score,
+      this.submitTime,
+      this.webUrl});
 
   final String className;
   final String score;
@@ -17,9 +22,9 @@ class NotificationStudentItem extends StatefulWidget {
   _NotifStudentItemState createState() => _NotifStudentItemState();
 }
 
-class _NotifStudentItemState extends State<NotificationStudentItem> with AutomaticKeepAliveClientMixin {
+class _NotifStudentItemState extends State<NotificationStudentItem>
+    with AutomaticKeepAliveClientMixin {
   bool _clickedStatus = false;
-
 
   @override
   bool get wantKeepAlive => true;
@@ -32,6 +37,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem> with Automat
   }
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
@@ -92,7 +98,10 @@ class _NotifStudentItemState extends State<NotificationStudentItem> with Automat
                                         style: TextStyle(fontSize: 16),
                                       ),
                                       TextSpan(
-                                        text: ' Ngày '+DateFormat.yMd().format(DateTime.parse(widget.deadline)),
+                                        text: ' Ngày ' +
+                                            DateFormat.yMd().format(
+                                                DateTime.parse(
+                                                    widget.deadline)),
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),
@@ -109,8 +118,13 @@ class _NotifStudentItemState extends State<NotificationStudentItem> with Automat
                         children: [
                           Padding(
                             padding:
-                            EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                            child: Text(DateTimeFormat.relative(DateTime.parse(widget.submitTime), relativeTo: DateTime.now(), levelOfPrecision: 1, appendIfAfter: ' ago', abbr: true )),
+                                EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                            child: Text(DateTimeFormat.relative(
+                                DateTime.parse(widget.submitTime),
+                                relativeTo: DateTime.now(),
+                                levelOfPrecision: 1,
+                                appendIfAfter: ' ago',
+                                abbr: true)),
                           ),
                         ],
                       ),
@@ -154,4 +168,3 @@ class _NotifStudentItemState extends State<NotificationStudentItem> with Automat
     );
   }
 }
-

@@ -42,8 +42,11 @@ class _RegisterScreen extends State<RegisterScreen> {
     var data = jsonDecode(reponse.body);
     if (data['code'] == 200) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => NotificationScreen(role: 'teacher',)),
-              (Route<dynamic> route) => false);
+          MaterialPageRoute(
+              builder: (context) => NotificationScreen(
+                    role: 'teacher',
+                  )),
+          (Route<dynamic> route) => false);
       //log data in api
       // ignore: unnecessary_brace_in_string_interps
       return print("DATA TRUE: ${data}");
@@ -71,9 +74,9 @@ class _RegisterScreen extends State<RegisterScreen> {
               top: 40,
             ),
             children: <Widget>[
-              Image.network(
-                'https://i0.wp.com/s1.uphinh.org/2021/01/15/logo.png',
-                height: 80,
+              Image(
+                image: AssetImage('assets/logo.png'),
+                height: 100,
               ),
               Container(
                 child: Column(
@@ -81,7 +84,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                     Text(
                       'ĐĂNG KÝ',
                       style:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     Form(
                       key: _formKey,
@@ -157,8 +160,9 @@ class _RegisterScreen extends State<RegisterScreen> {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 hintText: 'email (không bắt buộc)',
-                                prefixIcon: Icon(Icons.lock),
+                                prefixIcon: Icon(Icons.email),
                               ),
+                              // ignore: missing_return
                               validator: (value) {
                                 if (value.isEmpty) {
                                   return null;

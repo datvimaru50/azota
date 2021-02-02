@@ -1,14 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:azt/view/notificationScreen.dart';
 import 'package:azt/models/authen.dart';
 import 'package:azt/models/anonymous_use.dart';
 
@@ -24,7 +20,6 @@ enum Status {
 }
 
 class LoginController extends ControllerMVC {
-
   factory LoginController() {
     if (_this == null) _this = LoginController._();
     return _this;
@@ -37,18 +32,19 @@ class LoginController extends ControllerMVC {
   /// Allow for easy access to 'the Controller' throughout the application.
   static LoginController get con => _this;
 
-
-
   // Normal login with phone number and password
-  static Future<Map<String, dynamic>> loginGetAccessToken(Map<String, dynamic> params) async{
-
+  // ignore: missing_return
+  static Future<Map<String, dynamic>> loginGetAccessToken(
+      Map<String, dynamic> params) async {
     var result;
 
-    final response = await http.Client().post(AZO_LOGIN, body: jsonEncode(params), headers: {
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
-    });
+    final response = await http.Client().post(AZO_LOGIN,
+        body: jsonEncode(params),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
+        });
 
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       final Map<String, dynamic> resBody = json.decode(response.body);
 
       var userData = resBody['data'];
@@ -58,15 +54,10 @@ class LoginController extends ControllerMVC {
       Prefs.savePrefs(ACCESS_TOKEN, authUser.rememberToken);
 
       result = {'status': true, 'message': 'successful', 'user': authUser};
-
     } else {
-      result = {
-        'status': false,
-        'message': "Login failed"
-      };
+      result = {'status': false, 'message': "Login failed"};
       return result;
     }
-
   }
 
   static Future<User> getUserInfo() async {
@@ -77,8 +68,6 @@ class LoginController extends ControllerMVC {
       HttpHeaders.authorizationHeader: "Bearer " + token
     });
 
-
-
     // ???? CÁCH NÀY VÌ SAO K ĐC
     //
     // var response = await Prefs.getPref(ACCESS_TOKEN).then((value) => {
@@ -88,9 +77,7 @@ class LoginController extends ControllerMVC {
     //   })
     // });
 
-
-
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       final Map<String, dynamic> resBody = json.decode(response.body);
       var userData = resBody['data'];
       User authUser = User.fromJson(userData);
@@ -99,17 +86,14 @@ class LoginController extends ControllerMVC {
     } else {
       return throw 'Có lỗi xảy ra';
     }
-
   }
 
-
-  static Future<AnonymousUser> loginAnonymous() async{
-
+  static Future<AnonymousUser> loginAnonymous() async {
     final response = await http.Client().get(AZO_LOGIN_ANONYMOUS, headers: {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
     });
 
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
       var anonymousInfo = responseBody['data'];
       Prefs.savePrefs(ANONYMOUS_TOKEN, anonymousInfo['rememberToken']);

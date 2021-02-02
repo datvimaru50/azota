@@ -4,10 +4,13 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-
-
 class NotificationTeacherItem extends StatefulWidget {
-  NotificationTeacherItem({this.className, this.deadline, this.student, this.submitTime, this.webUrl});
+  NotificationTeacherItem(
+      {this.className,
+      this.deadline,
+      this.student,
+      this.submitTime,
+      this.webUrl});
 
   final String className;
   final String student;
@@ -19,7 +22,8 @@ class NotificationTeacherItem extends StatefulWidget {
   _NotifTeacherItemState createState() => _NotifTeacherItemState();
 }
 
-class _NotifTeacherItemState extends State<NotificationTeacherItem> with AutomaticKeepAliveClientMixin {
+class _NotifTeacherItemState extends State<NotificationTeacherItem>
+    with AutomaticKeepAliveClientMixin {
   bool _clickedStatus = false;
   DateFormat dateFormat;
 
@@ -34,6 +38,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem> with Automat
   }
 
   @override
+  // ignore: must_call_super
   Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
@@ -42,8 +47,6 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem> with Automat
           //   _clickedStatus = true;
           // });
           launch(widget.webUrl);
-
-
         },
         child: Container(
           child: Row(
@@ -102,7 +105,10 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem> with Automat
                                           style: TextStyle(fontSize: 16)),
                                       TextSpan(
                                         // text: ' Ngày '+ DateTimeFormat.format( DateTime.parse(widget.deadline), format: 'd/m/y' ),
-                                        text: ' Ngày '+ DateFormat.yMd().format(DateTime.parse(widget.deadline)),
+                                        text: ' Ngày ' +
+                                            DateFormat.yMd().format(
+                                                DateTime.parse(
+                                                    widget.deadline)),
                                         style: TextStyle(
                                             // color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
                                             fontWeight: FontWeight.bold,
@@ -120,11 +126,17 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem> with Automat
                         children: [
                           Padding(
                             padding:
-                            EdgeInsets.only(left: 10, top: 10, bottom: 10),
-
-                            child: Text(DateTimeFormat.relative(DateTime.parse(widget.submitTime), relativeTo: DateTime.now(), levelOfPrecision: 1, appendIfAfter: ' ago', abbr: true) , style: TextStyle(
-                              // color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
-                            )),
+                                EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                            child: Text(
+                                DateTimeFormat.relative(
+                                    DateTime.parse(widget.submitTime),
+                                    relativeTo: DateTime.now(),
+                                    levelOfPrecision: 1,
+                                    appendIfAfter: ' ago',
+                                    abbr: true),
+                                style: TextStyle(
+                                    // color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
+                                    )),
                           ),
                         ],
                       ),
@@ -148,5 +160,4 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem> with Automat
       ),
     );
   }
-
 }

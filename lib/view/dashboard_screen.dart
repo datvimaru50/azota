@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:azt/view/profile_screen.dart';
 import 'package:azt/models/authen.dart';
-import 'package:azt/view/notificationScreen.dart';
 import 'package:azt/controller/login_controller.dart';
 
 class Dashboard extends StatefulWidget {
@@ -44,7 +43,12 @@ class _DashboardState extends State<Dashboard> {
                         Padding(
                           padding: EdgeInsets.all(20),
                           child: Text(
-                            rolesJson['TEACHER'] == 1 && rolesJson['PARENT'] == 1 ? "Giáo viên + Phụ huynh" : rolesJson['TEACHER'] == 1 ? "Giáo viên" : "Phụ huynh",
+                            rolesJson['TEACHER'] == 1 &&
+                                    rolesJson['PARENT'] == 1
+                                ? "Giáo viên + Phụ huynh"
+                                : rolesJson['TEACHER'] == 1
+                                    ? "Giáo viên"
+                                    : "Phụ huynh",
                             style: TextStyle(fontSize: 17),
                           ),
                         ),
@@ -57,14 +61,18 @@ class _DashboardState extends State<Dashboard> {
                                 onTap: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => ProfileScreen()),
+                                    MaterialPageRoute(
+                                        builder: (context) => ProfileScreen()),
                                   );
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.all(0),
                                   child: Container(
                                     padding: const EdgeInsets.only(
-                                        top: 40, bottom: 40, left: 10, right: 10),
+                                        top: 40,
+                                        bottom: 40,
+                                        left: 10,
+                                        right: 10),
                                     child: Text(
                                       snapshot.data.fullName,
                                       style: TextStyle(fontSize: 20),
@@ -75,8 +83,8 @@ class _DashboardState extends State<Dashboard> {
                                           color: Colors.grey.withOpacity(0.5),
                                           spreadRadius: 2,
                                           blurRadius: 7,
-                                          offset:
-                                          Offset(0, 3), // changes position of shadow
+                                          offset: Offset(0,
+                                              3), // changes position of shadow
                                         ),
                                       ],
                                       borderRadius: BorderRadius.circular(5.0),
@@ -92,17 +100,19 @@ class _DashboardState extends State<Dashboard> {
                                 onTap: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(
-                                        builder: (context) {
-                                          return Text('Thông báo');
-                                        }),
+                                    MaterialPageRoute(builder: (context) {
+                                      return Text('Thông báo');
+                                    }),
                                   );
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.all(0),
                                   child: Container(
                                     padding: const EdgeInsets.only(
-                                        top: 40, bottom: 40, left: 10, right: 10),
+                                        top: 40,
+                                        bottom: 40,
+                                        left: 10,
+                                        right: 10),
                                     child: Text(
                                       'Thông báo (9)',
                                       style: TextStyle(fontSize: 20),
@@ -113,8 +123,8 @@ class _DashboardState extends State<Dashboard> {
                                           color: Colors.grey.withOpacity(0.5),
                                           spreadRadius: 2,
                                           blurRadius: 7,
-                                          offset:
-                                          Offset(0, 3), // changes position of shadow
+                                          offset: Offset(0,
+                                              3), // changes position of shadow
                                         ),
                                       ],
                                       borderRadius: BorderRadius.circular(5.0),
@@ -132,15 +142,11 @@ class _DashboardState extends State<Dashboard> {
                         ),
                       ],
                     );
-
-                  } else if(snapshot.hasError) {
+                  } else if (snapshot.hasError) {
                     return Text("${snapshot.error}");
                   }
                   return CircularProgressIndicator();
-                }
-
-            ),
-
+                }),
           ],
         ),
       ),

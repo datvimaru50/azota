@@ -18,21 +18,27 @@ class NotificationScreen extends StatefulWidget {
   _NotificationScreenState createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> with WidgetsBindingObserver {
+class _NotificationScreenState extends State<NotificationScreen>
+    with WidgetsBindingObserver {
   Iterable _notiArr = [];
   var accessToken;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  // ignore: unused_field
   AppLifecycleState _notification;
 
   void fetchNoti() async {
-    var result = widget.role == 'parent' ? await NotiController.getNotiAnonymous(1) : await NotiController.getNoti(1);
+    var result = widget.role == 'parent'
+        ? await NotiController.getNotiAnonymous(1)
+        : await NotiController.getNoti(1);
     setState(() {
       _notiArr = result.objs;
     });
   }
 
   void getAccessToken() async {
-    var token = widget.role == 'parent' ? await Prefs.getPref(ANONYMOUS_TOKEN) : await Prefs.getPref(ACCESS_TOKEN);
+    var token = widget.role == 'parent'
+        ? await Prefs.getPref(ANONYMOUS_TOKEN)
+        : await Prefs.getPref(ACCESS_TOKEN);
     setState(() {
       accessToken = token;
     });
@@ -60,7 +66,10 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
               },
             ),
             TextButton(
-              child: Text('Đăng xuất', style: TextStyle(color: Colors.red),),
+              child: Text(
+                'Đăng xuất',
+                style: TextStyle(color: Colors.red),
+              ),
               onPressed: () {
                 Prefs.deletePref();
                 Navigator.pop(context);
@@ -72,7 +81,6 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
                 );
               },
             ),
-
           ],
         );
       },
@@ -82,31 +90,48 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
   Widget _buildList() {
     return _notiArr.length != 0
         ? RefreshIndicator(
-      child: Column(
-        children: <Widget>[
-          Expanded(child: ListView.builder(
-              padding: EdgeInsets.all(8),
-              itemCount:  _notiArr.length,
-              itemBuilder: (BuildContext context, int index) {
-                return widget.role == 'parent' ? NotificationStudentItem(
-                  className: _notiArr.elementAt(index)['classroomName'],
-                  score: _notiArr.elementAt(index)['point'].toString(),
-                  deadline: _notiArr.elementAt(index)['deadline'],
-                  submitTime: _notiArr.elementAt(index)['createdAt'],
-                  webUrl: 'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/xem-bai-tap/${_notiArr.elementAt(index)['answerId']}',
-                ) : NotificationTeacherItem(
-                  className: _notiArr.elementAt(index)['classroomName'],
-                  student: _notiArr.elementAt(index)['studentName'],
-                  deadline: _notiArr.elementAt(index)['deadline'],
-                  submitTime: _notiArr.elementAt(index)['createdAt'],
-                  webUrl: 'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/mark-exercise/${_notiArr.elementAt(index)['answerId']}',
-                );
-              }),)
-        ],
-      ),
-      onRefresh: _getData,
-    )
-        : Center(child: Text('Bạn không có thông báo nào!', style: TextStyle(fontSize: 18),));
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView.builder(
+                      padding: EdgeInsets.all(8),
+                      itemCount: _notiArr.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return widget.role == 'parent'
+                            ? NotificationStudentItem(
+                                className:
+                                    _notiArr.elementAt(index)['classroomName'],
+                                score: _notiArr
+                                    .elementAt(index)['point']
+                                    .toString(),
+                                deadline: _notiArr.elementAt(index)['deadline'],
+                                submitTime:
+                                    _notiArr.elementAt(index)['createdAt'],
+                                webUrl:
+                                    'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/xem-bai-tap/${_notiArr.elementAt(index)['answerId']}',
+                              )
+                            : NotificationTeacherItem(
+                                className:
+                                    _notiArr.elementAt(index)['classroomName'],
+                                student:
+                                    _notiArr.elementAt(index)['studentName'],
+                                deadline: _notiArr.elementAt(index)['deadline'],
+                                submitTime:
+                                    _notiArr.elementAt(index)['createdAt'],
+                                webUrl:
+                                    'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/mark-exercise/${_notiArr.elementAt(index)['answerId']}',
+                              );
+                      }),
+                )
+              ],
+            ),
+            onRefresh: _getData,
+          )
+        : Center(
+            child: Text(
+            'Bạn không có thông báo nào!',
+            style: TextStyle(fontSize: 18),
+          ));
   }
 
   Future<void> _getData() async {
@@ -120,7 +145,7 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
     if (state.index == 0) {
       _getData();
     }
-   }
+  }
 
   @override
   void initState() {
@@ -128,35 +153,32 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
     WidgetsBinding.instance.addObserver(this);
     fetchNoti();
     _firebaseMessaging.configure(
-      onMessage: (message) async{
+      onMessage: (message) async {
         _getData();
       },
-
     );
     _firebaseMessaging.getToken().then((String token) {
       assert(token != null);
-      if(widget.role == 'parent') {
+      if (widget.role == 'parent') {
         SavedToken.saveAnonymousToken(token);
       }
-      if(widget.role == 'teacher') {
+      if (widget.role == 'teacher') {
         SavedToken.saveToken(token);
       }
 
-      print('Init token: '+token);
+      print('Init token: ' + token);
     });
 
     _firebaseMessaging.onTokenRefresh.listen((token) {
       assert(token != null);
-      if(widget.role == 'parent') {
+      if (widget.role == 'parent') {
         SavedToken.saveAnonymousToken(token);
       }
-      if(widget.role == 'teacher') {
+      if (widget.role == 'teacher') {
         SavedToken.saveToken(token);
       }
-      print('Refresh token: '+token);
-
+      print('Refresh token: ' + token);
     });
-
   }
 
   @override
@@ -165,10 +187,8 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(
           title: Row(
@@ -180,14 +200,13 @@ class _NotificationScreenState extends State<NotificationScreen> with WidgetsBin
                   Icons.logout,
                   color: Colors.white,
                 ),
-                onTap: (){
+                onTap: () {
                   _showMyDialog();
                 },
               ),
             ],
           ),
         ),
-        body: _buildList()
-    );
+        body: _buildList());
   }
 }

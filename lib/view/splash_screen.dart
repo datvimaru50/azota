@@ -4,7 +4,6 @@ import 'package:azt/config/global.dart';
 import 'package:azt/view/mainHome.dart';
 
 class Splash extends StatefulWidget {
-
   @override
   _MyAppState createState() => new _MyAppState();
 }
@@ -26,16 +25,20 @@ class _MyAppState extends State<Splash> {
         future: accessToken,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return NotificationScreen(role: 'teacher',);
-          } else if (snapshot.hasError){
+            return NotificationScreen(
+              role: 'teacher',
+            );
+          } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
           return FutureBuilder(
             future: anonymousToken,
             builder: (context, snapshot) {
-              if(snapshot.hasData) {
-                return NotificationScreen(role: 'parent',);
-              } else if(snapshot.hasError){
+              if (snapshot.hasData) {
+                return NotificationScreen(
+                  role: 'parent',
+                );
+              } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
               return MainHome();
