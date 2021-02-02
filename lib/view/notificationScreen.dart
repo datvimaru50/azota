@@ -18,10 +18,11 @@ class NotificationScreen extends StatefulWidget {
   _NotificationScreenState createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> {
+class _NotificationScreenState extends State<NotificationScreen> with WidgetsBindingObserver {
   Iterable _notiArr = [];
   var accessToken;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  AppLifecycleState _notification;
 
   void fetchNoti() async {
     var result = widget.role == 'parent' ? await NotiController.getNotiAnonymous(1) : await NotiController.getNoti(1);
@@ -31,7 +32,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   void getAccessToken() async {
-    var token = widget.role == 'parent' ? Prefs.getPref(ANONYMOUS_TOKEN) : Prefs.getPref(ACCESS_TOKEN);
+    var token = widget.role == 'parent' ? await Prefs.getPref(ANONYMOUS_TOKEN) : await Prefs.getPref(ACCESS_TOKEN);
     setState(() {
       accessToken = token;
     });
@@ -115,15 +116,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state.index == 0) {
+      _getData();
+    }
+   }
+
+  @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     fetchNoti();
     _firebaseMessaging.configure(
       onMessage: (message) async{
-        setState(() {
-          // notiArray.toList().insert(0, message["data"]);
-        });
-
+        _getData();
       },
 
     );
@@ -152,6 +158,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
     });
 
   }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
