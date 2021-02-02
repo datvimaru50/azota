@@ -1,5 +1,8 @@
+import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class NotificationStudentItem extends StatefulWidget {
   NotificationStudentItem(
@@ -25,6 +28,13 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    Intl.defaultLocale = 'vi_VN';
+    initializeDateFormatting();
+  }
 
   @override
   // ignore: must_call_super
@@ -85,19 +95,14 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                                     children: <TextSpan>[
                                       TextSpan(
                                         text: 'Kết quả Bài tập ',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: _clickedStatus
-                                              ? Colors.black38
-                                              : Color(0xff00c0ef),
-                                        ),
+                                        style: TextStyle(fontSize: 16),
                                       ),
                                       TextSpan(
-                                        text: ' Ngày ${widget.deadline}',
+                                        text: ' Ngày ' +
+                                            DateFormat.yMd().format(
+                                                DateTime.parse(
+                                                    widget.deadline)),
                                         style: TextStyle(
-                                            color: _clickedStatus
-                                                ? Colors.black38
-                                                : Color(0xff00c0ef),
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),
                                       ),
@@ -114,12 +119,12 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                           Padding(
                             padding:
                                 EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                            child: Text(widget.submitTime,
-                                style: TextStyle(
-                                  color: _clickedStatus
-                                      ? Colors.black38
-                                      : Color(0xff00c0ef),
-                                )),
+                            child: Text(DateTimeFormat.relative(
+                                DateTime.parse(widget.submitTime),
+                                relativeTo: DateTime.now(),
+                                levelOfPrecision: 1,
+                                appendIfAfter: ' ago',
+                                abbr: true)),
                           ),
                         ],
                       ),
@@ -150,7 +155,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
             ],
           ),
           margin: EdgeInsets.only(
-            bottom: 10,
+            top: 10,
             left: 10,
             right: 10,
           ),

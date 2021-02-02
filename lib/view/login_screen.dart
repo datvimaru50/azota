@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:azt/view/notificationScreenTeacher.dart';
+import 'package:azt/view/notificationScreen.dart';
 import 'package:azt/view/register_screen.dart';
 
 import 'package:azt/controller/login_controller.dart';
@@ -47,6 +47,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   bool _showPass = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,9 +61,9 @@ class _LoginFormState extends State<LoginForm> {
               top: 20,
             ),
             children: <Widget>[
-              Image.network(
-                'https://i0.wp.com/s1.uphinh.org/2021/01/15/logo.png',
-                height: 80,
+              Image(
+                image: AssetImage('assets/logo.png'),
+                height: 100,
               ),
               Container(
                 child: Column(
@@ -153,11 +154,15 @@ class _LoginFormState extends State<LoginForm> {
                                       Duration(seconds: 1),
                                       () {
                                         print('OK Message: ' + ok.toString());
-                                        Navigator.of(context).pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    NotificationScreenTeacher()),
-                                            (Route<dynamic> route) => false);
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        NotificationScreen(
+                                                          role: 'teacher',
+                                                        )),
+                                                (Route<dynamic> route) =>
+                                                    false);
                                       },
                                     );
                                   }).catchError((onError) {

@@ -1,5 +1,8 @@
+import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class NotificationTeacherItem extends StatefulWidget {
   NotificationTeacherItem(
@@ -22,9 +25,17 @@ class NotificationTeacherItem extends StatefulWidget {
 class _NotifTeacherItemState extends State<NotificationTeacherItem>
     with AutomaticKeepAliveClientMixin {
   bool _clickedStatus = false;
+  DateFormat dateFormat;
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    Intl.defaultLocale = 'vi_VN';
+    initializeDateFormatting();
+  }
 
   @override
   // ignore: must_call_super
@@ -32,9 +43,9 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
     return Center(
       child: GestureDetector(
         onTap: () {
-          setState(() {
-            _clickedStatus = true;
-          });
+          // setState(() {
+          //   _clickedStatus = true;
+          // });
           launch(widget.webUrl);
         },
         child: Container(
@@ -91,18 +102,15 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
                                       ),
                                       TextSpan(
                                           text: ' nộp bài tập',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: _clickedStatus
-                                                ? Colors.black38
-                                                : Color(0xff00c0ef),
-                                          )),
+                                          style: TextStyle(fontSize: 16)),
                                       TextSpan(
-                                        text: ' Ngày ' + widget.deadline,
+                                        // text: ' Ngày '+ DateTimeFormat.format( DateTime.parse(widget.deadline), format: 'd/m/y' ),
+                                        text: ' Ngày ' +
+                                            DateFormat.yMd().format(
+                                                DateTime.parse(
+                                                    widget.deadline)),
                                         style: TextStyle(
-                                            color: _clickedStatus
-                                                ? Colors.black38
-                                                : Color(0xff00c0ef),
+                                            // color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
                                             fontWeight: FontWeight.bold,
                                             fontSize: 16),
                                       ),
@@ -119,12 +127,16 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
                           Padding(
                             padding:
                                 EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                            child: Text(widget.submitTime,
+                            child: Text(
+                                DateTimeFormat.relative(
+                                    DateTime.parse(widget.submitTime),
+                                    relativeTo: DateTime.now(),
+                                    levelOfPrecision: 1,
+                                    appendIfAfter: ' ago',
+                                    abbr: true),
                                 style: TextStyle(
-                                  color: _clickedStatus
-                                      ? Colors.black38
-                                      : Color(0xff00c0ef),
-                                )),
+                                    // color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
+                                    )),
                           ),
                         ],
                       ),
@@ -136,7 +148,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
             ],
           ),
           margin: EdgeInsets.only(
-            bottom: 10,
+            top: 10,
             left: 10,
             right: 10,
           ),

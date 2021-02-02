@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'package:azt/config/connect.dart';
-import 'package:azt/view/dashboard_screen.dart';
+import 'package:azt/view/notificationScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -42,7 +42,10 @@ class _RegisterScreen extends State<RegisterScreen> {
     var data = jsonDecode(reponse.body);
     if (data['code'] == 200) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => Dashboard()),
+          MaterialPageRoute(
+              builder: (context) => NotificationScreen(
+                    role: 'teacher',
+                  )),
           (Route<dynamic> route) => false);
       //log data in api
       // ignore: unnecessary_brace_in_string_interps
@@ -71,9 +74,9 @@ class _RegisterScreen extends State<RegisterScreen> {
               top: 40,
             ),
             children: <Widget>[
-              Image.network(
-                'https://i0.wp.com/s1.uphinh.org/2021/01/15/logo.png',
-                height: 80,
+              Image(
+                image: AssetImage('assets/logo.png'),
+                height: 100,
               ),
               Container(
                 child: Column(
@@ -157,7 +160,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 hintText: 'email (không bắt buộc)',
-                                prefixIcon: Icon(Icons.lock),
+                                prefixIcon: Icon(Icons.email),
                               ),
                               // ignore: missing_return
                               validator: (value) {
