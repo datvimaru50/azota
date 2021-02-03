@@ -194,7 +194,7 @@ class _NotificationScreenState extends State<NotificationScreen>
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Thông báo'),
+              Text(widget.role == 'teacher' ? 'Thông báo giáo viên' : 'Thông báo phụ huynh'),
               GestureDetector(
                 child: Icon(
                   Icons.logout,
