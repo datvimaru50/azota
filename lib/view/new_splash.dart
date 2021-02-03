@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 void main() {
   runApp(NewSplash());
@@ -26,7 +27,8 @@ class _NewSplashState extends State<NewSplash> {
               children: [
                 Image(
                   image: AssetImage('assets/icon_app_512.png'),
-                  height: 170,
+                  height: 160,
+                  color: Color(0xFF42C0B6),
                 ),
                 Image(
                   image: AssetImage('assets/azota-logo-text.png'),
@@ -43,13 +45,18 @@ class _NewSplashState extends State<NewSplash> {
                   padding: EdgeInsets.only(right: 0),
                   child: Text(
                     'giao bài tập',
-                    textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
               ],
             ),
-            CircularProgressIndicator(),
+            SizedBox(
+              height: 70,
+              child: LoadingIndicator(
+                indicatorType: Indicator.ballClipRotatePulse,
+                color: Color(0xFF42C0B6),
+              ),
+            ),
             Container(
               child: Column(
                 children: [
