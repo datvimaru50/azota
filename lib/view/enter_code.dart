@@ -71,8 +71,10 @@ class _CodeFormState extends State<CodeForm> {
                         Padding(
                           padding:
                               EdgeInsets.only(top: 20, left: 10, right: 10),
-                          child: Image.network(
-                              'https://i0.wp.com/s1.uphinh.org/2021/01/21/exersiceCode.png'),
+                          child: Image(
+                            image: AssetImage('assets/code.png'),
+
+                          ),
                         ),
                         Form(
                           key: _formKey,

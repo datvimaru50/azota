@@ -180,56 +180,56 @@ class _LoginFormState extends State<LoginForm> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5.0),
-                      child: Text(
-                        '---Hoặc---',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5.0),
-                      child: OutlineButton.icon(
-                        disabledBorderColor: Colors.blue,
-                        padding: EdgeInsets.only(
-                            top: 5.0, bottom: 5, left: 15, right: 15),
-                        onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => SecondRoute()),
-                          // );
-                        },
-                        icon: Image(
-                          image: AssetImage('assets/zalo.png'),
-                          width: 35,
-                        ),
-                        label: Text(
-                          'Đăng nhập bằng Zalo',
-                          style:
-                              TextStyle(color: Color(0xff17A2B8), fontSize: 15),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Column(
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => RegisterScreen()),
-                              );
-                            },
-                            child: Text(
-                              'Đăng ký thành viên mới',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    //   child: Text(
+                    //     '---Hoặc---',
+                    //     style: TextStyle(fontSize: 15),
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    //   child: OutlineButton.icon(
+                    //     disabledBorderColor: Colors.blue,
+                    //     padding: EdgeInsets.only(
+                    //         top: 5.0, bottom: 5, left: 15, right: 15),
+                    //     onPressed: () {
+                    //       // Navigator.push(
+                    //       //   context,
+                    //       //   MaterialPageRoute(builder: (context) => SecondRoute()),
+                    //       // );
+                    //     },
+                    //     icon: Image(
+                    //       image: AssetImage('assets/zalo.png'),
+                    //       width: 35,
+                    //     ),
+                    //     label: Text(
+                    //       'Đăng nhập bằng Zalo',
+                    //       style:
+                    //           TextStyle(color: Color(0xff17A2B8), fontSize: 15),
+                    //     ),
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 10),
+                    //   child: Column(
+                    //     children: <Widget>[
+                    //       GestureDetector(
+                    //         onTap: () {
+                    //           Navigator.push(
+                    //             context,
+                    //             MaterialPageRoute(
+                    //                 builder: (context) => RegisterScreen()),
+                    //           );
+                    //         },
+                    //         child: Text(
+                    //           'Đăng ký thành viên mới',
+                    //           style: TextStyle(fontSize: 16),
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
                 margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
