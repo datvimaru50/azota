@@ -52,9 +52,6 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xFFecf0f5),
-        appBar: AppBar(
-          title: Text('Đăng Nhập'),
-        ),
         body: Center(
           child: new ListView(
             padding: const EdgeInsets.only(
@@ -202,14 +199,14 @@ class _LoginFormState extends State<LoginForm> {
                           //   MaterialPageRoute(builder: (context) => SecondRoute()),
                           // );
                         },
-                        icon: Image.network(
-                          'https://i0.wp.com/s1.uphinh.org/2021/01/21/Logo-zalo-png.png',
+                        icon: Image(
+                          image: AssetImage('assets/zalo.png'),
                           width: 35,
                         ),
                         label: Text(
                           'Đăng nhập bằng Zalo',
                           style:
-                              TextStyle(color: Color(0xff17A2B8), fontSize: 18),
+                              TextStyle(color: Color(0xff17A2B8), fontSize: 15),
                         ),
                       ),
                     ),
