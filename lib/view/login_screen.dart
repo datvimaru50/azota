@@ -47,6 +47,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   bool _showPass = true;
+  bool _isSigningIn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +133,9 @@ class _LoginFormState extends State<LoginForm> {
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: _isSigningIn ? null
+                          :
+                              () {
                             // Validate will return true if the form is valid, or false if
                             // the form is invalid.
                             if (_formKey.currentState.validate()) {
@@ -141,11 +144,15 @@ class _LoginFormState extends State<LoginForm> {
                                 "password": password.text,
                               };
 
+                              setState((){
+                                _isSigningIn = true;
+                              });
+
                               LoginController.loginGetAccessToken(paramsLogin)
                                   .then((ok) {
                                 Future.delayed(
                                   Duration(seconds: 1),
-                                  () {
+                                      () {
                                     print('OK Message: ' + ok.toString());
                                     Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
@@ -153,10 +160,13 @@ class _LoginFormState extends State<LoginForm> {
                                                 NotificationScreen(
                                                   role: 'teacher',
                                                 )),
-                                        (Route<dynamic> route) => false);
+                                            (Route<dynamic> route) => false);
                                   },
                                 );
                               }).catchError((onError) {
+                                setState((){
+                                  _isSigningIn = false;
+                                });
                                 return Fluttertoast.showToast(
                                     msg: "Thông tin đăng nhập không hợp lệ",
                                     toastLength: Toast.LENGTH_SHORT,
@@ -168,7 +178,7 @@ class _LoginFormState extends State<LoginForm> {
                               });
                             }
                           },
-                          child: Text('Đăng Nhập'),
+                          child: Text(_isSigningIn ? 'Đang đăng nhập...' :'Đăng Nhập'),
                         ),
                       ),
                     ],
