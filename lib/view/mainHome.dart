@@ -16,16 +16,15 @@ class _MainHomeState extends State<MainHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFecf0f5),
-      appBar: AppBar(
-        title: Text('Trang Chủ'),
-      ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(right: 15),
-              child: Image.network(
-                'https://i0.wp.com/s1.uphinh.org/2021/01/15/logo.png',
+              child: Image(
+                image: AssetImage('assets/logo.png'),
                 height: 120,
               ),
             ),
