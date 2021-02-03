@@ -39,7 +39,7 @@ class _CodeFormState extends State<CodeForm> {
           future: anonymousUser,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              print('anonymous token: ' + snapshot.data.rememberToken);
+              // print('anonymous token: ' + snapshot.data.rememberToken);
               return new ListView(
                 padding: const EdgeInsets.only(
                   top: 40,

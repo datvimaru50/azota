@@ -37,11 +37,9 @@ class NotiObject {
     });
 
     if(response.statusCode == 200){
-      print('Nhận notif thành công từ server! '+response.body);
       final obj = json.decode(response.body);
       return NotiObject.fromJson(obj);
     } else {
-      print('Nhận notif KHÔNG thành công từ server!');
       return throw 'Có lỗi xảy ra';
     }
 

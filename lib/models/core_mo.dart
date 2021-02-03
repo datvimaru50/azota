@@ -93,21 +93,6 @@ class Student{
   );
 }
 
-// class HomeworkHashIdInfo{
-//   List<Student> studentObjs;
-//
-//   HomeworkHashIdInfo({this.studentObjs});
-//
-//   factory HomeworkHashIdInfo.fromJson(Map<String, dynamic> json){
-//     Iterable stdList = json['studentObjs'];
-//     List<Student> students = List<Student>.from(stdList.map((model)=> Student.fromJson(model)));
-//
-//     return new HomeworkHashIdInfo(
-//         studentObjs: students
-//     );
-//   }
-//
-// }
 
 class HomeworkHashIdInfo{
   Iterable studentObjs;

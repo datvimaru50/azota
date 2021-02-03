@@ -36,8 +36,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
           future: homeworkHashIdInfo,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              print('thong tin hashid ' +
-                  snapshot.data.studentObjs.elementAt(0)['fullName']);
+              // print('thong tin hashid ' +snapshot.data.studentObjs.elementAt(0)['fullName']);
               return CustomScrollView(
                 slivers: <Widget>[
                   SliverGrid(

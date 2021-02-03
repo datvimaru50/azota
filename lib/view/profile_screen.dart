@@ -14,7 +14,7 @@ class ProfileScreen extends StatelessWidget {
         body: Center(
           child: ElevatedButton(
             onPressed: () {
-              print('Đăng xuất');
+              // print('Đăng xuất');
               Prefs.deletePref();
               Navigator.pop(context);
               Navigator.pushAndRemoveUntil(

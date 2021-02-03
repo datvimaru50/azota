@@ -40,7 +40,6 @@ class SavedToken {
       final tkn = json.decode(response.body);
       return SavedToken.fromJson(tkn);
     } else {
-      print('Save token không thành công!');
       return throw 'Có lỗi xảy ra';
     }
   }

@@ -166,7 +166,7 @@ class _NotificationScreenState extends State<NotificationScreen>
         SavedToken.saveToken(token);
       }
 
-      print('Init token: ' + token);
+      // print('Init token: ' + token);
     });
 
     _firebaseMessaging.onTokenRefresh.listen((token) {
@@ -177,7 +177,7 @@ class _NotificationScreenState extends State<NotificationScreen>
       if (widget.role == 'teacher') {
         SavedToken.saveToken(token);
       }
-      print('Refresh token: ' + token);
+      // print('Refresh token: ' + token);
     });
   }
 
