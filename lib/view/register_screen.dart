@@ -239,7 +239,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                         },
                         icon: Image(
                           image: AssetImage('assets/zalo.png'),
-                          width: 35,
+                          height: 80,
                         ),
                         label: Text(
                           'Đăng nhập bằng Zalo',

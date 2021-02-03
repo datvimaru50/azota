@@ -25,7 +25,7 @@ class _MainHomeState extends State<MainHome> {
               padding: EdgeInsets.only(right: 15),
               child: Image(
                 image: AssetImage('assets/logo.png'),
-                height: 120,
+                height: 90,
               ),
             ),
             Padding(

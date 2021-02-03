@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/view/notificationScreen.dart';
-import 'package:azt/view/register_screen.dart';
+// import 'package:azt/view/register_screen.dart';
 
 import 'package:azt/controller/login_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -51,199 +51,193 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFecf0f5),
-        body: Center(
-          child: new ListView(
-            padding: const EdgeInsets.only(
-              top: 20,
-            ),
-            children: <Widget>[
-              Image(
-                image: AssetImage('assets/logo.png'),
-                height: 100,
-              ),
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      'ĐĂNG NHẬP',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 10,
-                              right: 10,
-                              top: 15,
+      backgroundColor: Color(0xFFecf0f5),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Image(
+            image: AssetImage('assets/logo.png'),
+            height: 80,
+          ),
+          Container(
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'ĐĂNG NHẬP',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          top: 15,
+                        ),
+                        child: TextFormField(
+                          controller: numberPhone,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                            child: TextFormField(
-                              controller: numberPhone,
+                            hintText: 'Số điện thoại',
+                            prefixIcon: Icon(Icons.phone_android_outlined),
+                          ),
+                          validator: (value) => validatePhone(value),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          top: 10,
+                        ),
+                        child: Stack(
+                          alignment: AlignmentDirectional.centerEnd,
+                          children: [
+                            TextFormField(
+                              controller: password,
+                              obscureText: _showPass,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                hintText: 'Số điện thoại',
-                                prefixIcon: Icon(Icons.phone_android_outlined),
+                                hintText: 'Mật Khẩu',
+                                prefixIcon: Icon(Icons.lock),
+                                // suffixIcon: Icon(Icons.remove_red_eye),
                               ),
-                              validator: (value) => validatePhone(value),
+                              validator: (value) => validatePassword(value),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 10,
-                              right: 10,
-                              top: 10,
-                            ),
-                            child: Stack(
-                              alignment: AlignmentDirectional.centerEnd,
-                              children: [
-                                TextFormField(
-                                  controller: password,
-                                  obscureText: _showPass,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    hintText: 'Mật Khẩu',
-                                    prefixIcon: Icon(Icons.lock),
-                                    // suffixIcon: Icon(Icons.remove_red_eye),
-                                  ),
-                                  validator: (value) => validatePassword(value),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _showPass = !_showPass;
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 5),
-                                    child: FaIcon(
-                                      _showPass
-                                          ? Icons.remove_red_eye_rounded
-                                          : FontAwesomeIcons.lowVision,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // Validate will return true if the form is valid, or false if
-                                // the form is invalid.
-                                if (_formKey.currentState.validate()) {
-                                  final paramsLogin = <String, dynamic>{
-                                    "phone": numberPhone.text,
-                                    "password": password.text,
-                                  };
-
-                                  LoginController.loginGetAccessToken(
-                                          paramsLogin)
-                                      .then((ok) {
-                                    Future.delayed(
-                                      Duration(seconds: 1),
-                                      () {
-                                        print('OK Message: ' + ok.toString());
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        NotificationScreen(
-                                                          role: 'teacher',
-                                                        )),
-                                                (Route<dynamic> route) =>
-                                                    false);
-                                      },
-                                    );
-                                  }).catchError((onError) {
-                                    return Fluttertoast.showToast(
-                                        msg: "Thông tin đăng nhập không hợp lệ",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIos: 1,
-                                        backgroundColor: Colors.red,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                  });
-                                }
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _showPass = !_showPass;
+                                });
                               },
-                              child: Text('Đăng Nhập'),
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 5),
+                                child: FaIcon(
+                                  _showPass
+                                      ? Icons.remove_red_eye_rounded
+                                      : FontAwesomeIcons.lowVision,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    //   child: Text(
-                    //     '---Hoặc---',
-                    //     style: TextStyle(fontSize: 15),
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    //   child: OutlineButton.icon(
-                    //     disabledBorderColor: Colors.blue,
-                    //     padding: EdgeInsets.only(
-                    //         top: 5.0, bottom: 5, left: 15, right: 15),
-                    //     onPressed: () {
-                    //       // Navigator.push(
-                    //       //   context,
-                    //       //   MaterialPageRoute(builder: (context) => SecondRoute()),
-                    //       // );
-                    //     },
-                    //     icon: Image(
-                    //       image: AssetImage('assets/zalo.png'),
-                    //       width: 35,
-                    //     ),
-                    //     label: Text(
-                    //       'Đăng nhập bằng Zalo',
-                    //       style:
-                    //           TextStyle(color: Color(0xff17A2B8), fontSize: 15),
-                    //     ),
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 10),
-                    //   child: Column(
-                    //     children: <Widget>[
-                    //       GestureDetector(
-                    //         onTap: () {
-                    //           Navigator.push(
-                    //             context,
-                    //             MaterialPageRoute(
-                    //                 builder: (context) => RegisterScreen()),
-                    //           );
-                    //         },
-                    //         child: Text(
-                    //           'Đăng ký thành viên mới',
-                    //           style: TextStyle(fontSize: 16),
-                    //         ),
-                    //       )
-                    //     ],
-                    //   ),
-                    // ),
-                  ],
-                ),
-                margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
-                padding: const EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  border: Border.all(
-                    color: Colors.black12,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Validate will return true if the form is valid, or false if
+                            // the form is invalid.
+                            if (_formKey.currentState.validate()) {
+                              final paramsLogin = <String, dynamic>{
+                                "phone": numberPhone.text,
+                                "password": password.text,
+                              };
+
+                              LoginController.loginGetAccessToken(paramsLogin)
+                                  .then((ok) {
+                                Future.delayed(
+                                  Duration(seconds: 1),
+                                  () {
+                                    print('OK Message: ' + ok.toString());
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                NotificationScreen(
+                                                  role: 'teacher',
+                                                )),
+                                        (Route<dynamic> route) => false);
+                                  },
+                                );
+                              }).catchError((onError) {
+                                return Fluttertoast.showToast(
+                                    msg: "Thông tin đăng nhập không hợp lệ",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIos: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              });
+                            }
+                          },
+                          child: Text('Đăng Nhập'),
+                        ),
+                      ),
+                    ],
                   ),
-                  color: Colors.white,
                 ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 5.0),
+                //   child: Text(
+                //     '---Hoặc---',
+                //     style: TextStyle(fontSize: 15),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(vertical: 5.0),
+                //   child: OutlineButton.icon(
+                //     disabledBorderColor: Colors.blue,
+                //     padding: EdgeInsets.only(
+                //         top: 5.0, bottom: 5, left: 15, right: 15),
+                //     onPressed: () {
+                //       // Navigator.push(
+                //       //   context,
+                //       //   MaterialPageRoute(builder: (context) => SecondRoute()),
+                //       // );
+                //     },
+                //     icon: Image(
+                //       image: AssetImage('assets/zalo.png'),
+                //       width: 35,
+                //     ),
+                //     label: Text(
+                //       'Đăng nhập bằng Zalo',
+                //       style:
+                //           TextStyle(color: Color(0xff17A2B8), fontSize: 15),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 10),
+                //   child: Column(
+                //     children: <Widget>[
+                //       GestureDetector(
+                //         onTap: () {
+                //           Navigator.push(
+                //             context,
+                //             MaterialPageRoute(
+                //                 builder: (context) => RegisterScreen()),
+                //           );
+                //         },
+                //         child: Text(
+                //           'Đăng ký thành viên mới',
+                //           style: TextStyle(fontSize: 16),
+                //         ),
+                //       )
+                //     ],
+                //   ),
+                // ),
+              ],
+            ),
+            margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+            padding: const EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5.0),
+              border: Border.all(
+                color: Colors.black12,
               ),
-            ],
+              color: Colors.white,
+            ),
           ),
-        ));
+        ],
+      ),
+    );
   }
 }
