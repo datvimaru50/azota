@@ -1,8 +1,8 @@
+import 'package:azt/view/new_splash.dart';
 import 'package:flutter/material.dart';
-import 'view/splash_screen.dart';
 
 void main() {
-  runApgitMaterialApp(
-    home: Splash(),
+  runApp(MaterialApp(
+    home: NewSplash(),
   ));
 }
