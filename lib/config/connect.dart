@@ -1,4 +1,3 @@
-const AZT_SERVER_NAME = "https://azota.vn/api"; //your server's ip address
 const AZT_DEV_SERVER = "https://azota.vn/api";
 
 const AZO_REGISTER = "$AZT_DEV_SERVER/auth/register";

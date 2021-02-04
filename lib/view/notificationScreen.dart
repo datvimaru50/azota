@@ -5,6 +5,7 @@ import 'package:azt/view/notification/notificationTeacher.dart';
 import 'package:azt/controller/notification_controller.dart';
 import 'package:azt/models/firebase_mo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:azt/config/global.dart';
 import 'package:azt/view/splash_screen.dart';
@@ -90,11 +91,57 @@ class _NotificationScreenState extends State<NotificationScreen>
     );
   }
 
+  Widget _buildFeatures() {
+    return widget.role == 'teacher'
+        ? Container(
+      color: Color(0xFF0089a7),
+      child: Padding(
+        padding: EdgeInsets.all(15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: (){
+                launch('https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/classes');
+              },
+              child: Column(
+                children: [
+                  Image(
+                    image: AssetImage('assets/class.png'),
+                    height: 90,
+                  ),
+                  Text('Giao bài tập', style: TextStyle(color: Colors.white, fontSize: 16),)
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: (){
+                launch('https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/content-store');
+              },
+              child: Column(
+                children: [
+                  Image(
+                    image: AssetImage('assets/store.png'),
+                    height: 90,
+                  ),
+                  Text('Ngân hàng nội dung', style: TextStyle(color: Colors.white, fontSize: 16),)
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    )
+        : Text('');
+  }
+
   Widget _buildList() {
     return _notiArr.length != 0
         ? RefreshIndicator(
             child: Column(
               children: <Widget>[
+                _buildFeatures(),
                 Expanded(
                   child: ListView.builder(
                       padding: EdgeInsets.all(8),
@@ -211,6 +258,7 @@ class _NotificationScreenState extends State<NotificationScreen>
             ],
           ),
         ),
-        body: _buildList());
+        body: _buildList(),
+    );
   }
 }
