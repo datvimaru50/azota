@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="azt.azt">
-   <application
-        android:label="azt"
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application
+        android:label="Azota"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
