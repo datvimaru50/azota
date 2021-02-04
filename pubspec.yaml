@@ -38,6 +38,7 @@ dependencies:
   date_time_picker: ^1.1.1
   loading_indicator: ^1.2.0
   provider: ^4.3.3
+  flutter_native_splash: ^0.2.9
   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -65,9 +66,6 @@ flutter:
    - assets/logo.png
    - assets/zalo.png
    - assets/code.png
-   - assets/icon_app_512.png
-   - assets/azota-logo-text.png
-   - assets/splashscreen.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

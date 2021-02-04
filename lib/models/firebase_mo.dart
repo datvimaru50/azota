@@ -61,6 +61,23 @@ class SavedToken {
       return throw 'Có lỗi xảy ra';
     }
   }
+
+
+  // Function to delete firebase token according to user token
+  static Future<String> deleteToken(String userToken) async {
+    final response = await http.Client()
+        .get(AZO_TOKEN_DELETE, headers: {
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.authorizationHeader: "Bearer " + userToken
+    });
+
+    if (response.statusCode == 200) {
+      final tkn = json.decode(response.body);
+      return "DELETE_SUCCESS";
+    } else {
+      return throw 'DELETE_FAIL';
+    }
+  }
 }
 
 class Data {

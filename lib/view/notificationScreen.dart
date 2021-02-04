@@ -73,6 +73,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () {
+                SavedToken.deleteToken(accessToken);
                 Prefs.deletePref();
                 Navigator.pop(context);
                 Navigator.pushAndRemoveUntil(
