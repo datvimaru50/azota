@@ -22,7 +22,7 @@ class _MainHomeState extends State<MainHome> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.only(right: 15),
+              padding: EdgeInsets.only(right: 0),
               child: Image(
                 image: AssetImage('assets/logo.png'),
                 height: 90,

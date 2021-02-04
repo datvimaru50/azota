@@ -67,6 +67,7 @@ flutter:
    - assets/code.png
    - assets/icon_app_512.png
    - assets/azota-logo-text.png
+   - assets/splashscreen.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
