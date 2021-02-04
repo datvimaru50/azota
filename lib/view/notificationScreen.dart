@@ -42,6 +42,8 @@ class _NotificationScreenState extends State<NotificationScreen>
     setState(() {
       accessToken = token;
     });
+
+    print('accesstoken::: '+accessToken);
   }
 
   Future<void> _showMyDialog() async {
@@ -152,6 +154,7 @@ class _NotificationScreenState extends State<NotificationScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     fetchNoti();
+    getAccessToken();
     _firebaseMessaging.configure(
       onMessage: (message) async {
         _getData();
