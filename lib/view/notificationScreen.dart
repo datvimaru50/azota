@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:azt/config/global.dart';
 import 'package:azt/view/splash_screen.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class NotificationScreen extends StatefulWidget {
   NotificationScreen({@required this.role});
@@ -76,6 +77,7 @@ class _NotificationScreenState extends State<NotificationScreen>
               onPressed: () {
                 SavedToken.deleteToken(accessToken);
                 Prefs.deletePref();
+                _firebaseMessaging.deleteInstanceID();
                 Navigator.pop(context);
                 Navigator.pushAndRemoveUntil(
                   context,
@@ -203,10 +205,12 @@ class _NotificationScreenState extends State<NotificationScreen>
     WidgetsBinding.instance.addObserver(this);
     fetchNoti();
     getAccessToken();
+
     _firebaseMessaging.configure(
       onMessage: (message) async {
         _getData();
       },
+      onBackgroundMessage: myBackgroundMessageHandler
     );
     _firebaseMessaging.getToken().then((String token) {
       assert(token != null);
@@ -236,6 +240,11 @@ class _NotificationScreenState extends State<NotificationScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  // TOP-LEVEL or STATIC function to handle background messages
+  static Future<void> myBackgroundMessageHandler(Map<String, dynamic> message) {
+    print('AppPushs myBackgroundMessageHandler : $message');
   }
 
   @override
