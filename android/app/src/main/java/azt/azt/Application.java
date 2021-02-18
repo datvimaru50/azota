@@ -9,12 +9,15 @@ import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.plugins.firebasemessaging.FlutterFirebaseMessagingService;
 import io.flutter.plugins.firebasemessaging.FirebaseMessagingPlugin;
 
+import com.zing.zalo.zalosdk.oauth.ZaloSDKApplication;
+
 public class Application extends FlutterApplication implements PluginRegistrantCallback {
 
     @Override
     @CallSuper
     public void onCreate() {
         super.onCreate();
+        ZaloSDKApplication.wrap(this);
         FlutterFirebaseMessagingService.setPluginRegistrant(this);
     }
 

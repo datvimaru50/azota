@@ -7,6 +7,7 @@ import 'package:azt/config/global.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:azt/models/authen.dart';
 import 'package:azt/models/anonymous_use.dart';
+import 'package:azt/models/zalo_mo.dart';
 
 // Login controller, handle different type of logins
 enum Status {
@@ -99,6 +100,23 @@ class LoginController extends ControllerMVC {
       Prefs.savePrefs(ANONYMOUS_TOKEN, anonymousInfo['rememberToken']);
       return AnonymousUser.fromJson(anonymousInfo);
     } else {
+      return throw 'Có lỗi xảy ra';
+    }
+  }
+
+  static Future<UserZalo> loginZalo(String code, int role) async {
+    final response = await http.Client().get(AZO_AUTH_ZALO + '?code=' + code + '&isTeacher=' + role.toString(), headers: {
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+    });
+
+    if (response.statusCode == 200) {
+      print('Gọi api thanh cong:::::>>>>');
+      final responseBody = json.decode(response.body);
+      var zaloInfo = responseBody['data'];
+      Prefs.savePrefs(ACCESS_TOKEN, zaloInfo['rememberToken']);
+      return UserZalo.fromJson(zaloInfo);
+    } else {
+      print('Gọi api KHONG THÀNH CÔNG:::::>>>>');
       return throw 'Có lỗi xảy ra';
     }
   }

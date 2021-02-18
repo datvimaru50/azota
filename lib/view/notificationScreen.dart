@@ -9,7 +9,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:azt/config/global.dart';
 import 'package:azt/view/splash_screen.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class NotificationScreen extends StatefulWidget {
   NotificationScreen({@required this.role});

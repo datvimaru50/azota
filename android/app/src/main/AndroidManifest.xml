@@ -46,5 +46,20 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- Zalo authen -->
+        <meta-data
+            android:name="com.zing.zalo.zalosdk.appID"
+            android:value="@string/appID" />
+        <activity
+            android:name="com.zing.zalo.zalosdk.oauth.BrowserLoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="@string/zalosdk_login_protocol_schema"/>
+            </intent-filter>
+        </activity>
+
     </application>
 </manifest>

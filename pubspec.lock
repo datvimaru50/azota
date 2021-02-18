@@ -210,6 +210,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_zalo_login:
+    dependency: "direct main"
+    description:
+      name: flutter_zalo_login
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.9+1"
   fluttertoast:
     dependency: "direct main"
     description:

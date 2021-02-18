@@ -6,6 +6,8 @@ import 'package:azt/view/notificationScreen.dart';
 import 'package:azt/controller/login_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:flutter_zalo_login/flutter_zalo_login.dart';
+
 class LoginForm extends StatefulWidget {
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -15,6 +17,23 @@ class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final numberPhone = TextEditingController();
   final password = TextEditingController();
+
+  bool _authenticated = false;
+
+  ZaloLoginResult zaloLoginResult = ZaloLoginResult(
+    errorCode: -1,
+    errorMessage: "",
+    oauthCode: "",
+    userId: "",
+  );
+
+  ZaloProfileModel zaloInfo = ZaloProfileModel(
+    birthday: "",
+    gender: "",
+    id: "",
+    name: "",
+    picture: null,
+  );
 
   String validatePhone(String value) {
     if (value.isEmpty) {
@@ -36,6 +55,50 @@ class _LoginFormState extends State<LoginForm> {
       return 'Mật khẩu phải trên 6 ký tự';
     }
     return null;
+  }
+
+  void loginZalo() async {
+    ZaloLoginResult res = await ZaloLogin().logIn();
+    // setState(() {
+    //   zaloLoginResult = res;
+    // });
+    print('Zalo OACode first::::: '+res.oauthCode);
+
+    LoginController.loginZalo(res.oauthCode, 1).then((ok){
+      // navigate here
+      Future.delayed(
+        Duration(seconds: 1),
+            () {
+
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      NotificationScreen(
+                        role: 'teacher',
+                      )),
+                  (Route<dynamic> route) => false);
+        },
+      );
+
+    }).catchError((onError) {
+
+      return Fluttertoast.showToast(
+          msg: "Đăng nhập Zalo không thành công!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    });
+
+    print('Zalo OACode second::::: '+res.oauthCode);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    ZaloLogin().init();
   }
 
   @override
@@ -184,36 +247,40 @@ class _LoginFormState extends State<LoginForm> {
                     ],
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(vertical: 5.0),
-                //   child: Text(
-                //     '---Hoặc---',
-                //     style: TextStyle(fontSize: 15),
-                //   ),
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(vertical: 5.0),
-                //   child: OutlineButton.icon(
-                //     disabledBorderColor: Colors.blue,
-                //     padding: EdgeInsets.only(
-                //         top: 5.0, bottom: 5, left: 15, right: 15),
-                //     onPressed: () {
-                //       // Navigator.push(
-                //       //   context,
-                //       //   MaterialPageRoute(builder: (context) => SecondRoute()),
-                //       // );
-                //     },
-                //     icon: Image(
-                //       image: AssetImage('assets/zalo.png'),
-                //       width: 35,
-                //     ),
-                //     label: Text(
-                //       'Đăng nhập bằng Zalo',
-                //       style:
-                //           TextStyle(color: Color(0xff17A2B8), fontSize: 15),
-                //     ),
-                //   ),
-                // ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: Text(
+                    '---Hoặc---',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: OutlineButton.icon(
+                    disabledBorderColor: Colors.blue,
+                    padding: EdgeInsets.only(
+                        top: 5.0, bottom: 5, left: 15, right: 15),
+                    onPressed: () {
+                      loginZalo();
+
+                    },
+                    icon: Image(
+                      image: AssetImage('assets/zalo.png'),
+                      width: 35,
+                    ),
+                    label: Text(
+                      'Đăng nhập bằng Zalo',
+                      style:
+                          TextStyle(color: Color(0xff17A2B8), fontSize: 15),
+                    ),
+                  ),
+                ),
+
+                if (zaloLoginResult != null)
+                  Text("userId: " + zaloLoginResult.userId),
+
+
+
                 // Padding(
                 //   padding: const EdgeInsets.only(top: 10),
                 //   child: Column(
