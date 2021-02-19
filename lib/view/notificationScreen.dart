@@ -220,10 +220,10 @@ class _NotificationScreenState extends State<NotificationScreen>
         SavedToken.saveToken(token);
       }
 
-      // print('Init token: ' + token);
     });
 
     _firebaseMessaging.onTokenRefresh.listen((token) {
+
       assert(token != null);
       if (widget.role == 'parent') {
         SavedToken.saveAnonymousToken(token);

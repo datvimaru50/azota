@@ -104,20 +104,28 @@ class LoginController extends ControllerMVC {
     }
   }
 
-  static Future<UserZalo> loginZalo(String code, int role) async {
-    final response = await http.Client().get(AZO_AUTH_ZALO + '?code=' + code + '&isTeacher=' + role.toString(), headers: {
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-    });
+  static Future<Map<String, dynamic>> loginZalo(String code, int role) async {
+    print('BAT DAU GOI IAPI:::::::::::');
+    var result;
+
+    final response = await http.Client().get(AZO_AUTH_ZALO + '?code=' + code + '&isteacher=' + role.toString(),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
+        });
 
     if (response.statusCode == 200) {
-      print('Gọi api thanh cong:::::>>>>');
-      final responseBody = json.decode(response.body);
-      var zaloInfo = responseBody['data'];
-      Prefs.savePrefs(ACCESS_TOKEN, zaloInfo['rememberToken']);
-      return UserZalo.fromJson(zaloInfo);
+      final Map<String, dynamic> resBody = json.decode(response.body);
+
+      var userData = resBody['data'];
+
+      UserZalo authUser = UserZalo.fromJson(userData);
+
+      Prefs.savePrefs(ACCESS_TOKEN, authUser.rememberToken);
+
+      result = {'status': true, 'message': 'successful', 'user': authUser};
     } else {
-      print('Gọi api KHONG THÀNH CÔNG:::::>>>>');
-      return throw 'Có lỗi xảy ra';
+      result = {'status': false, 'message': "Login failed"};
+      return result;
     }
   }
 }
