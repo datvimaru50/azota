@@ -218,13 +218,24 @@ class _NotificationScreenState extends State<NotificationScreen>
           _getData();
         },
         onBackgroundMessage: myBackgroundMessageHandler);
+
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+
     _firebaseMessaging.getToken().then((String token) {
       assert(token != null);
       if (widget.role == 'parent') {
         SavedToken.saveAnonymousToken(token);
+        print('FCManonymous::: '+token);
       }
       if (widget.role == 'teacher') {
         SavedToken.saveToken(token);
+        print('FCM::: '+token);
       }
     });
 
