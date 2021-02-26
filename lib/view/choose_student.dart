@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:azt/controller/homework_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:azt/view/notificationScreen.dart';
+import 'package:flutter/material.dart';
 import 'package:azt/models/core_mo.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 class ChooseStudent extends StatefulWidget {
   ChooseStudent({Key key, @required this.hashId, @required this.anonymousToken})
@@ -28,9 +29,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFecf0f5),
-      appBar: AppBar(
-        title: Text('Chọn học sinh')
-      ),
+      appBar: AppBar(title: Text('Chọn học sinh')),
       body: Container(
         child: FutureBuilder<HomeworkHashIdInfo>(
           future: homeworkHashIdInfo,
@@ -43,48 +42,92 @@ class _ChooseStudentState extends State<ChooseStudent> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       childAspectRatio: 3,
                       crossAxisCount: 2,
-                      // crossAxisSpacing: 5.0,
-                      // mainAxisSpacing: 4.0,
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        return Container(
-                          alignment: Alignment.center,
-                          child: InkWell(
-                            child: Text(
-                              snapshot.data.studentObjs
-                                  .elementAt(index)['fullName'],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                            ),
-                            onTap: () {
-                              var stdID = snapshot.data.studentObjs
-                                  .elementAt(index)['id']
-                                  .toString();
+                        return GestureDetector(
+                          onTap: () {
+                            showAnimatedDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (BuildContext context) {
+                                return ClassicGeneralDialogWidget(
+                                  titleText: snapshot.data.studentObjs
+                                      .elementAt(index)['fullName'],
+                                  contentText:
+                                      'Bạn có chắc đây là con của bạn?',
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text(
+                                        'Hủy Chọn',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text(
+                                        'Tiếp Tục',
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
+                                      onPressed: () {
+                                        var stdID = snapshot.data.studentObjs
+                                            .elementAt(index)['id']
+                                            .toString();
 
-                              HomeworkController.updateParent(
-                                      stdID, widget.anonymousToken)
-                                  .then((ok) {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            NotificationScreen(
-                                              role: 'parent',
-                                            )),
-                                    (Route<dynamic> route) => false);
-                              }).catchError((error) {
-                                print(error.toString());
-                              });
-                            },
-                          ),
-                          margin: EdgeInsets.only(top: 5, left: 5, right: 5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5.0),
-                            border: Border.all(
-                              color: Colors.black12,
+                                        HomeworkController.updateParent(
+                                                stdID, widget.anonymousToken)
+                                            .then((ok) {
+                                          Navigator.of(context)
+                                              .pushAndRemoveUntil(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          NotificationScreen(
+                                                            role: 'parent',
+                                                          )),
+                                                  (Route<dynamic> route) =>
+                                                      false);
+                                        }).catchError((error) {
+                                          print(error.toString());
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                              animationType: DialogTransitionType.size,
+                              curve: Curves.fastOutSlowIn,
+                              duration: Duration(seconds: 1),
+                            );
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: InkWell(
+                              child: Text(
+                                snapshot.data.studentObjs
+                                    .elementAt(index)['fullName'],
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
                             ),
-                            color: Color(0xFFfafafa),
+                            margin: EdgeInsets.only(top: 5, left: 5, right: 5),
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 10,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(5.0),
+                              border: Border.all(
+                                color: Colors.black12,
+                              ),
+                              color: Color(0xFFfafafa),
+                            ),
                           ),
                         );
                       },

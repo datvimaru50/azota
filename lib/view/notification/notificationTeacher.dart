@@ -55,7 +55,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
                 child: Column(
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.only(top: 25, left: 20, right: 20),
+                      padding: EdgeInsets.only(top: 20, left: 20, right: 20),
                       child: Text(
                         'Lớp',
                         style: TextStyle(
@@ -66,7 +66,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: 10, left: 25, right: 25, bottom: 25),
+                          top: 10, left: 10, right: 10, bottom: 20),
                       child: Text(
                         widget.className,
                         style: TextStyle(
@@ -78,6 +78,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
                     ),
                   ],
                 ),
+                width: 95,
                 color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
               ),
               Expanded(
@@ -98,11 +99,11 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
                                         text: widget.student,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                            fontSize: 15),
                                       ),
                                       TextSpan(
                                           text: ' nộp bài tập',
-                                          style: TextStyle(fontSize: 16)),
+                                          style: TextStyle(fontSize: 15)),
                                       TextSpan(
                                         // text: ' Ngày '+ DateTimeFormat.format( DateTime.parse(widget.deadline), format: 'd/m/y' ),
                                         text: ' Ngày ' +
@@ -112,7 +113,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
                                         style: TextStyle(
                                             // color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 16),
+                                            fontSize: 15),
                                       ),
                                     ],
                                   ),
@@ -148,9 +149,9 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
             ],
           ),
           margin: EdgeInsets.only(
-            top: 10,
-            left: 10,
-            right: 10,
+            top: 5,
+            left: 5,
+            right: 5,
           ),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black12),

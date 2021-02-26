@@ -44,7 +44,7 @@ class _NotificationScreenState extends State<NotificationScreen>
       accessToken = token;
     });
 
-    print('accesstoken::: '+accessToken);
+    print('accesstoken::: ' + accessToken);
   }
 
   Future<void> _showMyDialog() async {
@@ -95,45 +95,53 @@ class _NotificationScreenState extends State<NotificationScreen>
   Widget _buildFeatures() {
     return widget.role == 'teacher'
         ? Container(
-      color: Color(0xFF0089a7),
-      child: Padding(
-        padding: EdgeInsets.all(15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: (){
-                launch('https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/classes');
-              },
-              child: Column(
+            color: Color(0xff1970b6),
+            child: Padding(
+              padding: EdgeInsets.all(15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image(
-                    image: AssetImage('assets/class.png'),
-                    height: 90,
+                  GestureDetector(
+                    onTap: () {
+                      launch(
+                          'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/classes');
+                    },
+                    child: Column(
+                      children: [
+                        Image(
+                          image: AssetImage('assets/class.png'),
+                          height: 90,
+                        ),
+                        Text(
+                          '  Giao\nbài tập',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        )
+                      ],
+                    ),
                   ),
-                  Text('Giao bài tập', style: TextStyle(color: Colors.white, fontSize: 16),)
+                  GestureDetector(
+                    onTap: () {
+                      launch(
+                          'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/content-store');
+                    },
+                    child: Column(
+                      children: [
+                        Image(
+                          image: AssetImage('assets/store.png'),
+                          height: 90,
+                        ),
+                        Text(
+                          'Ngân hàng \n  nội dung',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        )
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: (){
-                launch('https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/content-store');
-              },
-              child: Column(
-                children: [
-                  Image(
-                    image: AssetImage('assets/store.png'),
-                    height: 90,
-                  ),
-                  Text('Ngân hàng nội dung', style: TextStyle(color: Colors.white, fontSize: 16),)
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    )
+          )
         : Text('');
   }
 
@@ -206,11 +214,10 @@ class _NotificationScreenState extends State<NotificationScreen>
     getAccessToken();
 
     _firebaseMessaging.configure(
-      onMessage: (message) async {
-        _getData();
-      },
-      onBackgroundMessage: myBackgroundMessageHandler
-    );
+        onMessage: (message) async {
+          _getData();
+        },
+        onBackgroundMessage: myBackgroundMessageHandler);
     _firebaseMessaging.getToken().then((String token) {
       assert(token != null);
       if (widget.role == 'parent') {
@@ -219,11 +226,9 @@ class _NotificationScreenState extends State<NotificationScreen>
       if (widget.role == 'teacher') {
         SavedToken.saveToken(token);
       }
-
     });
 
     _firebaseMessaging.onTokenRefresh.listen((token) {
-
       assert(token != null);
       if (widget.role == 'parent') {
         SavedToken.saveAnonymousToken(token);
@@ -249,24 +254,26 @@ class _NotificationScreenState extends State<NotificationScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(widget.role == 'teacher' ? 'Thông báo giáo viên' : 'Thông báo phụ huynh'),
-              GestureDetector(
-                child: Icon(
-                  Icons.logout,
-                  color: Colors.white,
-                ),
-                onTap: () {
-                  _showMyDialog();
-                },
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(widget.role == 'teacher'
+                ? 'Thông báo giáo viên'
+                : 'Thông báo phụ huynh'),
+            GestureDetector(
+              child: Icon(
+                Icons.logout,
+                color: Colors.white,
               ),
-            ],
-          ),
+              onTap: () {
+                _showMyDialog();
+              },
+            ),
+          ],
         ),
-        body: _buildList(),
+      ),
+      body: _buildList(),
     );
   }
 }
