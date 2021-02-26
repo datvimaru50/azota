@@ -235,7 +235,7 @@ class _NotificationScreenState extends State<NotificationScreen>
       }
       if (widget.role == 'teacher') {
         SavedToken.saveToken(token);
-        print('FCM::: '+token);
+        print('FCM::'+token);
       }
     });
 
