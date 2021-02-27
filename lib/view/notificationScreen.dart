@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:azt/view/notification/notificationStudent.dart';
 import 'package:azt/view/notification/notificationTeacher.dart';
 import 'package:azt/controller/notification_controller.dart';
+import 'package:azt/controller/update_controller.dart';
 import 'package:azt/models/firebase_mo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info/package_info.dart';
 
 import 'package:azt/config/global.dart';
 import 'package:azt/config/connect.dart';
@@ -25,6 +27,8 @@ class _NotificationScreenState extends State<NotificationScreen>
   Iterable _notiArr = [];
   var baseAccess;
   var accessToken;
+  var currentVerion = '';
+  var latestVerion = '';
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   // ignore: unused_field
   AppLifecycleState _notification;
@@ -87,6 +91,43 @@ class _NotificationScreenState extends State<NotificationScreen>
                       builder: (BuildContext context) => Splash()),
                   ModalRoute.withName('/'),
                 );
+
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showUpdateDialog(String desc) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Thông tin cập nhật!'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Đã có phiên bản mới bổ sung nhiều tính năng và cả thiện hiệu năng ứng dụng.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Để sau'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Cập nhật',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () {
+                launch('https://play.google.com/store/apps/details?id=azt.azt');
               },
             ),
           ],
@@ -205,6 +246,14 @@ class _NotificationScreenState extends State<NotificationScreen>
     });
   }
 
+  Future<void> _checkNewVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    NewVersionInfo newVersionInfo = await UpdateController.getNewVersionInfo();
+    if(packageInfo.version != newVersionInfo.version){
+      _showUpdateDialog(newVersionInfo.description);
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state.index == 0) {
@@ -215,6 +264,7 @@ class _NotificationScreenState extends State<NotificationScreen>
   @override
   void initState() {
     super.initState();
+    _checkNewVersion();
     WidgetsBinding.instance.addObserver(this);
     fetchNoti();
     setBaseAccess();
@@ -255,6 +305,8 @@ class _NotificationScreenState extends State<NotificationScreen>
       }
       // print('Refresh token: ' + token);
     });
+
+
   }
 
   @override

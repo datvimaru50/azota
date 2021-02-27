@@ -38,7 +38,7 @@ android {
         applicationId "azt.azt"
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 3
+        versionCode 5
         versionName flutterVersionName
     }
 

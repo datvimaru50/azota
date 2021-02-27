@@ -6,7 +6,6 @@ import 'package:azt/view/enter_code.dart';
 import 'package:azt/view/mainHome.dart';
 import 'package:azt/view/notificationScreen.dart';
 import 'package:azt/view/splash_screen.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
@@ -32,12 +31,23 @@ class _ChooseStudentState extends State<ChooseStudent> {
   }
 
   var accessToken;
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFecf0f5),
-      appBar: AppBar(title: Text('Chọn học sinh')),
+      appBar: AppBar(
+          title: Text('Chọn học sinh'),
+          leading: new IconButton(
+            icon: new Icon(Icons.arrow_back),
+            onPressed: () {
+              Prefs.deletePref();
+              Navigator.pop(
+                context,
+              );
+            },
+          ),
+      ),
       body: Container(
         child: FutureBuilder<HomeworkHashIdInfo>(
           future: homeworkHashIdInfo,
@@ -161,16 +171,8 @@ class _ChooseStudentState extends State<ChooseStudent> {
                     FlatButton.icon(
                       color: Colors.blue,
                       onPressed: () {
-                        SavedToken.deleteToken(accessToken);
                         Prefs.deletePref();
-                        _firebaseMessaging.deleteInstanceID();
                         Navigator.pop(context);
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => CodeForm()),
-                          ModalRoute.withName('/'),
-                        );
                       },
                       icon: Icon(Icons.arrow_back),
                       label: Text(
