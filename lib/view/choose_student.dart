@@ -1,6 +1,12 @@
 import 'dart:async';
+import 'package:azt/config/global.dart';
 import 'package:azt/controller/homework_controller.dart';
+import 'package:azt/models/firebase_mo.dart';
+import 'package:azt/view/enter_code.dart';
+import 'package:azt/view/mainHome.dart';
 import 'package:azt/view/notificationScreen.dart';
+import 'package:azt/view/splash_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
@@ -25,6 +31,8 @@ class _ChooseStudentState extends State<ChooseStudent> {
         widget.hashId, widget.anonymousToken);
   }
 
+  var accessToken;
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,113 +142,45 @@ class _ChooseStudentState extends State<ChooseStudent> {
                       childCount: snapshot.data.studentObjs.length,
                     ),
                   ),
-
-                  // SliverGrid(
-                  //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  //     childAspectRatio: 1.45,
-                  //     crossAxisCount: 1,
-                  //     crossAxisSpacing: 20.0,
-                  //     mainAxisSpacing: 4.0,
-                  //   ),
-                  //   delegate: SliverChildBuilderDelegate(
-                  //     (BuildContext context, int index) {
-                  //       return Container(
-                  //         child: Column(
-                  //           children: [
-                  //             Padding(
-                  //               padding: EdgeInsets.only(
-                  //                   top: 10, left: 50, right: 50),
-                  //               child: Text(
-                  //                   '(*) Nếu bạn chưa tìm thấy tên con mình. Vui lòng nhập tên và ngày sinh của con bạn!'),
-                  //             ),
-                  //             Form(
-                  //               key: _formKey,
-                  //               child: Column(
-                  //                 children: <Widget>[
-                  //                   Padding(
-                  //                     padding:
-                  //                         EdgeInsets.only(left: 50, right: 50),
-                  //                     child: TextFormField(
-                  //                       decoration: InputDecoration(
-                  //                         suffixIcon:
-                  //                             Icon(Icons.account_circle),
-                  //                         hintText: 'Họ và tên',
-                  //                       ),
-                  //                       validator: (value) {
-                  //                         if (value.isEmpty) {
-                  //                           return 'Vui lòng nhập họ tên';
-                  //                         }
-                  //                         if (value.length < 6) {
-                  //                           return 'Họ tên phải trên 6 ký tự';
-                  //                         }
-                  //                         return null;
-                  //                       },
-                  //                     ),
-                  //                   ),
-                  //                   Padding(
-                  //                     padding:
-                  //                         EdgeInsets.only(left: 50, right: 50),
-                  //                     child: DateTimePicker(
-                  //                       decoration: InputDecoration(
-                  //                         suffixIcon: Icon(Icons.date_range),
-                  //                         hintText: 'Ngày Sinh ',
-                  //                       ),
-                  //                       initialValue: '',
-                  //                       icon: Icon(Icons.date_range),
-                  //                       firstDate: DateTime(2000),
-                  //                       lastDate: DateTime(2100),
-                  //                       onChanged: (val) => print(val),
-                  //                       validator: (val) {
-                  //                         if (val.isEmpty) {
-                  //                           return 'Vui lòng chọn ngày sinh';
-                  //                         }
-                  //                         print(val);
-                  //                         return null;
-                  //                       },
-                  //                       onSaved: (val) => print(val),
-                  //                     ),
-                  //                   ),
-                  //                   Padding(
-                  //                     padding: const EdgeInsets.only(top: 10),
-                  //                     child: ElevatedButton(
-                  //                       onPressed: () {
-                  //                         // Validate will return true if the form is valid, or false if
-                  //                         // the form is invalid.
-                  //                         if (_formKey.currentState
-                  //                             .validate()) {
-                  //                           // Navigator.push(
-                  //                           //   context,
-                  //                           //   MaterialPageRoute(
-                  //                           //       builder: (context) =>
-                  //                           //           HomePageTeacher()),
-                  //                           //   // NotificationScreenTeacher()),
-                  //                           // );
-                  //                         }
-                  //                       },
-                  //                       child: Text('Tiếp Tục'),
-                  //                     ),
-                  //                   ),
-                  //                 ],
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         decoration: BoxDecoration(
-                  //           border: Border.all(
-                  //             color: Colors.black12,
-                  //           ),
-                  //           color: Color(0xFFf2f2f2),
-                  //         ),
-                  //         margin: EdgeInsets.only(top: 5),
-                  //       );
-                  //     },
-                  //     childCount: 1,
-                  //   ),
-                  // ),
                 ],
               );
             } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 10, left: 30, right: 30),
+                      child: Text(
+                        'Mã bài tập không tồn tại, vui lòng kiểm tra lại.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    FlatButton.icon(
+                      color: Colors.blue,
+                      onPressed: () {
+                        SavedToken.deleteToken(accessToken);
+                        Prefs.deletePref();
+                        _firebaseMessaging.deleteInstanceID();
+                        Navigator.pop(context);
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => CodeForm()),
+                          ModalRoute.withName('/'),
+                        );
+                      },
+                      icon: Icon(Icons.arrow_back),
+                      label: Text(
+                        'Thử Lại',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                    ),
+                  ],
+                ),
+              );
             }
             return Center(
               child: CircularProgressIndicator(),

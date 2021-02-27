@@ -73,7 +73,6 @@ class _CodeFormState extends State<CodeForm> {
                               EdgeInsets.only(top: 20, left: 10, right: 10),
                           child: Image(
                             image: AssetImage('assets/code.png'),
-
                           ),
                         ),
                         Form(
