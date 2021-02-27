@@ -4,19 +4,29 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import 'package:azt/config/connect.dart';
+
 class NotificationStudentItem extends StatefulWidget {
   NotificationStudentItem(
-      {this.className,
+      {
+      this.notiType,
+      this.className,
       this.deadline,
       this.score,
       this.submitTime,
-      this.webUrl});
+      this.token,
+      this.answerId,
+      this.hashId
+     });
 
+  final String notiType;
   final String className;
   final String score;
   final String deadline;
   final String submitTime;
-  final String webUrl;
+  final String token;
+  final String answerId;
+  final String hashId;
 
   @override
   _NotifStudentItemState createState() => _NotifStudentItemState();
@@ -25,6 +35,41 @@ class NotificationStudentItem extends StatefulWidget {
 class _NotifStudentItemState extends State<NotificationStudentItem>
     with AutomaticKeepAliveClientMixin {
   bool _clickedStatus = false;
+
+  String _buildText(String notiType){
+    switch(notiType) {
+      case 'RESEND_ANSWER': {
+        return 'Yêu cầu nộp lại bài tập ';
+      }
+      break;
+
+      case 'NEW_HOMEWORK': {
+        return 'Giáo viên giao bài tập ';
+      }
+      break;
+
+      default: {
+        return 'Kết quả bài tập ';
+      }
+      break;
+    }
+  }
+
+  String _buildWebUrl(String notiType){
+    final baseAccess = '$AZT_DOMAIN_NAME/en/auth/login?access_token=${widget.token}&return_url=';
+
+    switch(notiType) {
+      case 'HAS_MARK': {
+        return '$baseAccess/en/xem-bai-tap/${widget.answerId}';
+      }
+      break;
+
+      default: {
+        return '$baseAccess/en/nop-bai/${widget.hashId}';
+      }
+      break;
+    }
+  }
 
   @override
   bool get wantKeepAlive => true;
@@ -45,7 +90,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
           setState(() {
             _clickedStatus = true;
           });
-          launch(widget.webUrl);
+          launch(_buildWebUrl(widget.notiType));
         },
         child: Container(
           child: Row(
@@ -94,7 +139,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                                     style: DefaultTextStyle.of(context).style,
                                     children: <TextSpan>[
                                       TextSpan(
-                                        text: 'Kết quả Bài tập ',
+                                        text: _buildText(widget.notiType),
                                         style: TextStyle(fontSize: 16),
                                       ),
                                       TextSpan(
@@ -123,7 +168,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                                 DateTime.parse(widget.submitTime),
                                 relativeTo: DateTime.now(),
                                 levelOfPrecision: 1,
-                                appendIfAfter: ' ago',
+                                appendIfAfter: '',
                                 abbr: true)),
                           ),
                         ],

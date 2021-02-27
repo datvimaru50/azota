@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:azt/config/global.dart';
+import 'package:azt/config/connect.dart';
 import 'package:azt/view/splash_screen.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -22,6 +23,7 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen>
     with WidgetsBindingObserver {
   Iterable _notiArr = [];
+  var baseAccess;
   var accessToken;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   // ignore: unused_field
@@ -36,15 +38,16 @@ class _NotificationScreenState extends State<NotificationScreen>
     });
   }
 
-  void getAccessToken() async {
+  void setBaseAccess() async {
     var token = widget.role == 'parent'
         ? await Prefs.getPref(ANONYMOUS_TOKEN)
         : await Prefs.getPref(ACCESS_TOKEN);
     setState(() {
       accessToken = token;
+      baseAccess = '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
     });
 
-    print('accesstoken::: ' + accessToken);
+    print('accesstoken::: ' + token);
   }
 
   Future<void> _showMyDialog() async {
@@ -105,7 +108,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                   GestureDetector(
                     onTap: () {
                       launch(
-                          'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/classes');
+                          '$baseAccess/en/admin/classes');
                     },
                     child: Column(
                       children: [
@@ -123,7 +126,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                   GestureDetector(
                     onTap: () {
                       launch(
-                          'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/content-store');
+                          '$baseAccess/en/admin/content-store');
                     },
                     child: Column(
                       children: [
@@ -158,6 +161,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                       itemBuilder: (BuildContext context, int index) {
                         return widget.role == 'parent'
                             ? NotificationStudentItem(
+                                notiType:
+                                    _notiArr.elementAt(index)['type'],
                                 className:
                                     _notiArr.elementAt(index)['classroomName'],
                                 score: _notiArr
@@ -166,8 +171,9 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 deadline: _notiArr.elementAt(index)['deadline'],
                                 submitTime:
                                     _notiArr.elementAt(index)['createdAt'],
-                                webUrl:
-                                    'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/xem-bai-tap/${_notiArr.elementAt(index)['answerId']}',
+                                token: accessToken,
+                                answerId: _notiArr.elementAt(index)['answerId'].toString(),
+                                hashId: _notiArr.elementAt(index)['hashId'],
                               )
                             : NotificationTeacherItem(
                                 className:
@@ -178,7 +184,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 submitTime:
                                     _notiArr.elementAt(index)['createdAt'],
                                 webUrl:
-                                    'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/mark-exercise/${_notiArr.elementAt(index)['answerId']}',
+                                    '$baseAccess/en/admin/mark-exercise/${_notiArr.elementAt(index)['answerId']}',
                               );
                       }),
                 )
@@ -211,7 +217,7 @@ class _NotificationScreenState extends State<NotificationScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     fetchNoti();
-    getAccessToken();
+    setBaseAccess();
 
     _firebaseMessaging.configure(
         onMessage: (message) async {
