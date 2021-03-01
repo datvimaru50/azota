@@ -40,6 +40,8 @@ android {
         targetSdkVersion 30
         versionCode 3
         versionName flutterVersionName
+        // Required by the Flutter WebView plugin.
+        minSdkVersion 19
     }
 
     signingConfigs {
