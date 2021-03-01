@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:azt/view/notification/notificationStudent.dart';
 import 'package:azt/view/notification/notificationTeacher.dart';
@@ -100,18 +101,17 @@ class _NotificationScreenState extends State<NotificationScreen>
     );
   }
 
-  Future<void> _showUpdateDialog(String desc) async {
+  Future<void> _showUpdateDialog(String dialogTitle, String dialogDesc, String storeUrl) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Thông tin cập nhật!'),
+          title: Text(dialogTitle),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(
-                    'Đã có phiên bản mới bổ sung nhiều tính năng và cả thiện hiệu năng ứng dụng.'),
+                Text(dialogDesc),
               ],
             ),
           ),
@@ -128,7 +128,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                 style: TextStyle(color: Colors.green),
               ),
               onPressed: () {
-                launch('https://play.google.com/store/apps/details?id=azt.azt');
+                Navigator.pop(context);
+                launch(storeUrl);
               },
             ),
           ],
@@ -246,13 +247,13 @@ class _NotificationScreenState extends State<NotificationScreen>
     });
   }
 
-  Future<void> _checkNewVersion() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    NewVersionInfo newVersionInfo = await UpdateController.getNewVersionInfo();
-    if (packageInfo.version != newVersionInfo.version) {
-      _showUpdateDialog(newVersionInfo.description);
-    }
-  }
+  // Future<void> _checkNewVersion() async {
+  //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  //   NewVersionInfo newVersionInfo = await UpdateController.getNewVersionInfo();
+  //   if(packageInfo.version != newVersionInfo.version){
+  //     _showUpdateDialog(newVersionInfo.description);
+  //   }
+  // }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -264,7 +265,7 @@ class _NotificationScreenState extends State<NotificationScreen>
   @override
   void initState() {
     super.initState();
-    _checkNewVersion();
+    // _checkNewVersion();
     WidgetsBinding.instance.addObserver(this);
     fetchNoti();
     setBaseAccess();
@@ -272,8 +273,28 @@ class _NotificationScreenState extends State<NotificationScreen>
     _firebaseMessaging.configure(
         onMessage: (message) async {
           _getData();
+          print("onMessage: $message");
+          print(message['data']['type'] == 'update');
+          if(message['data']['type'] == 'update'){
+            _showUpdateDialog(message['data']['title'], message['data']['body'], message['data']['storeUrl']);
+          }
         },
-        onBackgroundMessage: myBackgroundMessageHandler);
+        onLaunch: (Map<String, dynamic> message) async {
+          print("onLaunch: $message");
+          print(message['data']['type'] == 'update');
+          if(message['data']['type'] == 'update'){
+            _showUpdateDialog(message['data']['title'], message['data']['body'], message['data']['storeUrl']);
+          }
+        },
+        onResume: (Map<String, dynamic> message) async {
+          print("onResume: $message");
+          print(message['data']['type'] == 'update');
+          if(message['data']['type'] == 'update'){
+            _showUpdateDialog(message['data']['title'], message['data']['body'], message['data']['storeUrl']);
+          }
+        },
+        onBackgroundMessage: Platform.isAndroid ? myBackgroundMessageHandler : null,
+    );
 
     _firebaseMessaging.requestNotificationPermissions(
         const IosNotificationSettings(sound: true, badge: true, alert: true));
