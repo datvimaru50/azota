@@ -43,9 +43,9 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
     return Center(
       child: GestureDetector(
         onTap: () {
-          // setState(() {
-          //   _clickedStatus = true;
-          // });
+          setState(() {
+            _clickedStatus = true;
+          });
           launch(widget.webUrl);
         },
         child: Container(

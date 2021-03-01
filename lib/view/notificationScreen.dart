@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:azt/view/notification/notificationStudent.dart';
 import 'package:azt/view/notification/notificationTeacher.dart';
 import 'package:azt/controller/notification_controller.dart';
+import 'package:azt/controller/update_controller.dart';
 import 'package:azt/models/firebase_mo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info/package_info.dart';
 
 import 'package:azt/config/global.dart';
+import 'package:azt/config/connect.dart';
 import 'package:azt/view/splash_screen.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -22,7 +25,10 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen>
     with WidgetsBindingObserver {
   Iterable _notiArr = [];
+  var baseAccess;
   var accessToken;
+  var currentVerion = '';
+  var latestVerion = '';
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   // ignore: unused_field
   AppLifecycleState _notification;
@@ -36,15 +42,17 @@ class _NotificationScreenState extends State<NotificationScreen>
     });
   }
 
-  void getAccessToken() async {
+  void setBaseAccess() async {
     var token = widget.role == 'parent'
         ? await Prefs.getPref(ANONYMOUS_TOKEN)
         : await Prefs.getPref(ACCESS_TOKEN);
     setState(() {
       accessToken = token;
+      baseAccess =
+          '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
     });
 
-    print('accesstoken::: ' + accessToken);
+    print('accesstoken::: ' + token);
   }
 
   Future<void> _showMyDialog() async {
@@ -92,6 +100,43 @@ class _NotificationScreenState extends State<NotificationScreen>
     );
   }
 
+  Future<void> _showUpdateDialog(String desc) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Thông tin cập nhật!'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'Đã có phiên bản mới bổ sung nhiều tính năng và cả thiện hiệu năng ứng dụng.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Để sau'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Cập nhật',
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () {
+                launch('https://play.google.com/store/apps/details?id=azt.azt');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _buildFeatures() {
     return widget.role == 'teacher'
         ? Container(
@@ -104,8 +149,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                 children: [
                   GestureDetector(
                     onTap: () {
-                      launch(
-                          'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/classes');
+                      launch('$baseAccess/en/admin/classes');
                     },
                     child: Column(
                       children: [
@@ -122,8 +166,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                   ),
                   GestureDetector(
                     onTap: () {
-                      launch(
-                          'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/content-store');
+                      launch('$baseAccess/en/admin/content-store');
                     },
                     child: Column(
                       children: [
@@ -158,6 +201,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                       itemBuilder: (BuildContext context, int index) {
                         return widget.role == 'parent'
                             ? NotificationStudentItem(
+                                notiType: _notiArr.elementAt(index)['type'],
                                 className:
                                     _notiArr.elementAt(index)['classroomName'],
                                 score: _notiArr
@@ -166,8 +210,11 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 deadline: _notiArr.elementAt(index)['deadline'],
                                 submitTime:
                                     _notiArr.elementAt(index)['createdAt'],
-                                webUrl:
-                                    'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/xem-bai-tap/${_notiArr.elementAt(index)['answerId']}',
+                                token: accessToken,
+                                answerId: _notiArr
+                                    .elementAt(index)['answerId']
+                                    .toString(),
+                                hashId: _notiArr.elementAt(index)['hashId'],
                               )
                             : NotificationTeacherItem(
                                 className:
@@ -178,7 +225,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 submitTime:
                                     _notiArr.elementAt(index)['createdAt'],
                                 webUrl:
-                                    'https://azota.vn/en/auth/login?access_token=$accessToken&return_url=/en/admin/mark-exercise/${_notiArr.elementAt(index)['answerId']}',
+                                    '$baseAccess/en/admin/mark-exercise/${_notiArr.elementAt(index)['answerId']}',
                               );
                       }),
                 )
@@ -199,6 +246,14 @@ class _NotificationScreenState extends State<NotificationScreen>
     });
   }
 
+  Future<void> _checkNewVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    NewVersionInfo newVersionInfo = await UpdateController.getNewVersionInfo();
+    if (packageInfo.version != newVersionInfo.version) {
+      _showUpdateDialog(newVersionInfo.description);
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state.index == 0) {
@@ -209,9 +264,10 @@ class _NotificationScreenState extends State<NotificationScreen>
   @override
   void initState() {
     super.initState();
+    _checkNewVersion();
     WidgetsBinding.instance.addObserver(this);
     fetchNoti();
-    getAccessToken();
+    setBaseAccess();
 
     _firebaseMessaging.configure(
         onMessage: (message) async {
@@ -231,11 +287,11 @@ class _NotificationScreenState extends State<NotificationScreen>
       assert(token != null);
       if (widget.role == 'parent') {
         SavedToken.saveAnonymousToken(token);
-        print('FCManonymous::: '+token);
+        print('FCManonymous::: ' + token);
       }
       if (widget.role == 'teacher') {
         SavedToken.saveToken(token);
-        print('FCM::'+token);
+        print('FCM::' + token);
       }
     });
 

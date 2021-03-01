@@ -3,6 +3,8 @@ import 'package:azt/view/choose_student.dart';
 import 'package:azt/models/anonymous_use.dart';
 import 'package:azt/controller/login_controller.dart';
 
+import 'package:azt/config/global.dart';
+
 class CodeForm extends StatefulWidget {
   @override
   _CodeFormState createState() => _CodeFormState();
@@ -33,6 +35,15 @@ class _CodeFormState extends State<CodeForm> {
         backgroundColor: Color(0xFFecf0f5),
         appBar: AppBar(
           title: Text('Nhập mã bài tập'),
+          leading: new IconButton(
+            icon: new Icon(Icons.arrow_back),
+            onPressed: () {
+              Prefs.deletePref();
+              Navigator.pop(
+                context,
+              );
+            },
+          ),
         ),
         body: Center(
             child: FutureBuilder<AnonymousUser>(
@@ -109,15 +120,14 @@ class _CodeFormState extends State<CodeForm> {
                                     // Validate will return true if the form is valid, or false if
                                     // the form is invalid.
                                     if (_formKey.currentState.validate()) {
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ChooseStudent(
-                                                    hashId: code.text,
-                                                    anonymousToken: snapshot
-                                                        .data.rememberToken,
-                                                  )),
-                                          (Route<dynamic> route) => false);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => ChooseStudent(
+                                          hashId: code.text,
+                                          anonymousToken: snapshot
+                                              .data.rememberToken,
+                                        )),
+                                      );
                                     }
                                   },
                                   child: Text(
