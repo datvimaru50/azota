@@ -98,30 +98,29 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
               Container(
                 child: Column(
                   children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 17, left: 20, right: 20),
-                      child: Text(
-                        'Lớp',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
+                    Text(
+                      'Lớp',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
-                          top: 10, left: 25, right: 25, bottom: 17),
-                      child: Text(
-                        widget.className,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
+                      padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                      child: Center(
+                        child: Text(
+                          widget.className,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
+                width: 95,
                 color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
               ),
               Expanded(

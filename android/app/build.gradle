@@ -38,8 +38,10 @@ android {
         applicationId "azt.azt"
         minSdkVersion 18
         targetSdkVersion 30
-        versionCode 5
+        versionCode 6
         versionName flutterVersionName
+        // Required by the Flutter WebView plugin.
+        minSdkVersion 19
     }
 
     signingConfigs {

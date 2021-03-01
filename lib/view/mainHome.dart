@@ -1,3 +1,4 @@
+import 'package:azt/view/webView.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/view/enter_code.dart';
 import 'package:azt/view/login_screen.dart';
@@ -21,6 +22,16 @@ class _MainHomeState extends State<MainHome> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            // FlatButton.icon(
+            //   onPressed: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => WebViewExample()),
+            //     );
+            //   },
+            //   icon: Icon(Icons.ac_unit),
+            //   label: Text('fasfs'),
+            // ),
             Padding(
               padding: EdgeInsets.only(right: 0),
               child: Image(

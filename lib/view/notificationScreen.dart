@@ -49,7 +49,8 @@ class _NotificationScreenState extends State<NotificationScreen>
         : await Prefs.getPref(ACCESS_TOKEN);
     setState(() {
       accessToken = token;
-      baseAccess = '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
+      baseAccess =
+          '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
     });
 
     print('accesstoken::: ' + token);
@@ -92,7 +93,6 @@ class _NotificationScreenState extends State<NotificationScreen>
                       builder: (BuildContext context) => Splash()),
                   ModalRoute.withName('/'),
                 );
-
               },
             ),
           ],
@@ -150,8 +150,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                 children: [
                   GestureDetector(
                     onTap: () {
-                      launch(
-                          '$baseAccess/en/admin/classes');
+                      launch('$baseAccess/en/admin/classes');
                     },
                     child: Column(
                       children: [
@@ -168,8 +167,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                   ),
                   GestureDetector(
                     onTap: () {
-                      launch(
-                          '$baseAccess/en/admin/content-store');
+                      launch('$baseAccess/en/admin/content-store');
                     },
                     child: Column(
                       children: [
@@ -204,8 +202,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                       itemBuilder: (BuildContext context, int index) {
                         return widget.role == 'parent'
                             ? NotificationStudentItem(
-                                notiType:
-                                    _notiArr.elementAt(index)['type'],
+                                notiType: _notiArr.elementAt(index)['type'],
                                 className:
                                     _notiArr.elementAt(index)['classroomName'],
                                 score: _notiArr
@@ -215,7 +212,9 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 submitTime:
                                     _notiArr.elementAt(index)['createdAt'],
                                 token: accessToken,
-                                answerId: _notiArr.elementAt(index)['answerId'].toString(),
+                                answerId: _notiArr
+                                    .elementAt(index)['answerId']
+                                    .toString(),
                                 hashId: _notiArr.elementAt(index)['hashId'],
                               )
                             : NotificationTeacherItem(
@@ -309,11 +308,11 @@ class _NotificationScreenState extends State<NotificationScreen>
       assert(token != null);
       if (widget.role == 'parent') {
         SavedToken.saveAnonymousToken(token);
-        print('FCManonymous::: '+token);
+        print('FCManonymous::: ' + token);
       }
       if (widget.role == 'teacher') {
         SavedToken.saveToken(token);
-        print('FCM::'+token);
+        print('FCM::' + token);
       }
     });
 
@@ -327,8 +326,6 @@ class _NotificationScreenState extends State<NotificationScreen>
       }
       // print('Refresh token: ' + token);
     });
-
-
   }
 
   @override
