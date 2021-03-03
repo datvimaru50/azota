@@ -8,7 +8,6 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:azt/controller/login_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -369,33 +368,12 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         ),
                       ),
+                      Platform.isAndroid ? null :
                       AppleSignInButton(
-
                         type: ButtonType.continueButton,
                         onPressed: appleLogIn,
                       ),
 
-
-                      // Padding(
-                      //   padding: const EdgeInsets.only(top: 10),
-                      //   child: Column(
-                      //     children: <Widget>[
-                      //       GestureDetector(
-                      //         onTap: () {
-                      //           Navigator.push(
-                      //             context,
-                      //             MaterialPageRoute(
-                      //                 builder: (context) => RegisterScreen()),
-                      //           );
-                      //         },
-                      //         child: Text(
-                      //           'Đăng ký thành viên mới',
-                      //           style: TextStyle(fontSize: 16),
-                      //         ),
-                      //       )
-                      //     ],
-                      //   ),
-                      // ),
                     ],
                   ),
                   margin:
