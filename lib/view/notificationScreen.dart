@@ -255,6 +255,16 @@ class _NotificationScreenState extends State<NotificationScreen>
   //   }
   // }
 
+  _checkUpdateNoticeType(dynamic message) {
+    final String type = Platform.isAndroid ? message['data']['type'] : message['type'];
+    final String title = Platform.isAndroid ? message['data']['title'] : message['title'];
+    final String body = Platform.isAndroid ? message['data']['body'] : message['body'];
+    final String storeUrl = Platform.isAndroid ? message['data']['storeUrl'] : message['storeUrl'];
+    if(type == 'update'){
+      _showUpdateDialog(title, body, storeUrl);
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state.index == 0) {
@@ -274,24 +284,15 @@ class _NotificationScreenState extends State<NotificationScreen>
         onMessage: (message) async {
           _getData();
           print("onMessage: $message");
-          print(message['type'] == 'update');
-          if(message['type'] == 'update'){
-            _showUpdateDialog(message['title'], message['body'], message['storeUrl']);
-          }
+          _checkUpdateNoticeType(message);
         },
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");
-          print(message['type'] == 'update');
-          if(message['type'] == 'update'){
-            _showUpdateDialog(message['title'], message['body'], message['storeUrl']);
-          }
+          _checkUpdateNoticeType(message);
         },
         onResume: (Map<String, dynamic> message) async {
           print("onResume: $message");
-          print(message['type'] == 'update');
-          if(message['type'] == 'update'){
-            _showUpdateDialog(message['title'], message['body'], message['storeUrl']);
-          }
+          _checkUpdateNoticeType(message);
         },
         onBackgroundMessage: Platform.isAndroid ? myBackgroundMessageHandler : null,
     );
