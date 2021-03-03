@@ -274,23 +274,23 @@ class _NotificationScreenState extends State<NotificationScreen>
         onMessage: (message) async {
           _getData();
           print("onMessage: $message");
-          print(message['data']['type'] == 'update');
-          if(message['data']['type'] == 'update'){
-            _showUpdateDialog(message['data']['title'], message['data']['body'], message['data']['storeUrl']);
+          print(message['type'] == 'update');
+          if(message['type'] == 'update'){
+            _showUpdateDialog(message['title'], message['body'], message['storeUrl']);
           }
         },
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");
-          print(message['data']['type'] == 'update');
-          if(message['data']['type'] == 'update'){
-            _showUpdateDialog(message['data']['title'], message['data']['body'], message['data']['storeUrl']);
+          print(message['type'] == 'update');
+          if(message['type'] == 'update'){
+            _showUpdateDialog(message['title'], message['body'], message['storeUrl']);
           }
         },
         onResume: (Map<String, dynamic> message) async {
           print("onResume: $message");
-          print(message['data']['type'] == 'update');
-          if(message['data']['type'] == 'update'){
-            _showUpdateDialog(message['data']['title'], message['data']['body'], message['data']['storeUrl']);
+          print(message['type'] == 'update');
+          if(message['type'] == 'update'){
+            _showUpdateDialog(message['title'], message['body'], message['storeUrl']);
           }
         },
         onBackgroundMessage: Platform.isAndroid ? myBackgroundMessageHandler : null,

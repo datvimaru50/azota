@@ -77,7 +77,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
                   ],
                 ),
                 width: 95,
-                color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
+
               ),
               Expanded(
                 child: Container(

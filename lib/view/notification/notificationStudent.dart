@@ -121,7 +121,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                   ],
                 ),
                 width: 95,
-                color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
+
               ),
               Expanded(
                 child: Container(
@@ -167,7 +167,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                                 DateTime.parse(widget.submitTime),
                                 relativeTo: DateTime.now(),
                                 levelOfPrecision: 1,
-                                appendIfAfter: '',
+                                appendIfAfter: 'ago',
                                 abbr: true)),
                           ),
                         ],
@@ -177,9 +177,9 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                   color: Colors.white,
                 ),
               ),
-              Container(
+              Container(child: Container(
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.only(top: 22, bottom: 22, left: 10, right: 10),
                   child: Text(
                     widget.score,
                     style: TextStyle(
@@ -196,6 +196,9 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                   color: Colors.red,
                 ),
               ),
+                color: Colors.white,
+              ),
+
             ],
           ),
           margin: EdgeInsets.only(
@@ -205,7 +208,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
           ),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black12),
-            color: Colors.white,
+            color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
           ),
         ),
       ),

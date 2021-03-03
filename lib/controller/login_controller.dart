@@ -128,4 +128,31 @@ class LoginController extends ControllerMVC {
       return result;
     }
   }
+
+
+  static Future<Map<String, dynamic>> registerWithApple(String md5) async {
+    print('BAT DAU GOI API Apple:::::::::::');
+    var result;
+
+    final response = await http.Client().get(AZO_AUTH_APPLE + '?code=' + md5.toLowerCase(),
+
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
+        });
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> resBody = json.decode(response.body);
+
+      var userData = resBody['data'];
+
+      UserZalo authUser = UserZalo.fromJson(userData);
+
+      Prefs.savePrefs(ACCESS_TOKEN, authUser.rememberToken);
+
+      result = {'status': true, 'message': 'successful', 'user': authUser};
+    } else {
+      result = {'status': false, 'message': "Login failed"};
+      return result;
+    }
+  }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:azt/config/connect.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/view/notificationScreen.dart';
@@ -6,11 +8,13 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+// import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:azt/controller/login_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter_zalo_login/flutter_zalo_login.dart';
+import 'package:crypto/crypto.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -94,9 +98,83 @@ class _LoginFormState extends State<LoginForm> {
     });
   }
 
+
+  void appleLogIn() async {
+    if(await AppleSignIn.isAvailable()) {
+      final AuthorizationResult result = await AppleSignIn.performRequests([AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])]);
+
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+
+      print('emaiL:: '+ result.credential.email);
+//       print('result::: $result');
+//        String sCode = new String.fromCharCodes(result.credential.authorizationCode);
+//        print('authCode:::: '+sCode);
+//        String sToken = new String.fromCharCodes(result.credential.identityToken);
+//        print('credential user::: '+result.credential.user);//All the required credentials
+//        print('identity token::: '+sToken);
+//
+//      var bytes = utf8.encode(SECRET_KEY+result.credential.email); // data being hashed
+//
+//      var digest = sha1.convert(bytes);
+
+      // print("Digest as bytes: ${digest.bytes}");
+      //print("Digest as hex string: $digest");
+
+
+//      LoginController.registerWithApple(codeMd5).then((ok) {
+//        Future.delayed(
+//          Duration(seconds: 1),
+//              () {
+//            Navigator.of(context).pushAndRemoveUntil(
+//                MaterialPageRoute(
+//                    builder: (context) => NotificationScreen(
+//                      role: 'teacher',
+//                    )),
+//                    (Route<dynamic> route) => false);
+//          },
+//        );
+//      }).catchError((onError) {
+//        setState(() {
+//          _isSigningIn = false;
+//        });
+//
+//        return Fluttertoast.showToast(
+//            msg: "Đăng nhập Apple không thành công!",
+//            toastLength: Toast.LENGTH_SHORT,
+//            gravity: ToastGravity.CENTER,
+//            timeInSecForIos: 1,
+//            backgroundColor: Colors.red,
+//            textColor: Colors.white,
+//            fontSize: 16.0);
+//      });
+      break;
+
+      case AuthorizationStatus.error:
+      print("Sign in failed: ${result.error.localizedDescription}");
+
+      break;
+
+      case AuthorizationStatus.cancelled:
+      print('User cancelled');
+      break;
+    }
+
+    }else{
+    print('Apple SignIn is not available for your device');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+
+    if(Platform.isIOS){                                                      //check for ios if developing for both android & ios
+      AppleSignIn.onCredentialRevoked.listen((_) {
+        print("Credentials revoked");
+      });
+    }
+
   }
 
   @override
@@ -269,60 +347,7 @@ class _LoginFormState extends State<LoginForm> {
                           style: TextStyle(fontSize: 15),
                         ),
                       ),
-                      SignInWithAppleButton(
-                        onPressed: () async {
-                          final credential =
-                              await SignInWithApple.getAppleIDCredential(
-                            scopes: [
-                              AppleIDAuthorizationScopes.email,
-                              AppleIDAuthorizationScopes.fullName,
-                            ],
-                            webAuthenticationOptions: WebAuthenticationOptions(
-                              // ignore: todo
-                              // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
-                              clientId:
-                                  'com.aboutyou.dart_packages.sign_in_with_apple.example',
-                              redirectUri: Uri.parse(
-                                'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
-                              ),
-                            ),
-                            // ignore: todo
-                            // TODO: Remove these if you have no need for them
-                            nonce: 'example-nonce',
-                            state: 'example-state',
-                          );
-
-                          print(credential);
-
-                          // This is the endpoint that will convert an authorization code obtained
-                          // via Sign in with Apple into a session in your system
-                          final signInWithAppleEndpoint = Uri(
-                            scheme: 'https',
-                            host:
-                                'flutter-sign-in-with-apple-example.glitch.me',
-                            path: '/sign_in_with_apple',
-                            queryParameters: <String, String>{
-                              'code': credential.authorizationCode,
-                              'firstName': credential.givenName,
-                              'lastName': credential.familyName,
-                              'useBundleId': Platform.isIOS || Platform.isMacOS
-                                  ? 'true'
-                                  : 'false',
-                              if (credential.state != null)
-                                'state': credential.state,
-                            },
-                          );
-
-                          final session = await http.Client().post(
-                            signInWithAppleEndpoint,
-                          );
-
-                          // If we got this far, a session based on the Apple ID credential has been created in your system,
-                          // and you can now set this as the app's session
-                          print(session);
-                        },
-                      ),
-                      Padding(
+                        Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
                         child: OutlineButton.icon(
                           disabledBorderColor: Colors.blue,
@@ -344,6 +369,12 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         ),
                       ),
+                      AppleSignInButton(
+
+                        type: ButtonType.continueButton,
+                        onPressed: appleLogIn,
+                      ),
+
 
                       // Padding(
                       //   padding: const EdgeInsets.only(top: 10),

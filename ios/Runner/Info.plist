@@ -20,8 +20,23 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>zalo</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>zalo-2252284608446108140</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<string>NO</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -50,26 +65,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-    <key>FirebaseAppDelegateProxyEnabled</key>
-    <string>NO</string>
-
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLName</key>
-            <string>zalo</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>zalo-2252284608446108140</string>
-            </array>
-        </dict>
-    </array>
-    <key>ZaloAppID</key>
-    <string>2252284608446108140</string>
-    <key>ZaloAppKey</key>
-    <string>8CEsOGn8XInSHBg5Il0n</string>
-
+	<key>ZaloAppID</key>
+	<string>2252284608446108140</string>
+	<key>ZaloAppKey</key>
+	<string>8CEsOGn8XInSHBg5Il0n</string>
 </dict>
 </plist>
