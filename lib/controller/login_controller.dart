@@ -130,11 +130,11 @@ class LoginController extends ControllerMVC {
   }
 
 
-  static Future<Map<String, dynamic>> registerWithApple(String md5) async {
+  static Future<Map<String, dynamic>> registerWithApple(String md5, String email) async {
     print('BAT DAU GOI API Apple:::::::::::');
     var result;
 
-    final response = await http.Client().get(AZO_AUTH_APPLE + '?code=' + md5.toLowerCase(),
+    final response = await http.Client().get(AZO_AUTH_APPLE + '?code=$md5&email=$email',
 
         headers: {
           HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"

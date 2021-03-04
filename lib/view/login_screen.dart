@@ -62,6 +62,17 @@ class _LoginFormState extends State<LoginForm> {
     return null;
   }
 
+  Future<void> _showAppleDialog(String errMsg) async {
+    return Fluttertoast.showToast(
+        msg: errMsg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
   void loginZalo() async {
     setState(() {
       _isSigningIn = true;
@@ -99,63 +110,54 @@ class _LoginFormState extends State<LoginForm> {
 
 
   void appleLogIn() async {
+    setState(() {
+      _isSigningIn = true;
+    });
+
     if(await AppleSignIn.isAvailable()) {
+
       final AuthorizationResult result = await AppleSignIn.performRequests([AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])]);
 
     switch (result.status) {
       case AuthorizationStatus.authorized:
 
-      print('emaiL:: '+ result.credential.email);
-//       print('result::: $result');
-//        String sCode = new String.fromCharCodes(result.credential.authorizationCode);
-//        print('authCode:::: '+sCode);
-//        String sToken = new String.fromCharCodes(result.credential.identityToken);
-//        print('credential user::: '+result.credential.user);//All the required credentials
-//        print('identity token::: '+sToken);
-//
-//      var bytes = utf8.encode(SECRET_KEY+result.credential.email); // data being hashed
-//
-//      var digest = sha1.convert(bytes);
+        print('credential user::: '+result.credential.user);
+        var bytes = utf8.encode(SECRET_KEY+result.credential.user);
+        var digest = md5.convert(bytes);
 
-      // print("Digest as bytes: ${digest.bytes}");
-      //print("Digest as hex string: $digest");
+        print("Digest as bytes: ${digest.bytes}");
+        print("Digest as hex string: $digest");
 
 
-//      LoginController.registerWithApple(codeMd5).then((ok) {
-//        Future.delayed(
-//          Duration(seconds: 1),
-//              () {
-//            Navigator.of(context).pushAndRemoveUntil(
-//                MaterialPageRoute(
-//                    builder: (context) => NotificationScreen(
-//                      role: 'teacher',
-//                    )),
-//                    (Route<dynamic> route) => false);
-//          },
-//        );
-//      }).catchError((onError) {
-//        setState(() {
-//          _isSigningIn = false;
-//        });
-//
-//        return Fluttertoast.showToast(
-//            msg: "Đăng nhập Apple không thành công!",
-//            toastLength: Toast.LENGTH_SHORT,
-//            gravity: ToastGravity.CENTER,
-//            timeInSecForIos: 1,
-//            backgroundColor: Colors.red,
-//            textColor: Colors.white,
-//            fontSize: 16.0);
-//      });
+      LoginController.registerWithApple(digest.toString(), result.credential.user).then((ok) {
+        Future.delayed(
+          Duration(seconds: 1),
+              () {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => NotificationScreen(
+                      role: 'teacher',
+                    )),
+                    (Route<dynamic> route) => false);
+          },
+        );
+      }).catchError((onError) {
+        setState(() {
+          _isSigningIn = false;
+        });
+
+        _showAppleDialog('Đăng nhập với Apple thất bại!');
+      });
       break;
 
       case AuthorizationStatus.error:
       print("Sign in failed: ${result.error.localizedDescription}");
+      _showAppleDialog('Đăng nhập với Apple thất bại: '+result.error.localizedDescription.toString());
 
       break;
 
       case AuthorizationStatus.cancelled:
-      print('User cancelled');
+      print('Bạn đã hủy bỏ');
       break;
     }
 

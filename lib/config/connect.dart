@@ -1,5 +1,5 @@
-const AZT_DOMAIN_NAME = "https://azota.vn";
-const AZT_DEV_SERVER = "https://azota.vn/api";
+const AZT_DOMAIN_NAME = "https://beta.azota.vn";
+const AZT_DEV_SERVER = "https://beta.azota.vn/api";
 
 // const AZT_DEV_SERVER = "http://192.168.1.34:5001/api";
 
