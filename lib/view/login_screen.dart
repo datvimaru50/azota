@@ -5,13 +5,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/view/notificationScreen.dart';
 // import 'package:azt/view/register_screen.dart';
 import 'dart:io';
-
 import 'package:http/http.dart' as http;
-
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:azt/controller/login_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:flutter_zalo_login/flutter_zalo_login.dart';
 import 'package:crypto/crypto.dart';
 
@@ -370,7 +367,7 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         ),
                       ),
-                      Platform.isAndroid ? null :
+                      Platform.isAndroid ? Container() :
                       AppleSignInButton(
                         type: ButtonType.continueButton,
                         onPressed: appleLogIn,
@@ -378,8 +375,7 @@ class _LoginFormState extends State<LoginForm> {
 
                     ],
                   ),
-                  margin:
-                      const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+                  margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
                   padding: const EdgeInsets.all(20.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5.0),
