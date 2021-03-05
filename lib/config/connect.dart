@@ -5,6 +5,7 @@ const AZT_DEV_SERVER = "https://beta.azota.vn/api";
 
 const AZO_REGISTER = "$AZT_DEV_SERVER/auth/register";
 const AZO_LOGIN = "$AZT_DEV_SERVER/auth/login";
+
 const AZO_AUTH_INFO = "$AZT_DEV_SERVER/auth/info";
 const AZO_AUTH_ZALO = "$AZT_DEV_SERVER/auth/AuhenByZalo";
 const AZO_AUTH_APPLE = "$AZT_DEV_SERVER/auth/RegisterByAppleId";
@@ -17,5 +18,17 @@ const AZO_HOMEWORK_INFO = "$AZT_DEV_SERVER/FrontHomework/GetObj";
 const AZO_LOGIN_ANONYMOUS = "$AZT_DEV_SERVER/Auth/LoginAnonymous";
 
 const AZO_UPDATE_PARENT = "$AZT_DEV_SERVER/FrontStudent/UpdateParent";
+
+/* ERROR MESSAGE */
+const ERR_INVALID_LOGIN_INFO = "Sai tên đăng nhập hoặc mật khẩu!";
+const ERR_SERVER_CONNECT = "Kết nối tới máy chủ bị lỗi!";
+const ERR_BAD_REQUEST = "Dữ liệu gửi lên không hợp lệ!";
+
+const ERR_APPLE_SIGN_IN = "Đăng nhập với Apple thất bại!";
+const ERR_APPLE_USER_CANCEL = "Bạn đã hủy bỏ đăng nhập với Apple!";
+const ERR_APPLE_SIGNIN_NOT_AVAILABLE = "Điện thoại của bạn không hỗ trợ đăng nhập với Apple!";
+
+/* SUCCESS MESSAGE */
+const SUCCESS_LOGIN = "Đăng nhập thành công!";
 
 const SECRET_KEY = "eyJraWQiOiI1MjJXQVlVQU4zIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiJBRDc0Mk05NDkyIiwiaWF0IjoxNjE0NjcyOTI0LCJleHAiOjE2MzAyMjQ5MjQsImF1ZCI6Imh0dHBzOi8vYXBwbGVpZC5hcHBsZS5jb20iLCJzdWIiOiJ2bi5henQuYXp0In0.eowrDUm17wfoSWJPpXkDaoNwn2lmjiG5E0bFyGpMDDKq6ng7C_5QYUJyUif5M6hC0H8EHc0LiQ93PWyGAMfz-g";

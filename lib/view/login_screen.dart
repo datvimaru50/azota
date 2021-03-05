@@ -59,114 +59,104 @@ class _LoginFormState extends State<LoginForm> {
     return null;
   }
 
-  Future<void> _showAppleDialog(String errMsg) async {
+  Future<void> _showErrorToast(String errMsg) async {
     return Fluttertoast.showToast(
         msg: errMsg,
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
+        gravity: ToastGravity.BOTTOM,
         timeInSecForIos: 1,
         backgroundColor: Colors.red,
         textColor: Colors.white,
         fontSize: 16.0);
   }
 
-  void loginZalo() async {
-    setState(() {
-      _isSigningIn = true;
-    });
+  void _enterNotificationScreenTeacher(){
+    Navigator.of(context)
+        .pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (context) =>
+                NotificationScreen(
+                  role:
+                  'teacher',
+                )),
+            (Route<dynamic>
+        route) =>
+        false);
+  }
 
-    ZaloLoginResult res = await ZaloLogin().logIn();
-
-    LoginController.loginZalo(res.oauthCode, 1).then((ok) {
-      Future.delayed(
-        Duration(seconds: 1),
-        () {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (context) => NotificationScreen(
-                        role: 'teacher',
-                      )),
-              (Route<dynamic> route) => false);
-        },
-      );
-    }).catchError((onError) {
+  Future<void> _normalLogin(params) async {
+    try {
+      setState(() {
+        _isSigningIn = true;
+      });
+      await LoginController.loginGetAccessToken(params);
+      _enterNotificationScreenTeacher();
+    } catch (err) {
+      _showErrorToast(err.toString());
       setState(() {
         _isSigningIn = false;
       });
+    }
 
-      return Fluttertoast.showToast(
-          msg: "Đăng nhập Zalo không thành công!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    });
+  }
+
+  Future<void> _loginZalo() async {
+    try{
+      setState(() {
+        _isSigningIn = true;
+      });
+      ZaloLoginResult res = await ZaloLogin().logIn();
+      await LoginController.loginZalo(res.oauthCode, 1);
+      _enterNotificationScreenTeacher();
+    } catch(err) {
+      _showErrorToast(err.toString());
+      setState(() {
+        _isSigningIn = false;
+      });
+    }
   }
 
 
-  void appleLogIn() async {
-    setState(() {
-      _isSigningIn = true;
-    });
+  void _appleLogIn() async {
 
     if(await AppleSignIn.isAvailable()) {
 
       final AuthorizationResult result = await AppleSignIn.performRequests([AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])]);
 
-    switch (result.status) {
-      case AuthorizationStatus.authorized:
+      switch (result.status) {
+        case AuthorizationStatus.authorized:
+          try{
+            setState(() {
+              _isSigningIn = true;
+            });
+            var bytes = utf8.encode(SECRET_KEY+result.credential.user);
+            var digest = md5.convert(bytes);
+            await LoginController.registerWithApple(digest.toString(), result.credential.user);
+            _enterNotificationScreenTeacher();
+          } catch(err){
+            _showErrorToast(err.toString());
+            setState(() {
+              _isSigningIn = false;
+            });
+          }
+        break;
 
-        print('credential user::: '+result.credential.user);
-        var bytes = utf8.encode(SECRET_KEY+result.credential.user);
-        var digest = md5.convert(bytes);
+        case AuthorizationStatus.error:
+        _showErrorToast(ERR_APPLE_SIGN_IN);
+        break;
 
-        print("Digest as bytes: ${digest.bytes}");
-        print("Digest as hex string: $digest");
-
-
-      LoginController.registerWithApple(digest.toString(), result.credential.user).then((ok) {
-        Future.delayed(
-          Duration(seconds: 1),
-              () {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (context) => NotificationScreen(
-                      role: 'teacher',
-                    )),
-                    (Route<dynamic> route) => false);
-          },
-        );
-      }).catchError((onError) {
-        setState(() {
-          _isSigningIn = false;
-        });
-
-        _showAppleDialog('Đăng nhập với Apple thất bại!');
-      });
-      break;
-
-      case AuthorizationStatus.error:
-      print("Sign in failed: ${result.error.localizedDescription}");
-      _showAppleDialog('Đăng nhập với Apple thất bại: '+result.error.localizedDescription.toString());
-
-      break;
-
-      case AuthorizationStatus.cancelled:
-      print('Bạn đã hủy bỏ');
-      break;
-    }
+        default:
+         _showErrorToast(ERR_APPLE_USER_CANCEL);
+      }
 
     }else{
-    print('Apple SignIn is not available for your device');
+      _showErrorToast(ERR_APPLE_SIGNIN_NOT_AVAILABLE);
     }
   }
 
   @override
   void initState() {
     super.initState();
-
     if(Platform.isIOS){                                                      //check for ios if developing for both android & ios
       AppleSignIn.onCredentialRevoked.listen((_) {
         print("Credentials revoked");
@@ -277,7 +267,10 @@ class _LoginFormState extends State<LoginForm> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 10),
-                              child: ElevatedButton(
+                              child: ElevatedButton.icon(
+                                //ElevatedButton.icon(onPressed: onPressed, icon: icon, label: label),
+                                icon: Icon(Icons.arrow_right_alt),
+                                label: Text(_isSigningIn ? 'Đang đăng nhập...' : 'Đăng Nhập'),
                                 onPressed: _isSigningIn
                                     ? null
                                     : () {
@@ -289,50 +282,10 @@ class _LoginFormState extends State<LoginForm> {
                                             "password": password.text,
                                           };
 
-                                          setState(() {
-                                            _isSigningIn = true;
-                                          });
-
-                                          LoginController.loginGetAccessToken(
-                                                  paramsLogin)
-                                              .then((ok) {
-                                            Future.delayed(
-                                              Duration(seconds: 1),
-                                              () {
-                                                print('OK Message: ' +
-                                                    ok.toString());
-                                                Navigator.of(context)
-                                                    .pushAndRemoveUntil(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                NotificationScreen(
-                                                                  role:
-                                                                      'teacher',
-                                                                )),
-                                                        (Route<dynamic>
-                                                                route) =>
-                                                            false);
-                                              },
-                                            );
-                                          }).catchError((onError) {
-                                            setState(() {
-                                              _isSigningIn = false;
-                                            });
-                                            return Fluttertoast.showToast(
-                                                msg:
-                                                    "Thông tin đăng nhập không hợp lệ",
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity: ToastGravity.CENTER,
-                                                timeInSecForIos: 1,
-                                                backgroundColor: Colors.red,
-                                                textColor: Colors.white,
-                                                fontSize: 16.0);
-                                          });
+                                          _normalLogin(paramsLogin);
                                         }
                                       },
-                                child: Text(_isSigningIn
-                                    ? 'Đang đăng nhập...'
-                                    : 'Đăng Nhập'),
+
                               ),
                             ),
                           ],
@@ -354,7 +307,7 @@ class _LoginFormState extends State<LoginForm> {
                           onPressed: _isSigningIn
                               ? null
                               : () {
-                                  loginZalo();
+                                  _loginZalo();
                                 },
                           icon: Image(
                             image: AssetImage('assets/zalo.png'),
@@ -370,7 +323,7 @@ class _LoginFormState extends State<LoginForm> {
                       Platform.isAndroid ? Container() :
                       AppleSignInButton(
                         type: ButtonType.continueButton,
-                        onPressed: appleLogIn,
+                        onPressed: _appleLogIn,
                       ),
 
                     ],
