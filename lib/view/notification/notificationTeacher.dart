@@ -77,7 +77,6 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
                   ],
                 ),
                 width: 95,
-
               ),
               Expanded(
                 child: Container(

@@ -1,6 +1,7 @@
+import 'package:azt/view/submit_homeworks.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -8,16 +9,14 @@ import 'package:azt/config/connect.dart';
 
 class NotificationStudentItem extends StatefulWidget {
   NotificationStudentItem(
-      {
-      this.notiType,
+      {this.notiType,
       this.className,
       this.deadline,
       this.score,
       this.submitTime,
       this.token,
       this.answerId,
-      this.hashId
-     });
+      this.hashId});
 
   final String notiType;
   final String className;
@@ -36,38 +35,44 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
     with AutomaticKeepAliveClientMixin {
   bool _clickedStatus = false;
 
-  String _buildText(String notiType){
-    switch(notiType) {
-      case 'RESEND_ANSWER': {
-        return 'Yêu cầu nộp lại bài tập ';
-      }
-      break;
+  String _buildText(String notiType) {
+    switch (notiType) {
+      case 'RESEND_ANSWER':
+        {
+          return 'Yêu cầu nộp lại bài tập ';
+        }
+        break;
 
-      case 'NEW_HOMEWORK': {
-        return 'Giáo viên giao bài tập ';
-      }
-      break;
+      case 'NEW_HOMEWORK':
+        {
+          return 'Giáo viên giao bài tập ';
+        }
+        break;
 
-      default: {
-        return 'Kết quả bài tập ';
-      }
-      break;
+      default:
+        {
+          return 'Kết quả bài tập ';
+        }
+        break;
     }
   }
 
-  String _buildWebUrl(String notiType){
-    final baseAccess = '$AZT_DOMAIN_NAME/en/auth/login?access_token=${widget.token}&return_url=';
+  String _buildWebUrl(String notiType) {
+    final baseAccess =
+        '$AZT_DOMAIN_NAME/en/auth/login?access_token=${widget.token}&return_url=';
 
-    switch(notiType) {
-      case 'HAS_MARK': {
-        return '$baseAccess/en/xem-bai-tap/${widget.answerId}';
-      }
-      break;
+    switch (notiType) {
+      case 'HAS_MARK':
+        {
+          return '$baseAccess/en/xem-bai-tap/${widget.answerId}';
+        }
+        break;
 
-      default: {
-        return '$baseAccess/en/nop-bai/${widget.hashId}';
-      }
-      break;
+      default:
+        {
+          return '$baseAccess/en/nop-bai/${widget.hashId}';
+        }
+        break;
     }
   }
 
@@ -87,10 +92,14 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
     return Center(
       child: GestureDetector(
         onTap: () {
-          setState(() {
-            _clickedStatus = true;
-          });
-          launch(_buildWebUrl(widget.notiType));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SubmitForm()),
+          );
+          // setState(() {
+          //   _clickedStatus = true;
+          // });
+          // launch(_buildWebUrl(widget.notiType));
         },
         child: Container(
           child: Row(
@@ -121,7 +130,6 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                   ],
                 ),
                 width: 95,
-
               ),
               Expanded(
                 child: Container(
@@ -177,28 +185,29 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                   color: Colors.white,
                 ),
               ),
-              Container(child: Container(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 22, bottom: 22, left: 10, right: 10),
-                  child: Text(
-                    widget.score,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+              Container(
+                child: Container(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: 22, bottom: 22, left: 10, right: 10),
+                    child: Text(
+                      widget.score,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(color: Colors.black12),
+                    color: Colors.red,
+                  ),
                 ),
-                margin: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  border: Border.all(color: Colors.black12),
-                  color: Colors.red,
-                ),
-              ),
                 color: Colors.white,
               ),
-
             ],
           ),
           margin: EdgeInsets.only(
