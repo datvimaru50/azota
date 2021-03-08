@@ -8,8 +8,14 @@ class GradedExersice extends StatelessWidget {
       children: [
         Center(
           child: Padding(
-            padding: EdgeInsets.only(top: 10),
-            child: Text('Vũ Ngọc Thu - Lớp: 1CN-3'),
+            padding: EdgeInsets.only(top: 20),
+            child: Text(
+              'Vũ Ngọc Thu - Lớp: 1CN-3',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
+            ),
           ),
         ),
         Container(

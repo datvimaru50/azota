@@ -101,7 +101,8 @@ class _NotificationScreenState extends State<NotificationScreen>
     );
   }
 
-  Future<void> _showUpdateDialog(String dialogTitle, String dialogDesc, String storeUrl) async {
+  Future<void> _showUpdateDialog(
+      String dialogTitle, String dialogDesc, String storeUrl) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -256,11 +257,15 @@ class _NotificationScreenState extends State<NotificationScreen>
   // }
 
   _checkUpdateNoticeType(dynamic message) {
-    final String type = Platform.isAndroid ? message['data']['type'] : message['type'];
-    final String title = Platform.isAndroid ? message['data']['title'] : message['title'];
-    final String body = Platform.isAndroid ? message['data']['body'] : message['body'];
-    final String storeUrl = Platform.isAndroid ? message['data']['storeUrl'] : message['storeUrl'];
-    if(type == 'update'){
+    final String type =
+        Platform.isAndroid ? message['data']['type'] : message['type'];
+    final String title =
+        Platform.isAndroid ? message['data']['title'] : message['title'];
+    final String body =
+        Platform.isAndroid ? message['data']['body'] : message['body'];
+    final String storeUrl =
+        Platform.isAndroid ? message['data']['storeUrl'] : message['storeUrl'];
+    if (type == 'update') {
       _showUpdateDialog(title, body, storeUrl);
     }
   }
@@ -281,20 +286,21 @@ class _NotificationScreenState extends State<NotificationScreen>
     setBaseAccess();
 
     _firebaseMessaging.configure(
-        onMessage: (message) async {
-          _getData();
-          print("onMessage: $message");
-          _checkUpdateNoticeType(message);
-        },
-        onLaunch: (Map<String, dynamic> message) async {
-          print("onLaunch: $message");
-          _checkUpdateNoticeType(message);
-        },
-        onResume: (Map<String, dynamic> message) async {
-          print("onResume: $message");
-          _checkUpdateNoticeType(message);
-        },
-        onBackgroundMessage: Platform.isAndroid ? myBackgroundMessageHandler : null,
+      onMessage: (message) async {
+        _getData();
+        print("onMessage: $message");
+        _checkUpdateNoticeType(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        _checkUpdateNoticeType(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        _checkUpdateNoticeType(message);
+      },
+      onBackgroundMessage:
+          Platform.isAndroid ? myBackgroundMessageHandler : null,
     );
 
     _firebaseMessaging.requestNotificationPermissions(
