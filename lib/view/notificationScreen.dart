@@ -312,6 +312,7 @@ class _NotificationScreenState extends State<NotificationScreen>
     });
 
     _firebaseMessaging.getToken().then((String token) {
+      print('type_acc::::: '+widget.role);
       assert(token != null);
       if (widget.role == 'parent') {
         SavedToken.saveAnonymousToken(token);

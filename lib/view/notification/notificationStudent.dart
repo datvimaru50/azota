@@ -1,7 +1,7 @@
 import 'package:azt/view/submit_homeworks.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
-// import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -92,14 +92,14 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
     return Center(
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SubmitForm()),
-          );
-          // setState(() {
-          //   _clickedStatus = true;
-          // });
-          // launch(_buildWebUrl(widget.notiType));
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => SubmitForm()),
+          // );
+          setState(() {
+            _clickedStatus = true;
+          });
+          launch(_buildWebUrl(widget.notiType));
         },
         child: Container(
           child: Row(

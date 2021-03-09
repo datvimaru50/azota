@@ -89,7 +89,7 @@ class _LoginFormState extends State<LoginForm> {
       setState(() {
         _isSigningIn = true;
       });
-      await LoginController.loginGetAccessToken(params);
+      await LoginController.login('NORMAL', params);
       _enterNotificationScreenTeacher();
     } catch (err) {
       _showErrorToast(err.toString());
@@ -106,7 +106,7 @@ class _LoginFormState extends State<LoginForm> {
         _isSigningIn = true;
       });
       ZaloLoginResult res = await ZaloLogin().logIn();
-      await LoginController.loginZalo(res.oauthCode, 1);
+      await LoginController.login('ZALO', {"code": res.oauthCode, "role": 1});
       _enterNotificationScreenTeacher();
     } catch(err) {
       _showErrorToast(err.toString());
@@ -131,7 +131,7 @@ class _LoginFormState extends State<LoginForm> {
             });
             var bytes = utf8.encode(SECRET_KEY+result.credential.user);
             var digest = md5.convert(bytes);
-            await LoginController.registerWithApple(digest.toString(), result.credential.user);
+            await LoginController.login('APPLE', {'md5': digest.toString(), 'email':result.credential.user});
             _enterNotificationScreenTeacher();
           } catch(err){
             _showErrorToast(err.toString());
@@ -157,7 +157,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   void initState() {
     super.initState();
-    if(Platform.isIOS){                                                      //check for ios if developing for both android & ios
+    if(Platform.isIOS){
       AppleSignIn.onCredentialRevoked.listen((_) {
         print("Credentials revoked");
       });
