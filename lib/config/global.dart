@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const ACCESS_TOKEN = "accessToken";
 const ANONYMOUS_TOKEN = "anonymousToken";
+const UPLOAD_TOKEN = "uploadToken";
 const CURRENT_USER = "currentUser";
 const FIREBASE_TOKEN = "firebaseToken";
 

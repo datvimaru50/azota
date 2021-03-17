@@ -49,6 +49,7 @@ class LoginController extends ControllerMVC {
           var userData = resBody['data'];
           User authUser = User.fromJson(userData);
           Prefs.savePrefs( loginType == 'ANONYMOUS' ? ANONYMOUS_TOKEN : ACCESS_TOKEN, authUser.rememberToken);
+          Prefs.savePrefs( UPLOAD_TOKEN, authUser.uploadToken);
           return authUser;
         } else {
           throw ERR_INVALID_LOGIN_INFO;

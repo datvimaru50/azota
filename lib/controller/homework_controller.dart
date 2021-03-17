@@ -20,6 +20,7 @@ class HomeworkController extends ControllerMVC {
 
   /* **********************************
   Get homework info from hashId
+  <first time to choose student>
   ********************************** */
   static Future<HomeworkHashIdInfo> getHomeworkInfo(String hashId) async {
     final authUser = await LoginController.login('ANONYMOUS');
@@ -28,6 +29,39 @@ class HomeworkController extends ControllerMVC {
         await http.Client().get(AZO_HOMEWORK_INFO + '?id=' + hashId, headers: {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       HttpHeaders.authorizationHeader: "Bearer " + authUser.rememberToken
+    });
+
+    switch (response.statusCode) {
+      case 200:
+        final Map<String, dynamic> resBody = json.decode(response.body);
+        if (resBody['success'] == 1) {
+          return HomeworkHashIdInfo.fromJson(resBody['data']);
+        } else {
+          throw ERR_INVALID_LOGIN_INFO;
+        }
+        break;
+
+      case 400:
+        throw ERR_BAD_REQUEST;
+        break;
+
+      default:
+        throw ERR_SERVER_CONNECT;
+    }
+  }
+
+
+  /* **********************************
+  Get homework info from hashId
+  <after update parent>
+  ********************************** */
+  static Future<HomeworkHashIdInfo> getHomeworkInfoAgain(String hashId) async {
+    final token = await Prefs.getPref(ANONYMOUS_TOKEN);
+
+    final response =
+    await http.Client().get(AZO_HOMEWORK_INFO + '?id=' + hashId, headers: {
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.authorizationHeader: "Bearer $token"
     });
 
     switch (response.statusCode) {
@@ -64,9 +98,9 @@ class HomeworkController extends ControllerMVC {
       case 200:
         final Map<String, dynamic> resBody = json.decode(response.body);
         if (resBody['success'] == 1) {
-          return "Cập nhật phụ huynh thành công!";
+          return SUCCESS_UPDATE_PARENT;
         } else {
-          throw "Cập nhật phụ huynh không thành công!";
+          throw ERR_UPDATE_PARENT;
         }
         break;
 

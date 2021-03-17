@@ -84,6 +84,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
     super.initState();
     Intl.defaultLocale = 'vi_VN';
     initializeDateFormatting();
+    print(widget.hashId);
   }
 
   @override
