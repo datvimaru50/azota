@@ -14,10 +14,14 @@ import 'package:azt/config/connect.dart';
 import 'package:azt/view/splash_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
-
 class SubmitForm extends StatefulWidget {
-  SubmitForm({@required this.role, this.hashId, this.studentId, this.className, this.stdName, this.deadline});
+  SubmitForm(
+      {@required this.role,
+      this.hashId,
+      this.studentId,
+      this.className,
+      this.stdName,
+      this.deadline});
 
   final String hashId;
   final int studentId;
@@ -98,23 +102,28 @@ class _SubmitFormState extends State<SubmitForm> {
       body: Center(
         child: ListView(
           children: <Widget>[
-            SubmitExersice(studentId: widget.studentId, hashId: widget.hashId, stdName: widget.stdName, deadline: widget.deadline, className: widget.className,),
+            SubmitExersice(
+              studentId: widget.studentId,
+              hashId: widget.hashId,
+              stdName: widget.stdName,
+              deadline: widget.deadline,
+              className: widget.className,
+            ),
             //đã chấm
             // GradedExersice(),
             HistorySubmit(hashId: widget.hashId),
 
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: ElevatedButton.icon(
-            //ElevatedButton.icon(onPressed: onPressed, icon: icon, label: label),
-              icon: Icon(Icons.logout),
-              label: Text('Đăng Xuất'),
-              onPressed: _showMyDialog
-
-          ),
-        )
-
-
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: ElevatedButton.icon(
+                  //ElevatedButton.icon(onPressed: onPressed, icon: icon, label: label),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                  ),
+                  icon: Icon(Icons.logout),
+                  label: Text('Đăng Xuất'),
+                  onPressed: _showMyDialog),
+            )
           ],
         ),
         // By default, show a loading spinner.
