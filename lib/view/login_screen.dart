@@ -70,18 +70,13 @@ class _LoginFormState extends State<LoginForm> {
         fontSize: 16.0);
   }
 
-  void _enterNotificationScreenTeacher(){
-    Navigator.of(context)
-        .pushAndRemoveUntil(
+  void _enterNotificationScreenTeacher() {
+    Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-            builder: (context) =>
-                NotificationScreen(
-                  role:
-                  'teacher',
+            builder: (context) => NotificationScreen(
+                  role: 'teacher',
                 )),
-            (Route<dynamic>
-        route) =>
-        false);
+        (Route<dynamic> route) => false);
   }
 
   Future<void> _normalLogin(params) async {
@@ -97,18 +92,17 @@ class _LoginFormState extends State<LoginForm> {
         _isSigningIn = false;
       });
     }
-
   }
 
   Future<void> _loginZalo() async {
-    try{
+    try {
       setState(() {
         _isSigningIn = true;
       });
       ZaloLoginResult res = await ZaloLogin().logIn();
       await LoginController.login('ZALO', {"code": res.oauthCode, "role": 1});
       _enterNotificationScreenTeacher();
-    } catch(err) {
+    } catch (err) {
       _showErrorToast(err.toString());
       setState(() {
         _isSigningIn = false;
@@ -116,40 +110,39 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-
   void _appleLogIn() async {
-
-    if(await AppleSignIn.isAvailable()) {
-
-      final AuthorizationResult result = await AppleSignIn.performRequests([AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])]);
+    if (await AppleSignIn.isAvailable()) {
+      final AuthorizationResult result = await AppleSignIn.performRequests([
+        AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+      ]);
 
       switch (result.status) {
         case AuthorizationStatus.authorized:
-          try{
+          try {
             setState(() {
               _isSigningIn = true;
             });
-            var bytes = utf8.encode(SECRET_KEY+result.credential.user);
+            var bytes = utf8.encode(SECRET_KEY + result.credential.user);
             var digest = md5.convert(bytes);
-            await LoginController.login('APPLE', {'md5': digest.toString(), 'email':result.credential.user});
+            await LoginController.login('APPLE',
+                {'md5': digest.toString(), 'email': result.credential.user});
             _enterNotificationScreenTeacher();
-          } catch(err){
+          } catch (err) {
             _showErrorToast(err.toString());
             setState(() {
               _isSigningIn = false;
             });
           }
-        break;
+          break;
 
         case AuthorizationStatus.error:
-        _showErrorToast(ERR_APPLE_SIGN_IN);
-        break;
+          _showErrorToast(ERR_APPLE_SIGN_IN);
+          break;
 
         default:
-         _showErrorToast(ERR_APPLE_USER_CANCEL);
+          _showErrorToast(ERR_APPLE_USER_CANCEL);
       }
-
-    }else{
+    } else {
       _showErrorToast(ERR_APPLE_SIGNIN_NOT_AVAILABLE);
     }
   }
@@ -157,12 +150,11 @@ class _LoginFormState extends State<LoginForm> {
   @override
   void initState() {
     super.initState();
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       AppleSignIn.onCredentialRevoked.listen((_) {
         print("Credentials revoked");
       });
     }
-
   }
 
   @override
@@ -270,7 +262,9 @@ class _LoginFormState extends State<LoginForm> {
                               child: ElevatedButton.icon(
                                 //ElevatedButton.icon(onPressed: onPressed, icon: icon, label: label),
                                 icon: Icon(Icons.arrow_right_alt),
-                                label: Text(_isSigningIn ? 'Đang đăng nhập...' : 'Đăng Nhập'),
+                                label: Text(_isSigningIn
+                                    ? 'Đang đăng nhập...'
+                                    : 'Đăng Nhập'),
                                 onPressed: _isSigningIn
                                     ? null
                                     : () {
@@ -285,7 +279,6 @@ class _LoginFormState extends State<LoginForm> {
                                           _normalLogin(paramsLogin);
                                         }
                                       },
-
                               ),
                             ),
                           ],
@@ -298,7 +291,7 @@ class _LoginFormState extends State<LoginForm> {
                           style: TextStyle(fontSize: 15),
                         ),
                       ),
-                        Padding(
+                      Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
                         child: OutlineButton.icon(
                           disabledBorderColor: Colors.blue,
@@ -320,15 +313,16 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         ),
                       ),
-                      Platform.isAndroid ? Container() :
-                      AppleSignInButton(
-                        type: ButtonType.continueButton,
-                        onPressed: _appleLogIn,
-                      ),
-
+                      Platform.isAndroid
+                          ? Container()
+                          : AppleSignInButton(
+                              type: ButtonType.continueButton,
+                              onPressed: _appleLogIn,
+                            ),
                     ],
                   ),
-                  margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+                  margin:
+                      const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
                   padding: const EdgeInsets.all(20.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5.0),
