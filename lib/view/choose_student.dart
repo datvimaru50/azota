@@ -5,6 +5,10 @@ import 'package:azt/view/notificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:azt/view/submit_homeworks/submit_exersice.dart';
+import 'package:azt/view/submit_homeworks.dart';
 
 class ChooseStudent extends StatefulWidget {
   ChooseStudent({Key key, @required this.hashId})
@@ -23,6 +27,17 @@ class _ChooseStudentState extends State<ChooseStudent> {
     Navigator.pop(
       context,
     );
+  }
+
+  Future<void> _showErrorToast(String errMsg) async {
+    return Fluttertoast.showToast(
+        msg: errMsg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 
   @override
@@ -49,7 +64,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
             future: homeworkHashIdInfo,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                // print('thong tin hashid ' +snapshot.data.studentObjs.elementAt(0)['fullName']);
+
                 return CustomScrollView(
                   slivers: <Widget>[
                     SliverGrid(
@@ -85,25 +100,27 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                           'Tiếp Tục',
                                           style: TextStyle(color: Colors.blue),
                                         ),
-                                        onPressed: () {
-                                          var stdID = snapshot.data.studentObjs
-                                              .elementAt(index)['id']
-                                              .toString();
+                                        onPressed: () async {
+                                            try {
+                                              var stdID = snapshot.data.studentObjs.elementAt(index)['id'];
+                                              var stdName = snapshot.data.studentObjs.elementAt(index)['fullName'];
 
-                                          HomeworkController.updateParent(stdID)
-                                              .then((ok) {
-                                            Navigator.of(context)
-                                                .pushAndRemoveUntil(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        NotificationScreen(
-                                                          role: 'parent',
-                                                        )),
-                                                    (Route<dynamic> route) =>
-                                                false);
-                                          }).catchError((error) {
-                                            print(error.toString());
-                                          });
+                                              var className = snapshot.data.classroomObj['name'];
+                                              var deadline = snapshot.data.homeworkObj['deadline'];
+                                              var historySubmit = snapshot.data.answerHistoryObjs;
+
+
+                                              await HomeworkController.updateParent(stdID.toString());
+                                                Navigator.of(context)
+                                                    .pushAndRemoveUntil(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                    SubmitForm(hashId: widget.hashId, studentId: stdID, stdName: stdName, className: className, deadline: deadline)),
+                                                        (Route<dynamic> route) =>
+                                                    false);
+                                              } catch (err) {
+                                                _showErrorToast(err.toString());
+                                              }
                                         },
                                       ),
                                     ],

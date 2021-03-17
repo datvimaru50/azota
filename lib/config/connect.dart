@@ -29,11 +29,15 @@ const ERR_BAD_REQUEST = "Dữ liệu gửi lên không hợp lệ!";
 
 const ERR_APPLE_SIGN_IN = "Đăng nhập với Apple thất bại!";
 const ERR_APPLE_USER_CANCEL = "Bạn đã hủy bỏ đăng nhập với Apple!";
-const ERR_APPLE_SIGNIN_NOT_AVAILABLE =
-    "Điện thoại của bạn không hỗ trợ đăng nhập với Apple!";
+const ERR_APPLE_SIGNIN_NOT_AVAILABLE = "Điện thoại của bạn không hỗ trợ đăng nhập với Apple!";
+const ERROR_SUBMIT_HOMEWORK = "Nộp bài không thành công!";
+
+const ERR_UPDATE_PARENT = "Cập nhật phụ huynh không thành công!";
 
 /* SUCCESS MESSAGE */
 const SUCCESS_LOGIN = "Đăng nhập thành công!";
+const SUCCESS_SUBMIT_HOMEWORK = "Nộp bài thành công!";
+const SUCCESS_UPDATE_PARENT = "Cập nhật phụ huynh thành công!";
 
 const SECRET_KEY =
     "eyJraWQiOiI1MjJXQVlVQU4zIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiJBRDc0Mk05NDkyIiwiaWF0IjoxNjE0NjcyOTI0LCJleHAiOjE2MzAyMjQ5MjQsImF1ZCI6Imh0dHBzOi8vYXBwbGVpZC5hcHBsZS5jb20iLCJzdWIiOiJ2bi5henQuYXp0In0.eowrDUm17wfoSWJPpXkDaoNwn2lmjiG5E0bFyGpMDDKq6ng7C_5QYUJyUif5M6hC0H8EHc0LiQ93PWyGAMfz-g";

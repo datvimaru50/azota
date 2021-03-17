@@ -1,4 +1,4 @@
-
+//
 class HomeworkInfo{
   List<dynamic> answers;
   dynamic classroom;
@@ -96,11 +96,17 @@ class Student{
 
 class HomeworkHashIdInfo{
   Iterable studentObjs;
+  Iterable answerHistoryObjs;
+  dynamic classroomObj;
+  dynamic homeworkObj;
 
-  HomeworkHashIdInfo({this.studentObjs});
+  HomeworkHashIdInfo({this.answerHistoryObjs, this.studentObjs, this.homeworkObj, this.classroomObj});
 
   factory HomeworkHashIdInfo.fromJson(Map<String, dynamic> json) => HomeworkHashIdInfo(
+    answerHistoryObjs: json["answerHistoryObjs"],
     studentObjs: json["studentObjs"],
+    classroomObj: json["classroomObj"],
+    homeworkObj: json["homeworkObj"],
   );
 
 }
