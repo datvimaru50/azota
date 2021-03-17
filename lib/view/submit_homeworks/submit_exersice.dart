@@ -293,9 +293,14 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                     color: Colors.blue,
                   ),
                 ),
-                color: Color(0xfff2f2f2),
                 padding:
                     EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.0, color: Colors.black12),
+                  ),
+                  color: Color(0xfff2f2f2),
+                ),
               ),
               Container(
                 child: Row(
