@@ -286,6 +286,18 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                 color: Color(0xff00a7d0),
               ),
               Container(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  '+ Thêm file bài tập',
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
+                ),
+                color: Color(0xfff2f2f2),
+                padding:
+                    EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
+              ),
+              Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

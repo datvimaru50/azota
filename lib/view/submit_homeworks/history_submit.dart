@@ -75,16 +75,22 @@ class _HistorySubmitState extends State<HistorySubmit> {
                                     ),
                                     Container(
                                       alignment: Alignment.topLeft,
-                                      child: Row(
-                                        children: [
-                                          Text('Yêu cầu nộp lại vì: '),
-                                          Text(
-                                            item["resendNote"],
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                        ],
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: 'Yêu cầu nộp lại vì: ',
+                                            ),
+                                            TextSpan(
+                                              text: item["resendNote"],
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                       margin: EdgeInsets.only(
                                           left: 20, right: 20, bottom: 15),
@@ -111,7 +117,7 @@ class _HistorySubmitState extends State<HistorySubmit> {
                                           style: TextStyle(color: Colors.black),
                                           children: <TextSpan>[
                                             TextSpan(
-                                              text: 'Kết quả',
+                                              text: 'Kết quả ',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 13,
@@ -150,8 +156,8 @@ class _HistorySubmitState extends State<HistorySubmit> {
                                     Container(
                                       alignment: Alignment.topLeft,
                                       child: Text('Nhận Xét'),
-                                      padding:
-                                          EdgeInsets.only(top: 15, left: 25),
+                                      padding: EdgeInsets.only(
+                                          top: 15, left: 25, bottom: 3),
                                     ),
                                     Container(
                                       alignment: Alignment.topLeft,
