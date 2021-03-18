@@ -1,18 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:azt/view/submit_homeworks/graded_exersice.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:azt/models/core_mo.dart';
-import 'package:azt/controller/homework_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
@@ -191,7 +182,11 @@ class _GradedExersiceState extends State<GradedExersice> {
               ),
               Container(
                 alignment: Alignment.center,
-                child: Text(jsonDecode(widget.answerObj["result"])["comment"]),
+                child: Text(jsonDecode(widget.answerObj["result"])["comment"], style: GoogleFonts.pacifico(
+                  textStyle: TextStyle(
+                      color: Colors.red,
+                      fontSize: 15),
+                ),),
                 padding: EdgeInsets.all(15),
                 margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
                 decoration: BoxDecoration(
