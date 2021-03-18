@@ -3,6 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:azt/config/connect.dart';
+import 'package:azt/config/global.dart';
 
 // ignore: must_be_immutable
 class GradedExersice extends StatefulWidget {
@@ -33,6 +37,14 @@ class GradedExersice extends StatefulWidget {
 }
 
 class _GradedExersiceState extends State<GradedExersice> {
+  Future<String> _buildWebUrl(String answerId) async {
+    final token = await Prefs.getPref(ANONYMOUS_TOKEN);
+    final baseAccess =
+        '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
+
+    return '$baseAccess/en/xem-bai-tap/$answerId';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -73,11 +85,8 @@ class _GradedExersiceState extends State<GradedExersice> {
               ),
               Container(
                 alignment: Alignment.topLeft,
-                child: Text(
-                  widget.content,
-                  style: TextStyle(
-                    color: Colors.blue,
-                  ),
+                child: Html(
+                  data: widget.content,
                 ),
                 padding:
                     EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
@@ -113,7 +122,7 @@ class _GradedExersiceState extends State<GradedExersice> {
               ),
               Container(
                 alignment: Alignment.center,
-                child: Text(jsonDecode(widget.answerObj["files"])['name']),
+                child: Text(widget.answerObj["files"]),
                 padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),
@@ -125,26 +134,32 @@ class _GradedExersiceState extends State<GradedExersice> {
                 margin: EdgeInsets.only(left: 20, right: 20),
               ),
               Padding(
-                padding: EdgeInsets.all(10),
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(color: Colors.black),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: 'Kết quả ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
+                  padding: EdgeInsets.all(10),
+                  child: GestureDetector(
+                    onTap: () async {
+                      final String url =
+                          await _buildWebUrl(widget.answerObj["id"]);
+                      launch(url);
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Kết quả ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '(Xem chi tiết kết quả)',
+                            style: TextStyle(fontSize: 13, color: Colors.blue),
+                          ),
+                        ],
                       ),
-                      TextSpan(
-                        text: '(Xem chi tiết kết quả)',
-                        style: TextStyle(fontSize: 13, color: Colors.blue),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
+                  )),
               Container(
                 alignment: Alignment.center,
                 child: Text('${widget.answerObj['point']}',
@@ -165,7 +180,7 @@ class _GradedExersiceState extends State<GradedExersice> {
                 padding: EdgeInsets.only(top: 15, bottom: 2, left: 25),
               ),
               Container(
-                alignment: Alignment.topLeft,
+                alignment: Alignment.center,
                 child: Text(
                   jsonDecode(widget.answerObj["result"])["comment"],
                   style: GoogleFonts.pacifico(
