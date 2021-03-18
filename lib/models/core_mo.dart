@@ -1,5 +1,5 @@
 //
-class HomeworkInfo{
+class HomeworkInfo {
   List<dynamic> answers;
   dynamic classroom;
   int classroomId;
@@ -13,7 +13,6 @@ class HomeworkInfo{
   String name;
   dynamic type;
   String updatedAt;
-
 
   HomeworkInfo({
     this.answers,
@@ -32,25 +31,23 @@ class HomeworkInfo{
   });
 
   factory HomeworkInfo.fromJson(Map<String, dynamic> json) => HomeworkInfo(
-    answers: json["answers"],
-    classroom: json["classroom"],
-    classroomId: json["classroomId"],
-    content: json["content"],
-    count: json["count"],
-    createdAt: json["createdAt"],
-    deadline: json["deadline"],
-    files: json["files"],
-    hashId: json["hashId"],
-    id: json["id"],
-    name: json["name"],
-    type: json["type"],
-    updatedAt: json["updatedAt"],
-
-  );
-
+        answers: json["answers"],
+        classroom: json["classroom"],
+        classroomId: json["classroomId"],
+        content: json["content"],
+        count: json["count"],
+        createdAt: json["createdAt"],
+        deadline: json["deadline"],
+        files: json["files"],
+        hashId: json["hashId"],
+        id: json["id"],
+        name: json["name"],
+        type: json["type"],
+        updatedAt: json["updatedAt"],
+      );
 }
 
-class Student{
+class Student {
   List<dynamic> answers;
   String birthday;
   dynamic classroom;
@@ -62,7 +59,6 @@ class Student{
   int id;
   int parentId;
   String updatedAt;
-
 
   Student({
     this.answers,
@@ -79,34 +75,40 @@ class Student{
   });
 
   factory Student.fromJson(Map<String, dynamic> json) => Student(
-    answers: json["answers"],
-    birthday: json["birthday"],
-    classroomId: json["classroomId"],
-    classroom: json["classroom"],
-    code: json["code"],
-    createdAt: json["createdAt"],
-    fullName: json["fullName"],
-    gender: json["gender"],
-    id: json["id"],
-    parentId: json["parentId"],
-    updatedAt: json["updatedAt"],
-  );
+        answers: json["answers"],
+        birthday: json["birthday"],
+        classroomId: json["classroomId"],
+        classroom: json["classroom"],
+        code: json["code"],
+        createdAt: json["createdAt"],
+        fullName: json["fullName"],
+        gender: json["gender"],
+        id: json["id"],
+        parentId: json["parentId"],
+        updatedAt: json["updatedAt"],
+      );
 }
 
-
-class HomeworkHashIdInfo{
+class HomeworkHashIdInfo {
   Iterable studentObjs;
   Iterable answerHistoryObjs;
   dynamic classroomObj;
   dynamic homeworkObj;
+  dynamic answerObj;
 
-  HomeworkHashIdInfo({this.answerHistoryObjs, this.studentObjs, this.homeworkObj, this.classroomObj});
+  HomeworkHashIdInfo(
+      {this.answerHistoryObjs,
+      this.studentObjs,
+      this.homeworkObj,
+      this.classroomObj,
+      this.answerObj});
 
-  factory HomeworkHashIdInfo.fromJson(Map<String, dynamic> json) => HomeworkHashIdInfo(
-    answerHistoryObjs: json["answerHistoryObjs"],
-    studentObjs: json["studentObjs"],
-    classroomObj: json["classroomObj"],
-    homeworkObj: json["homeworkObj"],
-  );
-
+  factory HomeworkHashIdInfo.fromJson(Map<String, dynamic> json) =>
+      HomeworkHashIdInfo(
+        answerHistoryObjs: json["answerHistoryObjs"],
+        studentObjs: json["studentObjs"],
+        classroomObj: json["classroomObj"],
+        homeworkObj: json["homeworkObj"],
+        answerObj: json["answerObj"],
+      );
 }

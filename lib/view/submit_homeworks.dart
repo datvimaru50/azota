@@ -1,16 +1,11 @@
 import 'dart:ui';
-import 'dart:io';
 
 import 'package:azt/view/submit_homeworks/graded_exersice.dart';
 import 'package:azt/view/submit_homeworks/history_submit.dart';
 import 'package:azt/view/submit_homeworks/submit_exersice.dart';
 import 'package:flutter/material.dart';
 
-import 'package:azt/models/firebase_mo.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-
 import 'package:azt/config/global.dart';
-import 'package:azt/config/connect.dart';
 import 'package:azt/view/splash_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -21,7 +16,8 @@ class SubmitForm extends StatefulWidget {
       this.studentId,
       this.className,
       this.stdName,
-      this.deadline});
+      this.deadline,
+      this.content});
 
   final String hashId;
   final int studentId;
@@ -29,6 +25,7 @@ class SubmitForm extends StatefulWidget {
   final String className;
   final String stdName;
   final String deadline;
+  final String content;
   @override
   _SubmitFormState createState() => _SubmitFormState();
 }
@@ -103,6 +100,7 @@ class _SubmitFormState extends State<SubmitForm> {
         child: ListView(
           children: <Widget>[
             SubmitExersice(
+              content: widget.content,
               studentId: widget.studentId,
               hashId: widget.hashId,
               stdName: widget.stdName,
@@ -111,7 +109,14 @@ class _SubmitFormState extends State<SubmitForm> {
             ),
             //đã chấm
             // GradedExersice(),
-            HistorySubmit(hashId: widget.hashId),
+            HistorySubmit(
+              content: widget.content,
+              hashId: widget.hashId,
+              studentId: widget.studentId,
+              stdName: widget.stdName,
+              deadline: widget.deadline,
+              className: widget.className,
+            ),
 
             Padding(
               padding: const EdgeInsets.all(20),

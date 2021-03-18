@@ -11,8 +11,7 @@ import 'package:azt/view/submit_homeworks/submit_exersice.dart';
 import 'package:azt/view/submit_homeworks.dart';
 
 class ChooseStudent extends StatefulWidget {
-  ChooseStudent({Key key, @required this.hashId})
-      : super(key: key);
+  ChooseStudent({Key key, @required this.hashId}) : super(key: key);
   final String hashId;
 
   @override
@@ -64,7 +63,6 @@ class _ChooseStudentState extends State<ChooseStudent> {
             future: homeworkHashIdInfo,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-
                 return CustomScrollView(
                   slivers: <Widget>[
                     SliverGrid(
@@ -73,7 +71,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
                         crossAxisCount: 2,
                       ),
                       delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
+                        (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () {
                               showAnimatedDialog(
@@ -84,7 +82,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                     titleText: snapshot.data.studentObjs
                                         .elementAt(index)['fullName'],
                                     contentText:
-                                    'Bạn có chắc đây là con của bạn?',
+                                        'Bạn có chắc đây là con của bạn?',
                                     actions: <Widget>[
                                       TextButton(
                                         child: Text(
@@ -101,26 +99,46 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                           style: TextStyle(color: Colors.blue),
                                         ),
                                         onPressed: () async {
-                                            try {
-                                              var stdID = snapshot.data.studentObjs.elementAt(index)['id'];
-                                              var stdName = snapshot.data.studentObjs.elementAt(index)['fullName'];
+                                          try {
+                                            var stdID = snapshot
+                                                .data.studentObjs
+                                                .elementAt(index)['id'];
+                                            var stdName = snapshot
+                                                .data.studentObjs
+                                                .elementAt(index)['fullName'];
 
-                                              var className = snapshot.data.classroomObj['name'];
-                                              var deadline = snapshot.data.homeworkObj['deadline'];
-                                              var historySubmit = snapshot.data.answerHistoryObjs;
+                                            var className = snapshot
+                                                .data.classroomObj['name'];
+                                            var deadline = snapshot
+                                                .data.homeworkObj['deadline'];
+                                            var historySubmit =
+                                                snapshot.data.answerHistoryObjs;
 
-
-                                              await HomeworkController.updateParent(stdID.toString());
-                                                Navigator.of(context)
-                                                    .pushAndRemoveUntil(
+                                            await HomeworkController
+                                                .updateParent(stdID.toString());
+                                            Navigator.of(context)
+                                                .pushAndRemoveUntil(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                    SubmitForm(hashId: widget.hashId, studentId: stdID, stdName: stdName, className: className, deadline: deadline)),
-                                                        (Route<dynamic> route) =>
-                                                    false);
-                                              } catch (err) {
-                                                _showErrorToast(err.toString());
-                                              }
+                                                            SubmitForm(
+                                                              hashId:
+                                                                  widget.hashId,
+                                                              studentId: stdID,
+                                                              stdName: stdName,
+                                                              className:
+                                                                  className,
+                                                              deadline:
+                                                                  deadline,
+                                                              content: snapshot
+                                                                      .data
+                                                                      .homeworkObj[
+                                                                  'content'],
+                                                            )),
+                                                    (Route<dynamic> route) =>
+                                                        false);
+                                          } catch (err) {
+                                            _showErrorToast(err.toString());
+                                          }
                                         },
                                       ),
                                     ],
@@ -142,7 +160,8 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                       color: Colors.black),
                                 ),
                               ),
-                              margin: EdgeInsets.only(top: 5, left: 5, right: 5),
+                              margin:
+                                  EdgeInsets.only(top: 5, left: 5, right: 5),
                               decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
@@ -173,7 +192,8 @@ class _ChooseStudentState extends State<ChooseStudent> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(bottom: 10, left: 30, right: 30),
+                        padding:
+                            EdgeInsets.only(bottom: 10, left: 30, right: 30),
                         child: Text(
                           'Mã bài tập không tồn tại, vui lòng kiểm tra lại.',
                           textAlign: TextAlign.center,

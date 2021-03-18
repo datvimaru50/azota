@@ -23,13 +23,15 @@ class SubmitExersice extends StatefulWidget {
       this.studentId,
       this.className,
       this.stdName,
-      this.deadline});
+      this.deadline,
+      this.content});
 
   final String hashId;
   final int studentId;
   final String className;
   final String stdName;
   final String deadline;
+  final String content;
 
   @override
   _SubmitExersiceState createState() => _SubmitExersiceState();
@@ -288,7 +290,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
               Container(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  '+ Thêm file bài tập',
+                  '${widget.content}',
                   style: TextStyle(
                     color: Colors.blue,
                   ),
