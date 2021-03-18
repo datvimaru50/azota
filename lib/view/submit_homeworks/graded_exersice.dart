@@ -1,18 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:azt/view/submit_homeworks/graded_exersice.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:azt/models/core_mo.dart';
-import 'package:azt/controller/homework_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
+// ignore: must_be_immutable
 class GradedExersice extends StatefulWidget {
   GradedExersice({
     Key key,
@@ -103,7 +95,7 @@ class _GradedExersiceState extends State<GradedExersice> {
                     style: TextStyle(color: Colors.black),
                     children: <TextSpan>[
                       TextSpan(
-                        text: 'Bài làm ',
+                        text: 'Bài làm',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
@@ -121,7 +113,7 @@ class _GradedExersiceState extends State<GradedExersice> {
               ),
               Container(
                 alignment: Alignment.center,
-                child: Text('file'),
+                child: Text(jsonDecode(widget.answerObj["files"])['name']),
                 padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),
@@ -173,8 +165,13 @@ class _GradedExersiceState extends State<GradedExersice> {
                 padding: EdgeInsets.only(top: 15, bottom: 2, left: 25),
               ),
               Container(
-                alignment: Alignment.center,
-                child: Text(jsonDecode(widget.answerObj["result"])["comment"]),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  jsonDecode(widget.answerObj["result"])["comment"],
+                  style: GoogleFonts.pacifico(
+                    textStyle: TextStyle(color: Colors.red, fontSize: 15),
+                  ),
+                ),
                 padding: EdgeInsets.all(15),
                 margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
                 decoration: BoxDecoration(

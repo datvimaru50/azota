@@ -1,4 +1,3 @@
-import 'package:azt/view/webView.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/view/enter_code.dart';
 import 'package:azt/view/login_screen.dart';
@@ -52,6 +51,7 @@ class _MainHomeState extends State<MainHome> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
+                    // ignore: deprecated_member_use
                     child: FlatButton(
                       color: Colors.white,
                       textColor: Colors.black,
@@ -86,6 +86,7 @@ class _MainHomeState extends State<MainHome> {
                     ),
                   ),
                   Container(
+                    // ignore: deprecated_member_use
                     child: FlatButton(
                       color: Colors.white,
                       textColor: Colors.black,

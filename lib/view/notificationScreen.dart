@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:azt/view/notification/notificationStudent.dart';
 import 'package:azt/view/notification/notificationTeacher.dart';
 import 'package:azt/controller/notification_controller.dart';
-import 'package:azt/controller/update_controller.dart';
 import 'package:azt/models/firebase_mo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:package_info/package_info.dart';
 
 import 'package:azt/config/global.dart';
 import 'package:azt/config/connect.dart';
@@ -312,7 +310,7 @@ class _NotificationScreenState extends State<NotificationScreen>
     });
 
     _firebaseMessaging.getToken().then((String token) {
-      print('type_acc::::: '+widget.role);
+      print('type_acc::::: ' + widget.role);
       assert(token != null);
       if (widget.role == 'parent') {
         SavedToken.saveAnonymousToken(token);
@@ -343,6 +341,7 @@ class _NotificationScreenState extends State<NotificationScreen>
   }
 
   // TOP-LEVEL or STATIC function to handle background messages
+  // ignore: missing_return
   static Future<void> myBackgroundMessageHandler(Map<String, dynamic> message) {
     print('AppPushs myBackgroundMessageHandler : $message');
   }

@@ -227,6 +227,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      // ignore: deprecated_member_use
                       child: OutlineButton.icon(
                         disabledBorderColor: Colors.blue,
                         padding: EdgeInsets.only(

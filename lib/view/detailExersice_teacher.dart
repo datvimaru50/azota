@@ -42,6 +42,7 @@ class _DetailExersiceState extends State<DetailExersice> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        // ignore: deprecated_member_use
                         RaisedButton.icon(
                           onPressed: () {
                             print('Button Clicked.');
@@ -58,6 +59,7 @@ class _DetailExersiceState extends State<DetailExersice> {
                           splashColor: Colors.red,
                           color: Colors.white,
                         ),
+                        // ignore: deprecated_member_use
                         RaisedButton.icon(
                           onPressed: () {
                             print('Button Clicked.');

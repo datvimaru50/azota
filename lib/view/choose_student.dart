@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'package:azt/config/global.dart';
 import 'package:azt/controller/homework_controller.dart';
-import 'package:azt/view/notificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:azt/view/submit_homeworks/submit_exersice.dart';
 import 'package:azt/view/submit_homeworks.dart';
 
 class ChooseStudent extends StatefulWidget {
@@ -21,6 +19,7 @@ class ChooseStudent extends StatefulWidget {
 class _ChooseStudentState extends State<ChooseStudent> {
   Future<HomeworkHashIdInfo> homeworkHashIdInfo;
 
+  // ignore: missing_return
   Future<bool> _onBackPressed() {
     Prefs.deletePref();
     Navigator.pop(
@@ -111,6 +110,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                                 .data.classroomObj['name'];
                                             var deadline = snapshot
                                                 .data.homeworkObj['deadline'];
+                                            // ignore: unused_local_variable
                                             var historySubmit =
                                                 snapshot.data.answerHistoryObjs;
 
@@ -120,6 +120,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                                 .pushAndRemoveUntil(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
+                                                            // ignore: missing_required_param
                                                             SubmitForm(
                                                               hashId:
                                                                   widget.hashId,
@@ -200,6 +201,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
+                      // ignore: deprecated_member_use
                       FlatButton.icon(
                         color: Colors.blue,
                         onPressed: () {

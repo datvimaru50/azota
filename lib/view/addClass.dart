@@ -15,6 +15,7 @@ class AddClass extends StatefulWidget {
 }
 
 class _AddClassState extends State<AddClass> {
+  // ignore: unused_field
   File _image;
 
   Future getFile() async {
@@ -137,6 +138,7 @@ class _AddClassState extends State<AddClass> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
+                      onPressed: () {},
                       child: Text(
                         'Tải file biểu mẫu',
                         style: TextStyle(color: Colors.blue),

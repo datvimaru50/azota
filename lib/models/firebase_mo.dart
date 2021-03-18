@@ -62,16 +62,15 @@ class SavedToken {
     }
   }
 
-
   // Function to delete firebase token according to user token
   static Future<String> deleteToken(String userToken) async {
-    final response = await http.Client()
-        .get(AZO_TOKEN_DELETE, headers: {
+    final response = await http.Client().get(AZO_TOKEN_DELETE, headers: {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       HttpHeaders.authorizationHeader: "Bearer " + userToken
     });
 
     if (response.statusCode == 200) {
+      // ignore: unused_local_variable
       final tkn = json.decode(response.body);
       return "DELETE_SUCCESS";
     } else {

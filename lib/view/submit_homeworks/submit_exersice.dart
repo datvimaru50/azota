@@ -39,6 +39,7 @@ class SubmitExersice extends StatefulWidget {
 
 class _SubmitExersiceState extends State<SubmitExersice> {
   final picker = ImagePicker();
+  // ignore: unused_field
   var _controllerClear = TextEditingController();
   List<dynamic> imgFilePaths = [];
   List<dynamic> imgUploadedFiles = [];

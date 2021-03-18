@@ -16,6 +16,7 @@ class AddExersice extends StatefulWidget {
 }
 
 class _AddExersiceState extends State<AddExersice> {
+  // ignore: unused_field
   File _image;
 
   Future getFile() async {
@@ -152,6 +153,7 @@ class _AddExersiceState extends State<AddExersice> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
+                      onPressed: () {},
                       child: Text(
                         'Tải file biểu mẫu',
                         style: TextStyle(color: Colors.blue),

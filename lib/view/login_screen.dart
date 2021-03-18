@@ -5,7 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/view/notificationScreen.dart';
 // import 'package:azt/view/register_screen.dart';
 import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:azt/controller/login_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -293,6 +292,7 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        // ignore: deprecated_member_use
                         child: OutlineButton.icon(
                           disabledBorderColor: Colors.blue,
                           padding: EdgeInsets.only(
