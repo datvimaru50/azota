@@ -9,6 +9,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:azt/config/connect.dart';
+import 'package:azt/config/global.dart';
 
 class HistorySubmit extends StatefulWidget {
   HistorySubmit({
@@ -34,6 +38,14 @@ class HistorySubmit extends StatefulWidget {
 
 class _HistorySubmitState extends State<HistorySubmit> {
   Future<HomeworkHashIdInfo> homeworkHashIdInfo;
+
+  Future<String> _buildWebUrl(String homeworkId, String answerId) async {
+    final token = await Prefs.getPref(ANONYMOUS_TOKEN);
+    final baseAccess =
+        '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
+
+    return '$baseAccess/en/xem-bai-tap/$homeworkId/$answerId';
+  }
 
   @override
   void initState() {
@@ -140,28 +152,35 @@ class _HistorySubmitState extends State<HistorySubmit> {
                                         ),
                                         Padding(
                                           padding: EdgeInsets.all(10),
-                                          child: RichText(
-                                            text: TextSpan(
-                                              style: TextStyle(
-                                                  color: Colors.black),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: 'Kết quả ',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 13,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text:
-                                                      '(Xem chi tiết kết quả)',
-                                                  style: TextStyle(
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              final String url = await _buildWebUrl(item["homeworkId"].toString(), item["id"].toString());
+                                              launch(url);
+                                            },
+                                            child: RichText(
+                                              text: TextSpan(
+                                                style: TextStyle(
+                                                    color: Colors.black),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                    text: 'Kết quả ',
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.bold,
                                                       fontSize: 13,
-                                                      color: Colors.blue),
-                                                ),
-                                              ],
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text:
+                                                    '(Xem chi tiết kết quả)',
+                                                    style: TextStyle(
+                                                        fontSize: 13,
+                                                        color: Colors.blue),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
+
                                         ),
                                         Container(
                                           child: Center(

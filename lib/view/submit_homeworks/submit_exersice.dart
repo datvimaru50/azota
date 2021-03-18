@@ -9,8 +9,11 @@ import 'package:azt/controller/upload_controller.dart';
 import 'package:mime/mime.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:flutter_html/flutter_html.dart';
+
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+
 
 typedef void OnDownloadProgressCallback(int receivedBytes, int totalBytes);
 typedef void OnUploadProgressCallback(int sentBytes, int totalBytes);
@@ -289,11 +292,8 @@ class _SubmitExersiceState extends State<SubmitExersice> {
               ),
               Container(
                 alignment: Alignment.topLeft,
-                child: Text(
-                  '${widget.content}',
-                  style: TextStyle(
-                    color: Colors.blue,
-                  ),
+                child: Html(
+                  data: widget.content,
                 ),
                 padding:
                     EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
