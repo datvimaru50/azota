@@ -2,6 +2,7 @@ import 'package:azt/view/notificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/config/global.dart';
 import 'package:azt/view/mainHome.dart';
+import 'package:azt/view/submit_homeworks.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -35,9 +36,7 @@ class _MyAppState extends State<Splash> {
             future: anonymousToken,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return NotificationScreen(
-                  role: 'parent',
-                );
+                return SubmitForm();
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
