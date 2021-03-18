@@ -12,25 +12,17 @@ import 'package:azt/config/global.dart';
 class GradedExersice extends StatefulWidget {
   GradedExersice({
     Key key,
-    @required this.hashId,
-    this.studentId,
-    this.stdName,
-    this.deadline,
-    this.className,
     this.answerObj,
-    this.answerHistoryObjs,
-    this.content,
+    this.homeworkObj,
+    this.studentObj,
+    this.classroomObj
   }) : super(key: key);
-  final String hashId;
-  final int studentId;
-  final String stdName;
-  final String deadline;
-  final String className;
-  final String content;
-  final dynamic answerObj;
-  final dynamic answerHistoryObjs;
 
-  List<Widget> hldfdf;
+  final dynamic homeworkObj;
+  final dynamic answerObj;
+  final dynamic studentObj;
+  final dynamic classroomObj;
+
 
   @override
   _GradedExersiceState createState() => _GradedExersiceState();
@@ -47,13 +39,13 @@ class _GradedExersiceState extends State<GradedExersice> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return widget.answerObj["confirmedAt"] != null ? Column(
       children: [
         Center(
           child: Padding(
             padding: EdgeInsets.only(top: 20),
             child: Text(
-              '${widget.stdName} - Lớp: ${widget.className}',
+              '${widget.studentObj["fullName"]} - Lớp: ${widget.classroomObj["name"]}',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 15,
@@ -72,7 +64,7 @@ class _GradedExersiceState extends State<GradedExersice> {
                     Padding(
                       padding: EdgeInsets.all(15),
                       child: Text(
-                        'Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(widget.deadline))}',
+                        'Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(widget.homeworkObj["deadline"]))}',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
@@ -86,7 +78,7 @@ class _GradedExersiceState extends State<GradedExersice> {
               Container(
                 alignment: Alignment.topLeft,
                 child: Html(
-                  data: widget.content,
+                  data: widget.homeworkObj["content"],
                 ),
                 padding:
                     EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
@@ -97,48 +89,48 @@ class _GradedExersiceState extends State<GradedExersice> {
                   color: Color(0xfff2f2f2),
                 ),
               ),
-              Container(
-                alignment: Alignment.topLeft,
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(color: Colors.black),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: 'Bài làm',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                      TextSpan(
-                        text:
-                            '(Đã nộp bài lúc: ${DateFormat.yMd().format(DateTime.parse(widget.answerObj["createdAt"]))})',
-                        style: TextStyle(fontSize: 13),
-                      ),
-                    ],
-                  ),
-                ),
-                padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: Text(widget.answerObj["files"]),
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  border: Border.all(
-                    color: Colors.black12,
-                  ),
-                  color: Colors.white,
-                ),
-                margin: EdgeInsets.only(left: 20, right: 20),
-              ),
+              // Container(
+              //   alignment: Alignment.topLeft,
+              //   child: RichText(
+              //     text: TextSpan(
+              //       style: TextStyle(color: Colors.black),
+              //       children: <TextSpan>[
+              //         TextSpan(
+              //           text: 'Bài làm',
+              //           style: TextStyle(
+              //             fontWeight: FontWeight.bold,
+              //             fontSize: 13,
+              //           ),
+              //         ),
+              //         TextSpan(
+              //           text:
+              //               '(Đã nộp bài lúc: ${DateFormat.yMd().format(DateTime.parse(widget.answerObj["createdAt"]))})',
+              //           style: TextStyle(fontSize: 13),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              //   padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+              // ),
+              // Container(
+              //   alignment: Alignment.center,
+              //   child: Text(widget.answerObj["files"]),
+              //   padding: EdgeInsets.all(15),
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(5.0),
+              //     border: Border.all(
+              //       color: Colors.black12,
+              //     ),
+              //     color: Colors.white,
+              //   ),
+              //   margin: EdgeInsets.only(left: 20, right: 20),
+              // ),
               Padding(
                   padding: EdgeInsets.all(10),
                   child: GestureDetector(
                     onTap: () async {
                       final String url =
-                          await _buildWebUrl(widget.answerObj["id"]);
+                          await _buildWebUrl(widget.answerObj["id"].toString());
                       launch(url);
                     },
                     child: RichText(
@@ -208,6 +200,6 @@ class _GradedExersiceState extends State<GradedExersice> {
           ),
         ),
       ],
-    );
+    ) : Container();
   }
 }

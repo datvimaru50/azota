@@ -95,10 +95,12 @@ class HomeworkHashIdInfo {
   dynamic classroomObj;
   dynamic homeworkObj;
   dynamic answerObj;
+  dynamic studentObj;
 
   HomeworkHashIdInfo(
       {this.answerHistoryObjs,
       this.studentObjs,
+      this.studentObj,
       this.homeworkObj,
       this.classroomObj,
       this.answerObj});
@@ -107,8 +109,9 @@ class HomeworkHashIdInfo {
       HomeworkHashIdInfo(
         answerHistoryObjs: json["answerHistoryObjs"],
         studentObjs: json["studentObjs"],
+        studentObj: json["studentObj"],
         classroomObj: json["classroomObj"],
         homeworkObj: json["homeworkObj"],
-        answerObj: json["answerObj"],
+        answerObj: json["answerObj"] == null ? {"confirmedAt": null} : json["answerObj"],
       );
 }

@@ -9,9 +9,10 @@ const ANONYMOUS_TOKEN = "anonymousToken";
 const UPLOAD_TOKEN = "uploadToken";
 const CURRENT_USER = "currentUser";
 const FIREBASE_TOKEN = "firebaseToken";
+const HASH_ID = "hashId";
 
 class Prefs {
-  static void savePrefs(String nameSave, String stringSave) async {
+  static Future<void> savePrefs(String nameSave, String stringSave) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(nameSave);
     await prefs.setString(nameSave, stringSave);

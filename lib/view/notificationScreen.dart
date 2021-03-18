@@ -15,7 +15,7 @@ import 'package:azt/view/splash_screen.dart';
 class NotificationScreen extends StatefulWidget {
   NotificationScreen({@required this.role});
 
-  final String role;
+  final String role;// use for parent only
 
   @override
   _NotificationScreenState createState() => _NotificationScreenState();
@@ -214,7 +214,6 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 answerId: _notiArr
                                     .elementAt(index)['answerId']
                                     .toString(),
-                                hashId: _notiArr.elementAt(index)['hashId'],
                               )
                             : NotificationTeacherItem(
                                 className:
@@ -356,6 +355,8 @@ class _NotificationScreenState extends State<NotificationScreen>
             Text(widget.role == 'teacher'
                 ? 'Thông báo giáo viên'
                 : 'Thông báo phụ huynh'),
+
+
             GestureDetector(
               child: Icon(
                 Icons.logout,

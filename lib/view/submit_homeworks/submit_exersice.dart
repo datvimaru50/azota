@@ -22,19 +22,15 @@ enum SubmitStatus { notSubmitted, submitting, doneSubmit }
 
 class SubmitExersice extends StatefulWidget {
   SubmitExersice(
-      {this.hashId,
-      this.studentId,
-      this.className,
-      this.stdName,
-      this.deadline,
-      this.content});
-
-  final String hashId;
-  final int studentId;
-  final String className;
-  final String stdName;
-  final String deadline;
-  final String content;
+      {this.classroomObj,
+        this.studentObj,
+        this.homeworkObj,
+      this.answerObj,
+      });
+  final dynamic homeworkObj;
+  final dynamic answerObj;
+  final dynamic studentObj;
+  final dynamic classroomObj;
 
   @override
   _SubmitExersiceState createState() => _SubmitExersiceState();
@@ -81,6 +77,13 @@ class _SubmitExersiceState extends State<SubmitExersice> {
 
   Future<void> handleOpenCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
+    setState(() {
+      imgFilePaths.add({"url": pickedFile.path, "uploaded": false});
+    });
+  }
+
+  Future<void> handleOpenGallery() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
       imgFilePaths.add({"url": pickedFile.path, "uploaded": false});
     });
@@ -163,13 +166,10 @@ class _SubmitExersiceState extends State<SubmitExersice> {
         submitStatus = SubmitStatus.submitting;
       });
       await uploadAllImage();
-
-      print('fildfdf upload::: ' + imgUploadedFiles.toString());
-
       String successStr = await UploadController.saveUploadInfo({
         "files": jsonEncode(imgUploadedFiles),
-        "homeworkId": widget.hashId,
-        "studentId": widget.studentId.toString(),
+        "homeworkId": widget.homeworkObj["hashId"],
+        "studentId": widget.studentObj["id"].toString(),
         "testbankExams": "[]"
       });
 
@@ -201,41 +201,22 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     return completer.future;
   }
 
-  // Future getFile() async {
-  //   FilePickerResult getFile = await FilePicker.platform.pickFiles();
-  //
-  //   setState(
-  //     () {
-  //       if (getFile != null) {
-  //         PlatformFile file = getFile.files.first;
-  //
-  //         print(getFile.files.first.toString());
-  //       }
-  //     },
-  //   );
-  // }
-  //
-  // List<Widget> imageSelected = <Widget>[
-  //   _imagesList.map(
-  //           (File item) => Image.file(item)).toList(),
-  // ];
 
   @override
   void initState() {
     super.initState();
     Intl.defaultLocale = 'vi_VN';
     initializeDateFormatting();
-    print('student:: ' + widget.studentId.toString());
-    print('hashid:::: ' + widget.hashId);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    // Nếu giáo viên đã chấm bài, không hiển thị nút chụp ảnh nữa
+    return widget.answerObj["confirmedAt"] == null ? Column(
       children: [
         Container(
           child: Text(
-            'Lớp: ${widget.className}',
+            'Lớp: ${widget.classroomObj["name"]}',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 15,
@@ -256,7 +237,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                   ),
                 ),
                 TextSpan(
-                  text: ' ${widget.hashId}',
+                  text: ' ${widget.homeworkObj["hashId"]}',
                   style: TextStyle(fontSize: 13, color: Colors.blue),
                 ),
               ],
@@ -274,7 +255,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                     Padding(
                       padding: EdgeInsets.all(15),
                       child: Text(
-                        'Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(widget.deadline))}',
+                        'Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(widget.homeworkObj["deadline"]))}',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
@@ -282,7 +263,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                     Padding(
                       padding: EdgeInsets.all(15),
                       child: Text(
-                        widget.stdName,
+                        widget.studentObj["fullName"],
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
@@ -294,7 +275,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
               Container(
                 alignment: Alignment.topLeft,
                 child: Html(
-                  data: widget.content,
+                  data: widget.homeworkObj["content"],
                 ),
                 padding:
                     EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
@@ -340,7 +321,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                         color: Colors.blue,
                         strokeWidth: 1,
                         child: TextButton(
-                          onPressed: null,
+                          onPressed: handleOpenGallery,
                           child: Column(
                             children: [
                               Icon(
@@ -385,6 +366,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                   : submitStatus == SubmitStatus.doneSubmit
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Icon(
                               Icons.check_box,
@@ -393,9 +375,8 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                             Text('  '),
                             Column(
                               children: [
-                                Text('Bài làm đã được gửi tới giáo viên,'),
-                                Text(
-                                    'vui lòng kiểm tra thông báo để biết kết quả!')
+                                Text('Bài làm đã được gửi tới giáo viên,\nkiểm tra thông báo để biết kết quả!'),
+
                               ],
                             ),
                           ],
@@ -441,6 +422,6 @@ class _SubmitExersiceState extends State<SubmitExersice> {
           ),
         ),
       ],
-    );
+    ) : Container();
   }
 }

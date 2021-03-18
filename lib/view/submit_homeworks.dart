@@ -1,35 +1,31 @@
+import 'dart:convert';
 import 'dart:ui';
-
+import 'package:azt/models/core_mo.dart';
+import 'package:azt/controller/homework_controller.dart';
+import 'package:azt/view/submit_homeworks/graded_exersice.dart';
 import 'package:azt/view/submit_homeworks/history_submit.dart';
 import 'package:azt/view/submit_homeworks/submit_exersice.dart';
 import 'package:flutter/material.dart';
 
 import 'package:azt/config/global.dart';
 import 'package:azt/view/splash_screen.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:azt/view/notificationScreen.dart';
 
 class SubmitForm extends StatefulWidget {
-  SubmitForm(
-      {@required this.role,
-      this.hashId,
-      this.studentId,
-      this.className,
-      this.stdName,
-      this.deadline,
-      this.content});
 
-  final String hashId;
-  final int studentId;
-  final String role;
-  final String className;
-  final String stdName;
-  final String deadline;
-  final String content;
   @override
   _SubmitFormState createState() => _SubmitFormState();
 }
 
 class _SubmitFormState extends State<SubmitForm> {
+  Future<HomeworkHashIdInfo> homeworkHashIdInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    homeworkHashIdInfo = HomeworkController.getHomeworkInfoAgain();
+  }
+
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
@@ -91,7 +87,7 @@ class _SubmitFormState extends State<SubmitForm> {
                   children: [
                     Icon(
                       Icons.notifications,
-                      color: Colors.black,
+                      color: Colors.yellow,
                       size: 30,
                     ),
                     Container(
@@ -121,48 +117,63 @@ class _SubmitFormState extends State<SubmitForm> {
                 ),
               ),
               onTap: () {
-                _showMyDialog();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotificationScreen(role: 'parent')),
+                );
               },
             ),
           ],
         ),
       ),
-      body: Center(
-        child: ListView(
-          children: <Widget>[
-            SubmitExersice(
-              content: widget.content,
-              studentId: widget.studentId,
-              hashId: widget.hashId,
-              stdName: widget.stdName,
-              deadline: widget.deadline,
-              className: widget.className,
-            ),
-            //đã chấm
-            // GradedExersice(),
-            HistorySubmit(
-              content: widget.content,
-              hashId: widget.hashId,
-              studentId: widget.studentId,
-              stdName: widget.stdName,
-              deadline: widget.deadline,
-              className: widget.className,
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: ElevatedButton.icon(
-                  //ElevatedButton.icon(onPressed: onPressed, icon: icon, label: label),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
+      body: FutureBuilder<HomeworkHashIdInfo>(
+        future: homeworkHashIdInfo,
+        builder: (context, snapshot){
+          if(snapshot.hasData){
+            return Center(
+              child: ListView(
+                children: <Widget>[
+                  SubmitExersice(
+                    homeworkObj: snapshot.data.homeworkObj,
+                    studentObj: snapshot.data.studentObj,
+                    classroomObj: snapshot.data.classroomObj,
+                    answerObj: snapshot.data.answerObj // Dùng để check trạng thái giáo viên đã chấm bài hay chưa
                   ),
-                  icon: Icon(Icons.logout),
-                  label: Text('Đăng Xuất'),
-                  onPressed: _showMyDialog),
-            )
-          ],
-        ),
-        // By default, show a loading spinner.
+
+                  GradedExersice(
+                    answerObj: snapshot.data.answerObj,
+                    homeworkObj: snapshot.data.homeworkObj,
+                    studentObj: snapshot.data.studentObj,
+                    classroomObj: snapshot.data.classroomObj,
+                  ),
+
+                  HistorySubmit(
+                    homeworkObj: snapshot.data.homeworkObj,
+                    answerHistoryObjs: snapshot.data.answerHistoryObjs,
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: ElevatedButton.icon(
+                      //ElevatedButton.icon(onPressed: onPressed, icon: icon, label: label),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red,
+                        ),
+                        icon: Icon(Icons.logout),
+                        label: Text('Đăng Xuất'),
+                        onPressed: _showMyDialog),
+                  )
+                ],
+              ),
+              // By default, show a loading spinner.
+            );
+          }else if (snapshot.hasError) {
+          return Text("lalaal ${snapshot.error}");
+          }
+          return Center(
+          child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }
