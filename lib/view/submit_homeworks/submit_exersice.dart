@@ -99,6 +99,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
 
     final uploadInfor = await UploadController.getPulicUpload(
         fileName, totalByteLength.toString(), lookupMimeType(imgPath));
+
     var httpClient = getHttpClient();
 
     final request = await httpClient.putUrl(Uri.parse(uploadInfor.upload_url));
@@ -206,11 +207,6 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     initializeDateFormatting();
   }
 
-  void clearFile() {
-    imgFilePaths.clear();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     // Nếu giáo viên đã chấm bài, không hiển thị nút chụp ảnh nữa
@@ -283,7 +279,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                         data: widget.homeworkObj["content"],
                       ),
                       padding: EdgeInsets.only(
-                          top: 15, bottom: 15, left: 10, right: 10),
+                          top: 6, bottom: 6, left: 10, right: 10),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(width: 1.0, color: Colors.black12),
@@ -334,7 +330,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                       color: Colors.blue,
                                     ),
                                     Text(
-                                      'Chọn file (Hỗ trợ Ảnh và Video hoặc Audio)',
+                                      'Chọn ảnh từ thư viện',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: Colors.black,
@@ -355,34 +351,25 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                           top: 15, left: 30, right: 30, bottom: 20),
                     ),
                     submitStatus == SubmitStatus.submitting
-                        ? Row(
+                        ? Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              CircularProgressIndicator(),
-                              Text('  '),
-                              Column(
-                                children: [
-                                  Text('Bài làm đang được tải lên,'),
-                                  Text('vui lòng đợi đợi trong giây lát!')
-                                ],
+                              Padding(
+                                padding: EdgeInsets.only(left: 20, right: 20),
+                                child: Text(
+                                    'Bài làm đang được tải lên. Vui lòng đợi trong giây lát!'),
                               ),
+                              CircularProgressIndicator(),
                             ],
                           )
                         : submitStatus == SubmitStatus.doneSubmit
-                            ? Row(
+                            ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Text('Đã nộp bài thành công!'),
                                   Icon(
                                     Icons.check_box,
                                     color: Colors.green,
-                                  ),
-                                  Text('  '),
-                                  Column(
-                                    children: [
-                                      Text(
-                                          'Bài làm đã được gửi tới giáo viên,\nkiểm tra thông báo để biết kết quả!'),
-                                    ],
                                   ),
                                 ],
                               )
@@ -390,46 +377,60 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                     imgFilePaths.length == 0
                         ? Container()
                         : Container(
+                            //color: Colors.red,
                             child: GridView.count(
-                              shrinkWrap: true,
-                              primary: false,
-                              padding: const EdgeInsets.all(20),
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              crossAxisCount: 3,
-                              children: <Widget>[
-                                IconButton(
-                                    icon: Icon(Icons.clear),
-                                    onPressed: () => clearFile()),
-                                ...imgFilePaths
-                                    .map(
-                                      (dynamic item) => Container(
-                                        key: UniqueKey(),
-                                        child: Image.file(
-                                          File(
-                                            item["url"],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                    .toList()
-                              ],
-                            ),
-                          ),
+                            shrinkWrap: true,
+                            primary: false,
+                            padding: const EdgeInsets.all(20),
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            crossAxisCount: 3,
+                            children: <Widget>[
+                              ...imgFilePaths
+                                  .map((dynamic item) => Container(
+                                      key: UniqueKey(),
+                                      child: Image.file(File(item["url"]))))
+                                  .toList()
+                            ],
+                          )),
                     imgFilePaths.length == 0
                         ? Container()
-                        : ElevatedButton(
-                            onPressed: submitStatus == SubmitStatus.submitting
-                                ? null
-                                : handleSubmit,
-                            child: Text(
-                              'NỘP BÀI',
-                              style: TextStyle(fontSize: 16),
-                            ),
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton.icon(
+                                icon: Icon(Icons.file_upload),
+                                label: Text('NỘP BÀI'),
+                                onPressed:
+                                    submitStatus == SubmitStatus.submitting
+                                        ? null
+                                        : handleSubmit,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 10),
+                                child: ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.red,
+                                    ),
+                                    icon: Icon(Icons.refresh),
+                                    label: Text('LÀM LẠI'),
+                                    onPressed:
+                                        submitStatus == SubmitStatus.submitting
+                                            ? null
+                                            : () {
+                                                setState(() {
+                                                  imgFilePaths.clear();
+                                                  submitStatus =
+                                                      SubmitStatus.notSubmitted;
+                                                });
+                                              }),
+                              )
+                            ],
                           ),
                   ],
                 ),
                 margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+                padding: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),
                   border: Border.all(

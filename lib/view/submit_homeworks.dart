@@ -10,6 +10,8 @@ import 'package:azt/config/global.dart';
 import 'package:azt/view/splash_screen.dart';
 import 'package:azt/view/notificationScreen.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 class SubmitForm extends StatefulWidget {
   @override
   _SubmitFormState createState() => _SubmitFormState();
@@ -17,6 +19,8 @@ class SubmitForm extends StatefulWidget {
 
 class _SubmitFormState extends State<SubmitForm> {
   Future<HomeworkHashIdInfo> homeworkHashIdInfo;
+  // ignore: unused_field
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {
@@ -93,12 +97,12 @@ class _SubmitFormState extends State<SubmitForm> {
                       height: 30,
                       alignment: Alignment.topRight,
                       child: Container(
-                        width: 15,
-                        height: 15,
+                        width: 14,
+                        height: 14,
                         decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color(0xffc32c37),
-                            border: Border.all(color: Colors.white, width: 1)),
+                          shape: BoxShape.circle,
+                          color: Color(0xffc32c37),
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.all(0.0),
                           child: Center(

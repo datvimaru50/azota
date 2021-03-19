@@ -38,6 +38,7 @@ class _HistorySubmitState extends State<HistorySubmit> {
     super.initState();
     Intl.defaultLocale = 'vi_VN';
     initializeDateFormatting();
+    print('lent::: ' + widget.answerHistoryObjs.length.toString());
   }
 
   @override
