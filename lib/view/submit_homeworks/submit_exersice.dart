@@ -14,27 +14,22 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-
 typedef void OnDownloadProgressCallback(int receivedBytes, int totalBytes);
 typedef void OnUploadProgressCallback(int sentBytes, int totalBytes);
 
 enum SubmitStatus { notSubmitted, submitting, doneSubmit }
 
 class SubmitExersice extends StatefulWidget {
-  SubmitExersice(
-      {this.hashId,
-      this.studentId,
-      this.className,
-      this.stdName,
-      this.deadline,
-      this.content});
-
-  final String hashId;
-  final int studentId;
-  final String className;
-  final String stdName;
-  final String deadline;
-  final String content;
+  SubmitExersice({
+    this.classroomObj,
+    this.studentObj,
+    this.homeworkObj,
+    this.answerObj,
+  });
+  final dynamic homeworkObj;
+  final dynamic answerObj;
+  final dynamic studentObj;
+  final dynamic classroomObj;
 
   @override
   _SubmitExersiceState createState() => _SubmitExersiceState();
@@ -86,6 +81,13 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     });
   }
 
+  Future<void> handleOpenGallery() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    setState(() {
+      imgFilePaths.add({"url": pickedFile.path, "uploaded": false});
+    });
+  }
+
   // OnUploadProgressCallback onUploadProgress
 
   Future uploadSingleImage(String imgPath, int index,
@@ -97,7 +99,6 @@ class _SubmitExersiceState extends State<SubmitExersice> {
 
     final uploadInfor = await UploadController.getPulicUpload(
         fileName, totalByteLength.toString(), lookupMimeType(imgPath));
-
     var httpClient = getHttpClient();
 
     final request = await httpClient.putUrl(Uri.parse(uploadInfor.upload_url));
@@ -163,13 +164,10 @@ class _SubmitExersiceState extends State<SubmitExersice> {
         submitStatus = SubmitStatus.submitting;
       });
       await uploadAllImage();
-
-      print('fildfdf upload::: ' + imgUploadedFiles.toString());
-
       String successStr = await UploadController.saveUploadInfo({
         "files": jsonEncode(imgUploadedFiles),
-        "homeworkId": widget.hashId,
-        "studentId": widget.studentId.toString(),
+        "homeworkId": widget.homeworkObj["hashId"],
+        "studentId": widget.studentObj["id"].toString(),
         "testbankExams": "[]"
       });
 
@@ -201,246 +199,246 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     return completer.future;
   }
 
-  // Future getFile() async {
-  //   FilePickerResult getFile = await FilePicker.platform.pickFiles();
-  //
-  //   setState(
-  //     () {
-  //       if (getFile != null) {
-  //         PlatformFile file = getFile.files.first;
-  //
-  //         print(getFile.files.first.toString());
-  //       }
-  //     },
-  //   );
-  // }
-  //
-  // List<Widget> imageSelected = <Widget>[
-  //   _imagesList.map(
-  //           (File item) => Image.file(item)).toList(),
-  // ];
-
   @override
   void initState() {
     super.initState();
     Intl.defaultLocale = 'vi_VN';
     initializeDateFormatting();
-    print('student:: ' + widget.studentId.toString());
-    print('hashid:::: ' + widget.hashId);
+  }
+
+  void clearFile() {
+    imgFilePaths.clear();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          child: Text(
-            'Lớp: ${widget.className}',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
-            ),
-          ),
-          padding: EdgeInsets.only(top: 10),
-        ),
-        Container(
-          child: RichText(
-            text: TextSpan(
-              style: TextStyle(color: Colors.black),
-              children: <TextSpan>[
-                TextSpan(
-                  text: 'Mã bài tập:',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
-                ),
-                TextSpan(
-                  text: ' ${widget.hashId}',
-                  style: TextStyle(fontSize: 13, color: Colors.blue),
-                ),
-              ],
-            ),
-          ),
-          padding: EdgeInsets.only(top: 10),
-        ),
-        Container(
-          child: Column(
+    // Nếu giáo viên đã chấm bài, không hiển thị nút chụp ảnh nữa
+    return widget.answerObj["confirmedAt"] == null
+        ? Column(
             children: [
               Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Text(
-                        'Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(widget.deadline))}',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Text(
-                        widget.stdName,
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-                color: Color(0xff00a7d0),
-              ),
-              Container(
-                alignment: Alignment.topLeft,
-                child: Html(
-                  data: widget.content,
-                ),
-                padding:
-                    EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(width: 1.0, color: Colors.black12),
+                child: Text(
+                  'Lớp: ${widget.classroomObj["name"]}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
                   ),
-                  color: Color(0xfff2f2f2),
                 ),
+                padding: EdgeInsets.only(top: 10),
               ),
               Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: Center(
-                        child: DottedBorder(
-                          color: Colors.blue,
-                          strokeWidth: 1,
-                          child: TextButton(
-                            onPressed: handleOpenCamera,
-                            child: Container(
-                              child: Column(
-                                children: [
-                                  Icon(Icons.add_a_photo),
-                                  Text(
-                                    'Chụp ảnh',
-                                    style: TextStyle(color: Colors.black),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                              width: 100,
-                            ),
-                          ),
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: Colors.black),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Mã bài tập:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
                         ),
                       ),
-                      width: 100,
-                      color: Color.fromRGBO(27, 171, 161, .05),
+                      TextSpan(
+                        text: ' ${widget.homeworkObj["hashId"]}',
+                        style: TextStyle(fontSize: 13, color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                ),
+                padding: EdgeInsets.only(top: 10),
+              ),
+              Container(
+                child: Column(
+                  children: [
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(15),
+                            child: Text(
+                              'Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(widget.homeworkObj["deadline"]))}',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(15),
+                            child: Text(
+                              widget.studentObj["fullName"],
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      color: Color(0xff00a7d0),
                     ),
                     Container(
-                      child: DottedBorder(
-                        color: Colors.blue,
-                        strokeWidth: 1,
-                        child: TextButton(
-                          onPressed: null,
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.attach_file,
+                      alignment: Alignment.topLeft,
+                      child: Html(
+                        data: widget.homeworkObj["content"],
+                      ),
+                      padding: EdgeInsets.only(
+                          top: 15, bottom: 15, left: 10, right: 10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(width: 1.0, color: Colors.black12),
+                        ),
+                        color: Color(0xfff2f2f2),
+                      ),
+                    ),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Center(
+                              child: DottedBorder(
                                 color: Colors.blue,
-                              ),
-                              Text(
-                                'Chọn file (Hỗ trợ Ảnh và Video hoặc Audio)',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
+                                strokeWidth: 1,
+                                child: TextButton(
+                                  onPressed: handleOpenCamera,
+                                  child: Container(
+                                    child: Column(
+                                      children: [
+                                        Icon(Icons.add_a_photo),
+                                        Text(
+                                          'Chụp ảnh',
+                                          style: TextStyle(color: Colors.black),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                    width: 100,
+                                  ),
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      width: 100,
-                      color: Color.fromRGBO(27, 171, 161, .05),
-                      // margin: EdgeInsets.all(10),
-                    ),
-                  ],
-                ),
-                padding:
-                    EdgeInsets.only(top: 15, left: 30, right: 30, bottom: 20),
-              ),
-              submitStatus == SubmitStatus.submitting
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                        Text('  '),
-                        Column(
-                          children: [
-                            Text('Bài làm đang được tải lên,'),
-                            Text('vui lòng đợi đợi trong giây lát!')
-                          ],
-                        ),
-                      ],
-                    )
-                  : submitStatus == SubmitStatus.doneSubmit
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.check_box,
-                              color: Colors.green,
                             ),
-                            Text('  '),
-                            Column(
-                              children: [
-                                Text('Bài làm đã được gửi tới giáo viên,'),
-                                Text(
-                                    'vui lòng kiểm tra thông báo để biết kết quả!')
+                            width: 100,
+                            color: Color.fromRGBO(27, 171, 161, .05),
+                          ),
+                          Container(
+                            child: DottedBorder(
+                              color: Colors.blue,
+                              strokeWidth: 1,
+                              child: TextButton(
+                                onPressed: handleOpenGallery,
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.attach_file,
+                                      color: Colors.blue,
+                                    ),
+                                    Text(
+                                      'Chọn file (Hỗ trợ Ảnh và Video hoặc Audio)',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            width: 100,
+                            color: Color.fromRGBO(27, 171, 161, .05),
+                            // margin: EdgeInsets.all(10),
+                          ),
+                        ],
+                      ),
+                      padding: EdgeInsets.only(
+                          top: 15, left: 30, right: 30, bottom: 20),
+                    ),
+                    submitStatus == SubmitStatus.submitting
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(),
+                              Text('  '),
+                              Column(
+                                children: [
+                                  Text('Bài làm đang được tải lên,'),
+                                  Text('vui lòng đợi đợi trong giây lát!')
+                                ],
+                              ),
+                            ],
+                          )
+                        : submitStatus == SubmitStatus.doneSubmit
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.check_box,
+                                    color: Colors.green,
+                                  ),
+                                  Text('  '),
+                                  Column(
+                                    children: [
+                                      Text(
+                                          'Bài làm đã được gửi tới giáo viên,\nkiểm tra thông báo để biết kết quả!'),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            : Container(),
+                    imgFilePaths.length == 0
+                        ? Container()
+                        : Container(
+                            child: GridView.count(
+                              shrinkWrap: true,
+                              primary: false,
+                              padding: const EdgeInsets.all(20),
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              crossAxisCount: 3,
+                              children: <Widget>[
+                                IconButton(
+                                    icon: Icon(Icons.clear),
+                                    onPressed: () => clearFile()),
+                                ...imgFilePaths
+                                    .map(
+                                      (dynamic item) => Container(
+                                        key: UniqueKey(),
+                                        child: Image.file(
+                                          File(
+                                            item["url"],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList()
                               ],
                             ),
-                          ],
-                        )
-                      : Container(),
-              imgFilePaths.length == 0
-                  ? Container()
-                  : Container(
-                      child: GridView.count(
-                      shrinkWrap: true,
-                      primary: false,
-                      padding: const EdgeInsets.all(20),
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 3,
-                      children: <Widget>[
-                        ...imgFilePaths
-                            .map((dynamic item) => Container(
-                                key: UniqueKey(),
-                                child: Image.file(File(item["url"]))))
-                            .toList()
-                      ],
-                    )),
-              imgFilePaths.length == 0
-                  ? Container()
-                  : ElevatedButton(
-                      onPressed: submitStatus == SubmitStatus.submitting
-                          ? null
-                          : handleSubmit,
-                      child: Text(
-                        'NỘP BÀI',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
+                          ),
+                    imgFilePaths.length == 0
+                        ? Container()
+                        : ElevatedButton(
+                            onPressed: submitStatus == SubmitStatus.submitting
+                                ? null
+                                : handleSubmit,
+                            child: Text(
+                              'NỘP BÀI',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                  ],
+                ),
+                margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  border: Border.all(
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
             ],
-          ),
-          margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            border: Border.all(
-              color: Colors.blue,
-            ),
-          ),
-        ),
-      ],
-    );
+          )
+        : Container();
   }
 }

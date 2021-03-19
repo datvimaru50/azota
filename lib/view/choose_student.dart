@@ -71,8 +71,6 @@ class _ChooseStudentState extends State<ChooseStudent> {
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                          // print(
-                          //     '1222333::: ${snapshot.data.answerObj["point"].toString()}');
                           return GestureDetector(
                             onTap: () {
                               showAnimatedDialog(
@@ -101,48 +99,21 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                         ),
                                         onPressed: () async {
                                           try {
+                                            await Prefs.savePrefs(
+                                                HASH_ID, widget.hashId);
                                             var stdID = snapshot
                                                 .data.studentObjs
                                                 .elementAt(index)['id'];
-                                            var stdName = snapshot
-                                                .data.studentObjs
-                                                .elementAt(index)['fullName'];
-
-                                            var className = snapshot
-                                                .data.classroomObj['name'];
-                                            var deadline = snapshot
-                                                .data.homeworkObj['deadline'];
-                                            // ignore: unused_local_variable
-                                            var historySubmit =
-                                                snapshot.data.answerHistoryObjs;
 
                                             await HomeworkController
                                                 .updateParent(stdID.toString());
+
                                             Navigator.of(context)
                                                 .pushAndRemoveUntil(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             // ignore: missing_required_param
-                                                            SubmitForm(
-                                                              files: snapshot
-                                                                      .data
-                                                                      .answerObj
-                                                                      .elementAt(
-                                                                          index)[
-                                                                  'files'],
-                                                              hashId:
-                                                                  widget.hashId,
-                                                              studentId: stdID,
-                                                              stdName: stdName,
-                                                              className:
-                                                                  className,
-                                                              deadline:
-                                                                  deadline,
-                                                              content: snapshot
-                                                                      .data
-                                                                      .homeworkObj[
-                                                                  'content'],
-                                                            )),
+                                                            SubmitForm()),
                                                     (Route<dynamic> route) =>
                                                         false);
                                           } catch (err) {

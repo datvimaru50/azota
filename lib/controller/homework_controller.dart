@@ -55,9 +55,9 @@ class HomeworkController extends ControllerMVC {
   Get homework info from hashId
   <after update parent>
   ********************************** */
-  static Future<HomeworkHashIdInfo> getHomeworkInfoAgain(String hashId) async {
+  static Future<HomeworkHashIdInfo> getHomeworkInfoAgain() async {
     final token = await Prefs.getPref(ANONYMOUS_TOKEN);
-
+    final hashId = await Prefs.getPref(HASH_ID);
     final response =
     await http.Client().get(AZO_HOMEWORK_INFO + '?id=' + hashId, headers: {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",

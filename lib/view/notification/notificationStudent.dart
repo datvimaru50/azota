@@ -1,21 +1,20 @@
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'package:azt/config/connect.dart';
+import 'package:azt/view/submit_homeworks.dart';
 
 class NotificationStudentItem extends StatefulWidget {
-  NotificationStudentItem(
-      {this.notiType,
-      this.className,
-      this.deadline,
-      this.score,
-      this.submitTime,
-      this.token,
-      this.answerId,
-      this.hashId});
+  NotificationStudentItem({
+    this.notiType,
+    this.className,
+    this.deadline,
+    this.score,
+    this.submitTime,
+    this.token,
+    this.answerId,
+  });
 
   final String notiType;
   final String className;
@@ -24,7 +23,6 @@ class NotificationStudentItem extends StatefulWidget {
   final String submitTime;
   final String token;
   final String answerId;
-  final String hashId;
 
   @override
   _NotifStudentItemState createState() => _NotifStudentItemState();
@@ -56,25 +54,6 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
     }
   }
 
-  String _buildWebUrl(String notiType) {
-    final baseAccess =
-        '$AZT_DOMAIN_NAME/en/auth/login?access_token=${widget.token}&return_url=';
-
-    switch (notiType) {
-      case 'HAS_MARK':
-        {
-          return '$baseAccess/en/xem-bai-tap/${widget.answerId}';
-        }
-        break;
-
-      default:
-        {
-          return '$baseAccess/en/nop-bai/${widget.hashId}';
-        }
-        break;
-    }
-  }
-
   @override
   bool get wantKeepAlive => true;
 
@@ -83,7 +62,6 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
     super.initState();
     Intl.defaultLocale = 'vi_VN';
     initializeDateFormatting();
-    print(widget.hashId);
   }
 
   @override
@@ -92,14 +70,15 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
     return Center(
       child: GestureDetector(
         onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => SubmitForm()),
-          // );
           setState(() {
             _clickedStatus = true;
           });
-          launch(_buildWebUrl(widget.notiType));
+
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => SubmitForm()),
+              (Route<dynamic> route) => false);
+
+          // launch(_buildWebUrl(widget.notiType));
         },
         child: Container(
           child: Row(

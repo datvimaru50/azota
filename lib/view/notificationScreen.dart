@@ -214,7 +214,6 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 answerId: _notiArr
                                     .elementAt(index)['answerId']
                                     .toString(),
-                                hashId: _notiArr.elementAt(index)['hashId'],
                               )
                             : NotificationTeacherItem(
                                 className:
@@ -356,6 +355,8 @@ class _NotificationScreenState extends State<NotificationScreen>
             Text(widget.role == 'teacher'
                 ? 'Thông báo giáo viên'
                 : 'Thông báo phụ huynh'),
+
+            widget.role == 'teacher' ?
             GestureDetector(
               child: Icon(
                 Icons.logout,
@@ -364,7 +365,7 @@ class _NotificationScreenState extends State<NotificationScreen>
               onTap: () {
                 _showMyDialog();
               },
-            ),
+            ): Text(''),
           ],
         ),
       ),
