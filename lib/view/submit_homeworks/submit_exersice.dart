@@ -329,7 +329,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                 color: Colors.blue,
                               ),
                               Text(
-                                'Chọn file (Hỗ trợ Ảnh và Video hoặc Audio)',
+                                'Chọn ảnh từ thư viện',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.black,
@@ -349,6 +349,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                 padding:
                     EdgeInsets.only(top: 15, left: 30, right: 30, bottom: 20),
               ),
+
               submitStatus == SubmitStatus.submitting
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -385,6 +386,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
               imgFilePaths.length == 0
                   ? Container()
                   : Container(
+                //color: Colors.red,
                       child: GridView.count(
                       shrinkWrap: true,
                       primary: false,
@@ -402,18 +404,40 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                     )),
               imgFilePaths.length == 0
                   ? Container()
-                  : ElevatedButton(
+
+                  : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+
+                  ElevatedButton.icon(
+                      icon: Icon(Icons.file_upload),
+                      label: Text('NỘP BÀI'),
                       onPressed: submitStatus == SubmitStatus.submitting
-                          ? null
-                          : handleSubmit,
-                      child: Text(
-                        'NỘP BÀI',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
+                    ? null
+                    : handleSubmit,),
+
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red,
+                        ),
+                        icon: Icon(Icons.refresh),
+                        label: Text('LÀM LẠI'),
+                        onPressed: submitStatus == SubmitStatus.submitting ? null : (){
+                          setState(() {
+                            imgFilePaths.clear();
+                            submitStatus = SubmitStatus.notSubmitted;
+                          });
+                        }),
+                  )
+
+                ],
+              ),
             ],
           ),
           margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+          padding: const EdgeInsets.only(bottom: 20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(

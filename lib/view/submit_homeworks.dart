@@ -11,6 +11,8 @@ import 'package:azt/config/global.dart';
 import 'package:azt/view/splash_screen.dart';
 import 'package:azt/view/notificationScreen.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 class SubmitForm extends StatefulWidget {
 
   @override
@@ -19,6 +21,7 @@ class SubmitForm extends StatefulWidget {
 
 class _SubmitFormState extends State<SubmitForm> {
   Future<HomeworkHashIdInfo> homeworkHashIdInfo;
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {

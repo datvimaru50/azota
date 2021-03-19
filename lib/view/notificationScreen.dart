@@ -356,7 +356,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                 ? 'Thông báo giáo viên'
                 : 'Thông báo phụ huynh'),
 
-            widget.role == 'teacher' ?
+            //widget.role == 'teacher' ?
             GestureDetector(
               child: Icon(
                 Icons.logout,
@@ -365,7 +365,8 @@ class _NotificationScreenState extends State<NotificationScreen>
               onTap: () {
                 _showMyDialog();
               },
-            ): Text(''),
+            )
+                //: Text(''),
           ],
         ),
       ),
