@@ -20,6 +20,7 @@ class GradedExersice extends StatefulWidget {
     this.answerObj,
     this.answerHistoryObjs,
     this.content,
+    this.nameFiles,
   }) : super(key: key);
   final String hashId;
   final int studentId;
@@ -27,6 +28,7 @@ class GradedExersice extends StatefulWidget {
   final String deadline;
   final String className;
   final String content;
+  final String nameFiles;
   final dynamic answerObj;
   final dynamic answerHistoryObjs;
 
@@ -122,7 +124,7 @@ class _GradedExersiceState extends State<GradedExersice> {
               ),
               Container(
                 alignment: Alignment.center,
-                child: Text(widget.answerObj["files"]),
+                child: Text(widget.nameFiles),
                 padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),

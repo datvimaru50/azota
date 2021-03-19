@@ -23,6 +23,7 @@ class HistorySubmit extends StatefulWidget {
     this.deadline,
     this.className,
     this.content,
+    this.nameFile,
   }) : super(key: key);
   final String hashId;
   final int studentId;
@@ -30,6 +31,7 @@ class HistorySubmit extends StatefulWidget {
   final String deadline;
   final String className;
   final String content;
+  final String nameFile;
   List<Widget> hldfdf;
 
   @override
@@ -64,6 +66,7 @@ class _HistorySubmitState extends State<HistorySubmit> {
             return Column(
               children: [
                 GradedExersice(
+                  nameFiles: widget.nameFile,
                   content: widget.content,
                   hashId: widget.hashId,
                   studentId: widget.studentId,
@@ -154,7 +157,11 @@ class _HistorySubmitState extends State<HistorySubmit> {
                                           padding: EdgeInsets.all(10),
                                           child: GestureDetector(
                                             onTap: () async {
-                                              final String url = await _buildWebUrl(item["homeworkId"].toString(), item["id"].toString());
+                                              final String url =
+                                                  await _buildWebUrl(
+                                                      item["homeworkId"]
+                                                          .toString(),
+                                                      item["id"].toString());
                                               launch(url);
                                             },
                                             child: RichText(
@@ -165,13 +172,14 @@ class _HistorySubmitState extends State<HistorySubmit> {
                                                   TextSpan(
                                                     text: 'Kết quả ',
                                                     style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 13,
                                                     ),
                                                   ),
                                                   TextSpan(
                                                     text:
-                                                    '(Xem chi tiết kết quả)',
+                                                        '(Xem chi tiết kết quả)',
                                                     style: TextStyle(
                                                         fontSize: 13,
                                                         color: Colors.blue),
@@ -180,7 +188,6 @@ class _HistorySubmitState extends State<HistorySubmit> {
                                               ),
                                             ),
                                           ),
-
                                         ),
                                         Container(
                                           child: Center(

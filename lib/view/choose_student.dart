@@ -71,6 +71,8 @@ class _ChooseStudentState extends State<ChooseStudent> {
                       ),
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
+                          // print(
+                          //     '1222333::: ${snapshot.data.answerObj["point"].toString()}');
                           return GestureDetector(
                             onTap: () {
                               showAnimatedDialog(
@@ -122,6 +124,12 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                                         builder: (context) =>
                                                             // ignore: missing_required_param
                                                             SubmitForm(
+                                                              files: snapshot
+                                                                      .data
+                                                                      .answerObj
+                                                                      .elementAt(
+                                                                          index)[
+                                                                  'files'],
                                                               hashId:
                                                                   widget.hashId,
                                                               studentId: stdID,

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 
 import 'package:azt/config/global.dart';
 import 'package:azt/view/splash_screen.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SubmitForm extends StatefulWidget {
   SubmitForm(
@@ -16,7 +15,8 @@ class SubmitForm extends StatefulWidget {
       this.className,
       this.stdName,
       this.deadline,
-      this.content});
+      this.content,
+      this.files});
 
   final String hashId;
   final int studentId;
@@ -25,6 +25,7 @@ class SubmitForm extends StatefulWidget {
   final String stdName;
   final String deadline;
   final String content;
+  final dynamic files;
   @override
   _SubmitFormState createState() => _SubmitFormState();
 }
@@ -58,7 +59,6 @@ class _SubmitFormState extends State<SubmitForm> {
               ),
               onPressed: () {
                 Prefs.deletePref();
-                // _firebaseMessaging.deleteInstanceID();
                 Navigator.pop(context);
                 Navigator.pushAndRemoveUntil(
                   context,
@@ -90,15 +90,14 @@ class _SubmitFormState extends State<SubmitForm> {
                 child: Stack(
                   children: [
                     Icon(
-                      Icons.notifications,
-                      color: Colors.black,
+                      Icons.notifications_none,
+                      color: Colors.white,
                       size: 30,
                     ),
                     Container(
                       width: 30,
                       height: 30,
                       alignment: Alignment.topRight,
-                      margin: EdgeInsets.only(top: 5),
                       child: Container(
                         width: 15,
                         height: 15,
@@ -141,6 +140,7 @@ class _SubmitFormState extends State<SubmitForm> {
             //đã chấm
             // GradedExersice(),
             HistorySubmit(
+              nameFile: widget.files['name'],
               content: widget.content,
               hashId: widget.hashId,
               studentId: widget.studentId,
