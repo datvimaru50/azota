@@ -38,8 +38,8 @@ android {
         applicationId "azt.azt"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 6
-        versionName flutterVersionName
+        versionCode 9
+        versionName '1.1.0'
     }
 
     signingConfigs {

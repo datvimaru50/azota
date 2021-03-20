@@ -93,7 +93,7 @@ class _CodeFormState extends State<CodeForm> {
                                     return 'Vui lòng nhập mã bài tập';
                                   }
                                   if (value.length < 6) {
-                                    return 'Mã bài tập phải lớn hơn 6 ký tự';
+                                    return 'Mã bài tập phải lớn hơn 6 ký tự ';
                                   }
                                   return null;
                                 },
