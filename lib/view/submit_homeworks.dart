@@ -121,7 +121,10 @@ class _SubmitFormState extends State<SubmitForm> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => NotificationScreen(role: 'parent')),
+                    builder: (context) => NotificationScreen(
+                      role: 'parent',
+                    ),
+                  ),
                 );
               },
             ),

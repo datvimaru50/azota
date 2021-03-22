@@ -54,6 +54,16 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
     }
   }
 
+  String _hidePoint(String hidePoint) {
+    switch (hidePoint) {
+      case 'RESEND_ANSWER':
+        {
+          return 'Yêu cầu nộp lại bài tập ';
+        }
+        break;
+    }
+  }
+
   @override
   bool get wantKeepAlive => true;
 
@@ -145,33 +155,36 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                               padding: EdgeInsets.only(
                                   left: 10, top: 10, bottom: 10),
                               child: Text(DateTimeFormat.relative(
-                                  DateTime.parse(widget.submitTime),
-                                  relativeTo: DateTime.now(),
-                                  levelOfPrecision: 1,
-                                  appendIfAfter: 'ago',
-                                  abbr: true)),
+                                DateTime.parse(widget.submitTime),
+                                relativeTo: DateTime.now(),
+                                levelOfPrecision: 1,
+                                appendIfAfter: 'ago',
+                              )),
                             ),
                           ],
                         ),
                       ),
-                      Container(
-                        child: Text(
-                          widget.score,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        margin: EdgeInsets.all(5),
-                        padding: EdgeInsets.only(
-                            top: 10, bottom: 10, left: 8, right: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border: Border.all(color: Colors.black12),
-                          color: Colors.red,
-                        ),
-                      ),
+                      widget.notiType == 'RESEND_ANSWER'
+                          ? Text('')
+                          : Container(
+                              alignment: Alignment.center,
+                              height: 40,
+                              width: 40,
+                              child: Text(
+                                widget.score,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              margin: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                border: Border.all(color: Colors.black12),
+                                color: Colors.red,
+                              ),
+                            ),
                     ],
                   ),
                   color: Colors.white,
