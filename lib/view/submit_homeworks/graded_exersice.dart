@@ -170,10 +170,10 @@ class _GradedExersiceState extends State<GradedExersice> {
                     Container(
                       alignment: Alignment.topLeft,
                       child: Text('Nhận Xét'),
-                      padding: EdgeInsets.only(top: 15, bottom: 2, left: 25),
+                      padding: EdgeInsets.only(top: 15, left: 25, bottom: 3),
                     ),
                     Container(
-                      alignment: Alignment.center,
+                      alignment: Alignment.topLeft,
                       child: Text(
                         jsonDecode(widget.answerObj["result"])["comment"],
                         style: GoogleFonts.pacifico(
