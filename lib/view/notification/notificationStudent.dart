@@ -112,80 +112,70 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
               ),
               Expanded(
                 child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(top: 10, left: 10, right: 10),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: DefaultTextStyle.of(context).style,
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: _buildText(widget.notiType),
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      TextSpan(
-                                        text: ' Ngày ' +
-                                            DateFormat.yMd().format(
-                                                DateTime.parse(
-                                                    widget.deadline)),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      ),
-                                    ],
-                                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              padding:
+                                  EdgeInsets.only(top: 10, left: 10, right: 10),
+                              child: RichText(
+                                text: TextSpan(
+                                  style: DefaultTextStyle.of(context).style,
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: _buildText(widget.notiType),
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    TextSpan(
+                                      text: ' Ngày ' +
+                                          DateFormat.yMd().format(
+                                              DateTime.parse(widget.deadline)),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                  ],
                                 ),
                               ),
+                            ),
+                            Container(
+                              alignment: Alignment.topLeft,
+                              padding: EdgeInsets.only(
+                                  left: 10, top: 10, bottom: 10),
+                              child: Text(DateTimeFormat.relative(
+                                  DateTime.parse(widget.submitTime),
+                                  relativeTo: DateTime.now(),
+                                  levelOfPrecision: 1,
+                                  appendIfAfter: 'ago',
+                                  abbr: true)),
                             ),
                           ],
                         ),
                       ),
-                      Row(
-                        children: [
-                          Padding(
-                            padding:
-                                EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                            child: Text(DateTimeFormat.relative(
-                                DateTime.parse(widget.submitTime),
-                                relativeTo: DateTime.now(),
-                                levelOfPrecision: 1,
-                                appendIfAfter: 'ago',
-                                abbr: true)),
+                      Container(
+                        child: Text(
+                          widget.score,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
                           ),
-                        ],
+                        ),
+                        margin: EdgeInsets.all(5),
+                        padding: EdgeInsets.only(
+                            top: 10, bottom: 10, left: 8, right: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(color: Colors.black12),
+                          color: Colors.red,
+                        ),
                       ),
                     ],
                   ),
                   color: Colors.white,
                 ),
-              ),
-              Container(
-                child: Container(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        top: 22, bottom: 22, left: 10, right: 10),
-                    child: Text(
-                      widget.score,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(color: Colors.black12),
-                    color: Colors.red,
-                  ),
-                ),
-                color: Colors.white,
               ),
             ],
           ),
