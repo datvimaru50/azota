@@ -44,7 +44,7 @@ class _HistorySubmitState extends State<HistorySubmit> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: widget.answerHistoryObjs.length != 0
+      child: widget?.answerHistoryObjs?.length != 0
           ? Column(
               children: [
                 Container(
@@ -54,9 +54,10 @@ class _HistorySubmitState extends State<HistorySubmit> {
                     child: Text(
                       'Lịch sử nộp bài',
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   color: Color(0xff00a7d0),
@@ -88,8 +89,9 @@ class _HistorySubmitState extends State<HistorySubmit> {
                                     TextSpan(
                                       text: item["resendNote"],
                                       style: TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold),
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -133,7 +135,9 @@ class _HistorySubmitState extends State<HistorySubmit> {
                                       TextSpan(
                                         text: '(Xem chi tiết kết quả)',
                                         style: TextStyle(
-                                            fontSize: 13, color: Colors.blue),
+                                          fontSize: 13,
+                                          color: Colors.blue,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -167,7 +171,9 @@ class _HistorySubmitState extends State<HistorySubmit> {
                             Container(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                jsonDecode(item["result"])["comment"],
+                                item["result"] == null
+                                    ? ''
+                                    : jsonDecode(item["result"])["comment"],
                                 style: GoogleFonts.pacifico(
                                   textStyle: TextStyle(
                                       color: Colors.red, fontSize: 15),
@@ -200,31 +206,29 @@ class _HistorySubmitState extends State<HistorySubmit> {
                     .toList()
               ],
             )
-          : Container(
-              child: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Text(
-                        'Lịch sử nộp bài',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
-                      ),
+          : Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.all(15),
+                    child: Text(
+                      'Lịch sử nộp bài',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
                     ),
-                    color: Color(0xff00a7d0),
                   ),
-                  Container(
-                    height: 50,
-                    child: Center(
-                      child: Text('Bạn chưa nộp bài lần nào'),
-                    ),
-                  )
-                ],
-              ),
+                  color: Color(0xff00a7d0),
+                ),
+                Container(
+                  height: 50,
+                  child: Center(
+                    child: Text('Bạn chưa nộp bài lần nào'),
+                  ),
+                )
+              ],
             ),
       margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
       decoration: BoxDecoration(

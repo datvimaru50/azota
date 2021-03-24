@@ -32,6 +32,7 @@ dependencies:
   url_launcher: ^5.2.5
   json_serializable: ^3.2.2
   firebase_messaging: ^7.0.3
+  integration_test: ^1.0.1
   font_awesome_flutter: ^8.11.0
   date_time_format: ^1.1.1+1
   intl: ^0.16.1
@@ -46,10 +47,10 @@ dependencies:
   apple_sign_in: ^0.1.0
   crypto: ^2.1.5
   dotted_border: ^1.0.7
-  image_picker: ^0.7.3
+  image_picker: ^0.6.7+22
   file_picker: ^2.1.7
   flutter_switch: ^0.2.0
-  mime: ^0.9.7
+  mime: ^1.0.0
   google_fonts: ^1.1.2
   
   # The following adds the Cupertino Icons font to your application.

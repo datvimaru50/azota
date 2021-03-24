@@ -6,16 +6,17 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:azt/view/submit_homeworks.dart';
 
 class NotificationStudentItem extends StatefulWidget {
-  NotificationStudentItem({
-    this.notiType,
-    this.className,
-    this.deadline,
-    this.score,
-    this.submitTime,
-    this.token,
-    this.answerId,
-  });
+  NotificationStudentItem(
+      {this.notiType,
+      this.className,
+      this.deadline,
+      this.score,
+      this.submitTime,
+      this.token,
+      this.answerId,
+      this.resendNote});
 
+  final String resendNote;
   final String notiType;
   final String className;
   final String score;
@@ -49,16 +50,6 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
       default:
         {
           return 'Kết quả bài tập ';
-        }
-        break;
-    }
-  }
-
-  String _hidePoint(String hidePoint) {
-    switch (hidePoint) {
-      case 'RESEND_ANSWER':
-        {
-          return 'Yêu cầu nộp lại bài tập ';
         }
         break;
     }
@@ -154,12 +145,13 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                               alignment: Alignment.topLeft,
                               padding: EdgeInsets.only(
                                   left: 10, top: 10, bottom: 10),
-                              child: Text(DateTimeFormat.relative(
-                                DateTime.parse(widget.submitTime),
-                                relativeTo: DateTime.now(),
-                                levelOfPrecision: 1,
-                                appendIfAfter: 'ago',
-                              )),
+                              child: Text(
+                                DateTimeFormat.relative(
+                                  DateTime.parse(widget.submitTime),
+                                  levelOfPrecision: 1,
+                                  // appendIfAfter: 'ago',
+                                ),
+                              ),
                             ),
                           ],
                         ),

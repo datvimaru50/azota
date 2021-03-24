@@ -45,13 +45,14 @@ class _SubmitExersiceState extends State<SubmitExersice> {
 
   Future<void> _showErrorToast(String errMsg) async {
     return Fluttertoast.showToast(
-        msg: errMsg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
+      msg: errMsg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIos: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 
   Future<void> _showSuccessToast(String successMsg) async {
@@ -357,7 +358,8 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                               Padding(
                                 padding: EdgeInsets.only(left: 20, right: 20),
                                 child: Text(
-                                    'Bài làm đang được tải lên. Vui lòng đợi trong giây lát!'),
+                                    'Bài làm đang được tải lên. Vui lòng đợi trong giây lát!',
+                                    textAlign: TextAlign.center),
                               ),
                               CircularProgressIndicator(),
                             ],
@@ -366,7 +368,8 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                             ? Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('Đã nộp bài thành công!'),
+                                  Text('Đã nộp bài thành công!',
+                                      style: TextStyle(color: Colors.green)),
                                   Icon(
                                     Icons.check_box,
                                     color: Colors.green,
@@ -443,4 +446,3 @@ class _SubmitExersiceState extends State<SubmitExersice> {
         : Container();
   }
 }
-
