@@ -39,6 +39,12 @@
 	<string>NO</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Azota cần truy cập vào máy ảnh và thư viện của bạn</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Azota cần truy cập vào microphone của bạn</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Azota cần truy cập vào máy ảnh và thư viện của bạn</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -69,12 +75,5 @@
 	<string>2252284608446108140</string>
 	<key>ZaloAppKey</key>
 	<string>8CEsOGn8XInSHBg5Il0n</string>
-
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Azota cần truy cập vào máy ảnh và thư viện của bạn</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Azota cần truy cập vào máy ảnh và thư viện của bạn</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Azota cần truy cập vào microphone của bạn</string>
 </dict>
 </plist>

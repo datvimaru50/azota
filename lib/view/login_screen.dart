@@ -290,6 +290,13 @@ class _LoginFormState extends State<LoginForm> {
                           style: TextStyle(fontSize: 15),
                         ),
                       ),
+                       Platform.isAndroid
+                          ? Container()
+                          :Container(
+                         child: AppleSignInButton(
+                        type: ButtonType.continueButton,
+                        onPressed: _appleLogIn,
+                      ),),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
                         // ignore: deprecated_member_use
@@ -313,12 +320,6 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         ),
                       ),
-                      Platform.isAndroid
-                          ? Container()
-                          : AppleSignInButton(
-                              type: ButtonType.continueButton,
-                              onPressed: _appleLogIn,
-                            ),
                     ],
                   ),
                   margin:
