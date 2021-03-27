@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:azt/controller/upload_controller.dart';
 import 'package:mime/mime.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,6 +12,9 @@ import 'package:flutter_html/flutter_html.dart';
 
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 
 typedef void OnDownloadProgressCallback(int receivedBytes, int totalBytes);
 typedef void OnUploadProgressCallback(int sentBytes, int totalBytes);
@@ -36,13 +38,22 @@ class SubmitExersice extends StatefulWidget {
 }
 
 class _SubmitExersiceState extends State<SubmitExersice> {
-  final picker = ImagePicker();
-  // ignore: unused_field
-  var _controllerClear = TextEditingController();
-  List<dynamic> imgFilePaths = [];
+
+  List<Asset> images;
   List<dynamic> imgUploadedFiles = [];
   SubmitStatus submitStatus = SubmitStatus.notSubmitted;
 
+
+  Future<void> _showSuccessToast(String successMsg) async {
+    return Fluttertoast.showToast(
+        msg: successMsg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
   Future<void> _showErrorToast(String errMsg) async {
     return Fluttertoast.showToast(
       msg: errMsg,
@@ -55,44 +66,92 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     );
   }
 
-  Future<void> _showSuccessToast(String successMsg) async {
-    return Fluttertoast.showToast(
-        msg: successMsg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0);
+  // *** Load ảnh thừ thư viện
+  Future<void> loadAssets() async {
+    List<Asset> resultList;
+    try {
+      resultList = await MultiImagePicker.pickImages(
+          maxImages: 300,
+          enableCamera: true,
+          materialOptions: MaterialOptions(
+            actionBarTitle: "Ảnh theo nhóm",
+            allViewTitle: "Chọn hình ảnh",
+            // startInAllView: true, (Không set cái này bằng true)
+            selectionLimitReachedText: "Bạn không thể chọn thêm",
+          ),
+      );
+
+    } on Exception catch (e) {
+      _showErrorToast('Lỗi: '+e.toString());
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList;
+    });
+
   }
+
+
+  // Build grid of photos
+  Widget buildGridView() {
+    if (images != null)
+      return Container(
+        padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        child: GridView.count(
+          shrinkWrap: true,
+          crossAxisCount: 3,
+          mainAxisSpacing: 3,
+          crossAxisSpacing: 3,
+          children: List.generate(images.length, (index) {
+            Asset asset = images[index];
+            return AssetThumb(
+              asset: asset,
+              width: 300,
+              height: 300,
+            );
+          }),
+        )
+      );
+    else
+      return Container(color: Colors.white);
+  }
+
+  //
+  // printImageLenth() async{
+  //
+  //   for(var i=0; i<images.length; i++){
+  //     // var byteData = await images[i].getByteData();
+  //     //
+  //     // List<int> imageData = byteData.buffer.asUint8List();
+  //     var path = await FlutterAbsolutePath.getAbsolutePath(images[i]);
+  //     final String savedDir = dirname(path);
+  //
+  //     setState(() {
+  //       files.add(
+  //           FileItem(
+  //               filename: images[i].name,
+  //               savedDir: savedDir,
+  //               fieldname: 'file'
+  //           )
+  //       );
+  //     });
+  //
+  //   }
+
+  // }
 
   static HttpClient getHttpClient() {
     HttpClient httpClient = new HttpClient();
     return httpClient;
   }
 
-  static void callbackUpload(int sentBytes, int totalBytes) {
-    print('Upload progress: ${sentBytes / totalBytes * 100}%');
-  }
+  Future uploadSingleImage(String imgPath, int index, OnUploadProgressCallback onUploadProgress) async {
 
-  Future<void> handleOpenCamera() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-    setState(() {
-      imgFilePaths.add({"url": pickedFile.path, "uploaded": false});
-    });
-  }
-
-  Future<void> handleOpenGallery() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    setState(() {
-      imgFilePaths.add({"url": pickedFile.path, "uploaded": false});
-    });
-  }
-
-  // OnUploadProgressCallback onUploadProgress
-
-  Future uploadSingleImage(String imgPath, int index,
-      OnUploadProgressCallback onUploadProgress) async {
     var fileStream = File(imgPath).openRead();
     var fileName = imgPath.split("/").last;
     int totalByteLength = File(imgPath).lengthSync();
@@ -120,7 +179,6 @@ class _SubmitExersiceState extends State<SubmitExersice> {
             onUploadProgress(byteCount, totalByteLength);
             // CALL STATUS CALLBACK;
           }
-
           sink.add(data);
         },
         handleError: (error, stack, sink) {
@@ -128,10 +186,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
         },
         handleDone: (sink) {
           sink.close();
-
           setState(() {
-            imgFilePaths[index]["uploaded"] = true;
-
             imgUploadedFiles.add({
               "name": uploadInfor.name,
               "mines": uploadInfor.mimes,
@@ -187,8 +242,9 @@ class _SubmitExersiceState extends State<SubmitExersice> {
   }
 
   Future<void> uploadAllImage() async {
-    for (var i = 0; i < imgFilePaths.length; i++) {
-      await uploadSingleImage(imgFilePaths[i]["url"], i, callbackUpload);
+    for (var i = 0; i < images.length; i++) {
+      var path = await FlutterAbsolutePath.getAbsolutePath(images[i].identifier);
+      await uploadSingleImage(path, i, callbackUpload);
     }
   }
 
@@ -201,12 +257,17 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     return completer.future;
   }
 
+  static void callbackUpload(int sentBytes, int totalBytes) {
+    print('Upload progress: ${sentBytes / totalBytes * 100}%');
+  }
+
   @override
   void initState() {
     super.initState();
     Intl.defaultLocale = 'vi_VN';
     initializeDateFormatting();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -298,7 +359,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                 color: Colors.blue,
                                 strokeWidth: 1,
                                 child: TextButton(
-                                  onPressed: handleOpenCamera,
+                                  onPressed: loadAssets,
                                   child: Container(
                                     child: Column(
                                       children: [
@@ -323,7 +384,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                               color: Colors.blue,
                               strokeWidth: 1,
                               child: TextButton(
-                                onPressed: handleOpenGallery,
+                                onPressed: loadAssets,
                                 child: Column(
                                   children: [
                                     Icon(
@@ -377,37 +438,19 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                 ],
                               )
                             : Container(),
-                    imgFilePaths.length == 0
-                        ? Container()
-                        : Container(
-                            //color: Colors.red,
-                            child: GridView.count(
-                            shrinkWrap: true,
-                            primary: false,
-                            padding: const EdgeInsets.all(20),
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            crossAxisCount: 3,
-                            children: <Widget>[
-                              ...imgFilePaths
-                                  .map((dynamic item) => Container(
-                                      key: UniqueKey(),
-                                      child: Image.file(File(item["url"]))))
-                                  .toList()
-                            ],
-                          )),
-                    imgFilePaths.length == 0
-                        ? Container()
+
+                    buildGridView(),
+
+                    images == null ? Container()
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ElevatedButton.icon(
                                 icon: Icon(Icons.file_upload),
                                 label: Text('NỘP BÀI'),
-                                onPressed:
-                                    submitStatus == SubmitStatus.submitting
-                                        ? null
-                                        : handleSubmit,
+                                onPressed: submitStatus == SubmitStatus.submitting
+                                    ? null
+                                    : handleSubmit,
                               ),
                               Container(
                                 margin: EdgeInsets.only(left: 10),
@@ -417,16 +460,15 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                     ),
                                     icon: Icon(Icons.refresh),
                                     label: Text('LÀM LẠI'),
-                                    onPressed:
-                                        submitStatus == SubmitStatus.submitting
-                                            ? null
-                                            : () {
-                                                setState(() {
-                                                  imgFilePaths.clear();
-                                                  submitStatus =
-                                                      SubmitStatus.notSubmitted;
-                                                });
-                                              }),
+                                    onPressed: submitStatus == SubmitStatus.submitting ?
+                                                null :
+                                    (){
+                                      setState(() {
+                                        images.clear();
+                                        submitStatus =
+                                            SubmitStatus.notSubmitted;
+                                      });
+                                    }),
                               )
                             ],
                           ),
