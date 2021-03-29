@@ -95,13 +95,13 @@ class _SubmitExersiceState extends State<SubmitExersice> {
           materialOptions: MaterialOptions(
             actionBarTitle: "Ảnh theo nhóm",
             allViewTitle: "Chọn hình ảnh",
-            // startInAllView: true, (Không set cái này bằng true)
+            startInAllView: true,
             selectionLimitReachedText: "Bạn không thể chọn thêm",
           ),
       );
 
     } on Exception catch (e) {
-      _showErrorToast('Lỗi: '+e.toString());
+      print('Lỗi: '+e.toString());
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -155,7 +155,15 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                     Icons.attach_file,
                     color: Colors.blue,
                   ),
-                  Text(fileNames[index], style: TextStyle(fontStyle: FontStyle.italic),)
+                  Flexible(
+                    child: Container(
+                      child: Text(fileNames[index],
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,)
+                    ),
+                  )
+
                 ],
               );
             }),
