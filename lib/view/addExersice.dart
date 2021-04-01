@@ -42,7 +42,7 @@ class _AddExersiceState extends State<AddExersice> {
     Map mapdata = <String, dynamic>{
       "classroomId": widget.id,
       "deadline": deadline.text,
-      "content": "content.editorController.",
+      "content": "<p>content.editorController.</p>",
       "name": "Bài Tập"
     };
     // ignore: unnecessary_brace_in_string_interps

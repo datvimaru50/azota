@@ -251,6 +251,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_absolute_path:
+    dependency: "direct main"
+    description:
+      name: flutter_absolute_path
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.6"
   flutter_animated_dialog:
     dependency: "direct main"
     description:
@@ -317,6 +324,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_uploader:
+    dependency: "direct main"
+    description:
+      name: flutter_uploader
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -488,6 +502,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  multi_image_picker:
+    dependency: "direct main"
+    description:
+      name: multi_image_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.8.00"
   mvc_pattern:
     dependency: "direct main"
     description:

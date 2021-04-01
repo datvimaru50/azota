@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:azt/controller/upload_controller.dart';
 import 'package:mime/mime.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,6 +12,10 @@ import 'package:flutter_html/flutter_html.dart';
 
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:file_picker/file_picker.dart';
+
+import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 
 typedef void OnDownloadProgressCallback(int receivedBytes, int totalBytes);
 typedef void OnUploadProgressCallback(int sentBytes, int totalBytes);
@@ -36,12 +39,23 @@ class SubmitExersice extends StatefulWidget {
 }
 
 class _SubmitExersiceState extends State<SubmitExersice> {
-  final picker = ImagePicker();
-  // ignore: unused_field
-  var _controllerClear = TextEditingController();
-  List<dynamic> imgFilePaths = [];
+  List<Asset> images;
   List<dynamic> imgUploadedFiles = [];
   SubmitStatus submitStatus = SubmitStatus.notSubmitted;
+
+  List<String> fileNames;
+  List<String> filePaths;
+
+  Future<void> _showSuccessToast(String successMsg) async {
+    return Fluttertoast.showToast(
+        msg: successMsg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
 
   Future<void> _showErrorToast(String errMsg) async {
     return Fluttertoast.showToast(
@@ -55,15 +69,105 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     );
   }
 
-  Future<void> _showSuccessToast(String successMsg) async {
-    return Fluttertoast.showToast(
-        msg: successMsg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIos: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0);
+  Future<void> loadFiles() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['mp3', 'mp4', 'mov'],
+    );
+
+    if (result != null) {
+      print('chon file thanh cong');
+      // List<File> files = result.paths.map((path) => File(path)).toList();
+      setState(() {
+        fileNames = result.names.map((name) => name).toList();
+        filePaths = result.paths.map((path) => path).toList();
+      });
+    } else {
+      print('User không chọn file!');
+    }
+  }
+
+  // *** Load ảnh thừ thư viện
+  Future<void> loadAssets() async {
+    List<Asset> resultList;
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 300,
+        enableCamera: true,
+        materialOptions: MaterialOptions(
+          actionBarTitle: "Ảnh theo nhóm",
+          allViewTitle: "Chọn hình ảnh",
+          startInAllView: true,
+          selectionLimitReachedText: "Bạn không thể chọn thêm",
+        ),
+      );
+    } on Exception catch (e) {
+      print('Lỗi: ' + e.toString());
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList;
+    });
+  }
+
+  // Build grid of photos
+  Widget buildGridView() {
+    if (images != null)
+      return Container(
+          padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+          child: GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 3,
+            mainAxisSpacing: 3,
+            crossAxisSpacing: 3,
+            children: List.generate(images.length, (index) {
+              Asset asset = images[index];
+              return AssetThumb(
+                asset: asset,
+                width: 300,
+                height: 300,
+              );
+            }),
+          ));
+    else
+      return Container(color: Colors.white);
+  }
+
+  // Build grid of photos
+  Widget buildGridViewFiles() {
+    if (filePaths != null)
+      return Container(
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+          child: Column(
+            children: List.generate(fileNames.length, (index) {
+              return Row(
+                children: [
+                  Icon(
+                    Icons.attach_file,
+                    color: Colors.blue,
+                  ),
+                  Flexible(
+                    child: Container(
+                        child: Text(
+                      fileNames[index],
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+                  )
+                ],
+              );
+            }),
+          ));
+    else
+      return Container(color: Colors.white);
   }
 
   static HttpClient getHttpClient() {
@@ -71,31 +175,14 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     return httpClient;
   }
 
-  static void callbackUpload(int sentBytes, int totalBytes) {
-    print('Upload progress: ${sentBytes / totalBytes * 100}%');
-  }
-
-  Future<void> handleOpenCamera() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-    setState(() {
-      imgFilePaths.add({"url": pickedFile.path, "uploaded": false});
-    });
-  }
-
-  Future<void> handleOpenGallery() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    setState(() {
-      imgFilePaths.add({"url": pickedFile.path, "uploaded": false});
-    });
-  }
-
-  // OnUploadProgressCallback onUploadProgress
-
-  Future uploadSingleImage(String imgPath, int index,
-      OnUploadProgressCallback onUploadProgress) async {
+  Future uploadSingleImage(
+      Asset image, OnUploadProgressCallback onUploadProgress) async {
+    final String imgPath =
+        await FlutterAbsolutePath.getAbsolutePath(image.identifier);
     var fileStream = File(imgPath).openRead();
-    var fileName = imgPath.split("/").last;
+    var fileName = image.name;
     int totalByteLength = File(imgPath).lengthSync();
+
     print('fileBytes length:::: $totalByteLength');
 
     final uploadInfor = await UploadController.getPulicUpload(
@@ -120,7 +207,6 @@ class _SubmitExersiceState extends State<SubmitExersice> {
             onUploadProgress(byteCount, totalByteLength);
             // CALL STATUS CALLBACK;
           }
-
           sink.add(data);
         },
         handleError: (error, stack, sink) {
@@ -128,10 +214,74 @@ class _SubmitExersiceState extends State<SubmitExersice> {
         },
         handleDone: (sink) {
           sink.close();
-
           setState(() {
-            imgFilePaths[index]["uploaded"] = true;
+            imgUploadedFiles.add({
+              "name": uploadInfor.name,
+              "mines": uploadInfor.mimes,
+              "path": uploadInfor.path,
+              "extension": uploadInfor.extension,
+              "size": uploadInfor.size,
+              "url": uploadInfor.url,
+              "upload_url": uploadInfor.upload_url
+            });
+          });
 
+          print('Upload img item successfully!');
+          // UPLOAD DONE;
+        },
+      ),
+    );
+
+    await request.addStream(streamUpload);
+
+    final httpResponse = await request.close();
+
+    if (httpResponse.statusCode != 200) {
+      throw Exception('Error uploading file');
+    } else {
+      return await readResponseAsString(httpResponse);
+    }
+  }
+
+  Future uploadSingleFile(
+      String filePath, OnUploadProgressCallback onUploadProgress) async {
+    var fileStream = File(filePath).openRead();
+    var fileName = filePath.split('/').last;
+    int totalByteLength = File(filePath).lengthSync();
+
+    print('fileBytes length:::: $totalByteLength');
+
+    final uploadInfor = await UploadController.getPulicUpload(
+        fileName, totalByteLength.toString(), lookupMimeType(filePath));
+
+    var httpClient = getHttpClient();
+
+    final request = await httpClient.putUrl(Uri.parse(uploadInfor.upload_url));
+
+    request.headers
+        .set(HttpHeaders.contentTypeHeader, lookupMimeType(filePath));
+    request.headers.add("x-amz-acl", 'public-read');
+    request.contentLength = totalByteLength;
+
+    int byteCount = 0;
+
+    Stream<List<int>> streamUpload = fileStream.transform(
+      new StreamTransformer.fromHandlers(
+        handleData: (data, sink) {
+          byteCount += data.length;
+
+          if (onUploadProgress != null) {
+            onUploadProgress(byteCount, totalByteLength);
+            // CALL STATUS CALLBACK;
+          }
+          sink.add(data);
+        },
+        handleError: (error, stack, sink) {
+          print(error.toString());
+        },
+        handleDone: (sink) {
+          sink.close();
+          setState(() {
             imgUploadedFiles.add({
               "name": uploadInfor.name,
               "mines": uploadInfor.mimes,
@@ -165,7 +315,8 @@ class _SubmitExersiceState extends State<SubmitExersice> {
       setState(() {
         submitStatus = SubmitStatus.submitting;
       });
-      await uploadAllImage();
+      images != null ? await uploadAllImage() : print('no image selected');
+      filePaths != null ? await uploadAllFile() : print('no file selected');
       String successStr = await UploadController.saveUploadInfo({
         "files": jsonEncode(imgUploadedFiles),
         "homeworkId": widget.homeworkObj["hashId"],
@@ -187,8 +338,14 @@ class _SubmitExersiceState extends State<SubmitExersice> {
   }
 
   Future<void> uploadAllImage() async {
-    for (var i = 0; i < imgFilePaths.length; i++) {
-      await uploadSingleImage(imgFilePaths[i]["url"], i, callbackUpload);
+    for (var i = 0; i < images.length; i++) {
+      await uploadSingleImage(images[i], callbackUpload);
+    }
+  }
+
+  Future<void> uploadAllFile() async {
+    for (var i = 0; i < filePaths.length; i++) {
+      await uploadSingleFile(filePaths[i], callbackUpload);
     }
   }
 
@@ -199,6 +356,10 @@ class _SubmitExersiceState extends State<SubmitExersice> {
       contents.write(data);
     }, onDone: () => completer.complete(contents.toString()));
     return completer.future;
+  }
+
+  static void callbackUpload(int sentBytes, int totalBytes) {
+    print('Upload progress: ${sentBytes / totalBytes * 100}%');
   }
 
   @override
@@ -298,7 +459,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                 color: Colors.blue,
                                 strokeWidth: 1,
                                 child: TextButton(
-                                  onPressed: handleOpenCamera,
+                                  onPressed: loadAssets,
                                   child: Container(
                                     child: Column(
                                       children: [
@@ -323,7 +484,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                               color: Colors.blue,
                               strokeWidth: 1,
                               child: TextButton(
-                                onPressed: handleOpenGallery,
+                                onPressed: loadFiles,
                                 child: Column(
                                   children: [
                                     Icon(
@@ -331,7 +492,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                       color: Colors.blue,
                                     ),
                                     Text(
-                                      'Chọn ảnh từ thư viện',
+                                      'Chọn file âm thanh/video',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: Colors.black,
@@ -377,26 +538,9 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                 ],
                               )
                             : Container(),
-                    imgFilePaths.length == 0
-                        ? Container()
-                        : Container(
-                            //color: Colors.red,
-                            child: GridView.count(
-                            shrinkWrap: true,
-                            primary: false,
-                            padding: const EdgeInsets.all(20),
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            crossAxisCount: 3,
-                            children: <Widget>[
-                              ...imgFilePaths
-                                  .map((dynamic item) => Container(
-                                      key: UniqueKey(),
-                                      child: Image.file(File(item["url"]))))
-                                  .toList()
-                            ],
-                          )),
-                    imgFilePaths.length == 0
+                    buildGridView(),
+                    buildGridViewFiles(),
+                    images == null && filePaths == null
                         ? Container()
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -422,7 +566,8 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                             ? null
                                             : () {
                                                 setState(() {
-                                                  imgFilePaths.clear();
+                                                  images = null;
+                                                  filePaths = null;
                                                   submitStatus =
                                                       SubmitStatus.notSubmitted;
                                                 });
