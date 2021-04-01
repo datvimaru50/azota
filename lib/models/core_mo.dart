@@ -112,6 +112,38 @@ class HomeworkHashIdInfo {
         studentObj: json["studentObj"],
         classroomObj: json["classroomObj"],
         homeworkObj: json["homeworkObj"],
-        answerObj: json["answerObj"] == null ? {"confirmedAt": null} : json["answerObj"],
+        answerObj: json["answerObj"] == null
+            ? {"confirmedAt": null}
+            : json["answerObj"],
       );
+}
+
+class ClassroomHashIdInfo {
+  Iterable data;
+  // dynamic data;
+
+  ClassroomHashIdInfo({
+    this.data,
+  });
+
+  factory ClassroomHashIdInfo.fromJson(Map<String, dynamic> json) {
+    return ClassroomHashIdInfo(
+      data: json['data'],
+    );
+  }
+}
+
+class AnswerHashIdInfo {
+  Iterable dataAnswer;
+  // dynamic data;
+
+  AnswerHashIdInfo({
+    this.dataAnswer,
+  });
+
+  factory AnswerHashIdInfo.fromJson(Map<String, dynamic> json) {
+    return AnswerHashIdInfo(
+      dataAnswer: json['data'],
+    );
+  }
 }

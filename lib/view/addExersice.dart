@@ -1,36 +1,84 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
+import 'package:azt/config/connect.dart';
+import 'package:azt/config/global.dart';
+import 'package:azt/view/detailClass_teacher.dart';
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 
 void main() {
   runApp(AddExersice());
 }
 
 class AddExersice extends StatefulWidget {
+  AddExersice({
+    this.id,
+    this.countStudents,
+    this.className,
+    this.homeworkId,
+    this.homeworks,
+  });
+  final String id;
+  final String countStudents;
+  final String className;
+  final String homeworkId;
+  final String homeworks;
   @override
   _AddExersiceState createState() => _AddExersiceState();
 }
 
 class _AddExersiceState extends State<AddExersice> {
-  // ignore: unused_field
-  File _image;
+  final _formKey = GlobalKey<FormState>();
+  HtmlEditorController content = new HtmlEditorController();
+  TextEditingController deadline = new TextEditingController();
 
-  Future getFile() async {
-    FilePickerResult getFile = await FilePicker.platform.pickFiles();
+  Future addExersice() async {
+    final token = await Prefs.getPref(ACCESS_TOKEN);
 
-    setState(
-      () {
-        if (getFile != null) {
-          PlatformFile file = getFile.files.first;
+    Map mapdata = <String, dynamic>{
+      "classroomId": widget.id,
+      "deadline": deadline.text,
+      "content": "content.editorController.",
+      "name": "Bài Tập"
+    };
+    // ignore: unnecessary_brace_in_string_interps
+    print("JSON DATA : ${mapdata}");
+    final reponse = await http.Client()
+        .post(AZO_CLASSROOM_UPDATE, body: jsonEncode(mapdata), headers: {
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.authorizationHeader: "Bearer $token",
+    });
 
-          _image = File(file.path);
-        }
-      },
-    );
+    var data = jsonDecode(reponse.body);
+    final dataClass = data['data'];
+    if (data['success'] == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailClass(
+            id: dataClass['id'].toString(),
+            countStudents: dataClass['countStudents'].toString(),
+            className: dataClass['name'].toString(),
+            homeworks: dataClass['homeworks'].toString(),
+          ),
+        ),
+      );
+      return Fluttertoast.showToast(
+          msg: 'Tạo thành công lớp học',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.green[900],
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      // ignore: unnecessary_brace_in_string_interps
+      return print("DATA: ${data}");
+    }
   }
 
   @override
@@ -45,165 +93,96 @@ class _AddExersiceState extends State<AddExersice> {
       ),
       body: ListView(
         children: [
-          Container(
-            child: Column(
-              children: [
-                Container(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: EdgeInsets.all(0),
-                    child: DateTimePicker(
-                      dateMask: 'd/MM/yyyy',
-                      initialValue: '',
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                      dateLabelText: 'Chọn thời hạn nộp bài',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                      icon: Icon(Icons.date_range, color: Colors.white),
-                      onChanged: (val) => print(val),
-                      validator: (val) {
-                        print(val);
-                        return null;
-                      },
-                      onSaved: (val) => print(val),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(color: Color(0xff00a7d0)),
-                    color: Color(0xff00a7d0),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20, left: 15, right: 15),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      hintText: 'Nhập vào tên lớp',
-                      prefixIcon: Icon(Icons.code_sharp),
-                    ),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Vui lòng điền đầy đủ thông tin';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  padding:
-                      EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 10),
-                  child: Text('Danh sách học sinh',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  padding: EdgeInsets.only(left: 20, right: 20, bottom: 15),
-                  child: Text(
-                    'Nhập danh sách học sinh trong lớp mà thầy cô đang quản lý vào file Excel và đưa lên hệ thống. Các thông tin cần nhập bao gồm: Họ tên, Ngày sinh, Giới tính. Thầy/Cô có thể tải file biểu mẫu bên dưới để nhập danh sách học sinh',
-                  ),
-                ),
-                Container(
-                  child: Container(
-                    child: DottedBorder(
-                      color: Colors.blue,
-                      strokeWidth: 1,
-                      child: TextButton(
-                        onPressed: getFile,
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.cloud_upload,
-                              color: Colors.blue,
+          Form(
+            key: _formKey,
+            child: Container(
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          left: 10, right: 50, top: 5, bottom: 5),
+                      child: DateTimePicker(
+                        controller: deadline,
+                        decoration: InputDecoration(
+                            suffixIcon: Icon(
+                              Icons.event,
+                              color: Colors.white,
                             ),
-                            Text(
-                              'Chưa có file được chọn',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            ),
-                            Container(
-                              padding:
-                                  EdgeInsets.only(top: 15, left: 20, right: 20),
-                              child: Text(
-                                'Kéo thả file Excel hoặc Click để chọn File',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                            border: OutlineInputBorder(),
+                            labelText: 'Chọn thời hạn nộp bài tập* ',
+                            hintText: 'Chọn này sinh ',
+                            labelStyle: TextStyle(color: Colors.white),
+                            counterStyle: TextStyle(color: Colors.black)),
+                        dateMask: 'dd/MM/yyyy',
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                        icon: Icon(Icons.event),
+                        dateLabelText: 'Ngày',
+                        onChanged: (value) => print(value),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Vui lòng chọn ngày sinh';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => print(value),
                       ),
                     ),
-                    color: Color.fromRGBO(27, 171, 161, .05),
-                    // margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xff00a7d0)),
+                      color: Color(0xff00a7d0),
+                    ),
                   ),
-                  padding: EdgeInsets.only(top: 15, left: 30, right: 30),
-                ),
-                GestureDetector(
+                  HtmlEditor(
+                    controller: content,
+                    hint: "Nhập nội dung...",
+                  ),
+                  Container(
                     child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Tải file biểu mẫu',
-                        style: TextStyle(color: Colors.blue),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              addExersice();
+                            }
+                          },
+                          child: Text(
+                            'THÊM BÀI TẬP',
+                          ),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                          ),
+                          onPressed: () {
+                            // Validate will return true if the form is valid, or false if
+                            // the form is invalid.
+                          },
+                          child: Text('HỦY',
+                              style: TextStyle(color: Colors.black)),
+                        ),
+                      ],
+                    ),
+                    padding: EdgeInsets.only(
+                        left: 35, top: 10, bottom: 10, right: 35),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(width: 2.0, color: Colors.black12),
                       ),
                     ),
-                    Icon(Icons.save_alt),
-                  ],
-                )),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          // Validate will return true if the form is valid, or false if
-                          // the form is invalid.
-                        },
-                        child: Text(
-                          'TẠO LỚP',
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                        ),
-                        onPressed: () {
-                          // Validate will return true if the form is valid, or false if
-                          // the form is invalid.
-                        },
-                        child:
-                            Text('HỦY', style: TextStyle(color: Colors.black)),
-                      ),
-                    ],
-                  ),
-                  padding:
-                      EdgeInsets.only(left: 35, top: 10, bottom: 10, right: 35),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(width: 2.0, color: Colors.black12),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              border: Border.all(
-                width: 2,
-                color: Color(0xff00a7d0),
+                  )
+                ],
+              ),
+              margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                border: Border.all(
+                  width: 2,
+                  color: Color(0xff00a7d0),
+                ),
               ),
             ),
           ),

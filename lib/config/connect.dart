@@ -22,6 +22,18 @@ const AZO_UPDATE_PARENT = "$AZT_DEV_SERVER/FrontStudent/UpdateParent";
 const AZO_ANSWER_SAVE = "$AZT_DEV_SERVER/FrontAnswer/SaveObj";
 const AZO_S3SPACE_SAVE = "$AZT_DEV_SERVER/S3space/get_public_upload_url";
 
+const AZO_CLASSROOM_INFO = "$AZT_DEV_SERVER/Classroom/GetObjs";
+const AZO_DELETECLASSROOM_INFO = "$AZT_DEV_SERVER/Classroom/DeleteObj";
+const AZO_EXERSICE_INFO = "$AZT_DEV_SERVER/Homework/GetObjsByClassroom";
+const AZO_DELETESTUDENT_INFO = "$AZT_DEV_SERVER/Student/DeleteObj";
+const AZO_STUDENT_INFO = "$AZT_DEV_SERVER/Student/GetObjsByClassroom";
+const AZO_ANSWER_INFO = "$AZT_DEV_SERVER/Answer/GetObjsByHomework";
+const AZO_STUDENT_SAVE = "$AZT_DEV_SERVER/Student/SaveObj";
+const AZO_HOMEWORK_SAVE = "$AZT_DEV_SERVER/Homework/SaveObj";
+const AZO_CLASSROOM_UPDATE = "$AZT_DEV_SERVER/Classroom/UpdateObj";
+
+const AZO_ADDCLASS_INFO = "$AZT_DEV_SERVER/Classroom/SaveObj";
+
 /* ERROR MESSAGE */
 const ERR_INVALID_LOGIN_INFO = "Sai tên đăng nhập hoặc mật khẩu!";
 const ERR_SERVER_CONNECT = "Kết nối tới máy chủ bị lỗi!";
@@ -29,7 +41,8 @@ const ERR_BAD_REQUEST = "Dữ liệu gửi lên không hợp lệ!";
 
 const ERR_APPLE_SIGN_IN = "Đăng nhập với Apple thất bại!";
 const ERR_APPLE_USER_CANCEL = "Bạn đã hủy bỏ đăng nhập với Apple!";
-const ERR_APPLE_SIGNIN_NOT_AVAILABLE = "Điện thoại của bạn không hỗ trợ đăng nhập với Apple!";
+const ERR_APPLE_SIGNIN_NOT_AVAILABLE =
+    "Điện thoại của bạn không hỗ trợ đăng nhập với Apple!";
 const ERROR_SUBMIT_HOMEWORK = "Nộp bài không thành công!";
 
 const ERR_UPDATE_PARENT = "Cập nhật phụ huynh không thành công!";
