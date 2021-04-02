@@ -1,3 +1,5 @@
+import 'package:azt/controller/classroom_controller.dart';
+import 'package:azt/models/core_mo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
@@ -6,6 +8,12 @@ void main() {
 }
 
 class DetailExersice extends StatefulWidget {
+  DetailExersice({
+    this.id,
+    this.homeworkId,
+  });
+  final String id;
+  final String homeworkId;
   @override
   _DetailExersiceState createState() => _DetailExersiceState();
 }
@@ -13,8 +21,23 @@ class DetailExersice extends StatefulWidget {
 class _DetailExersiceState extends State<DetailExersice> {
   bool status = false;
   bool submitDate = false;
-
+  Future<ClassroomHashIdInfo> classroomHashIdInfo;
+  Future<AnswerHashIdInfo> answerHashIdInfo;
   @override
+  void initState() {
+    super.initState();
+    classroomHashIdInfo = ClassroomController.studentClassroom(widget.id);
+    answerHashIdInfo = ClassroomController.answerStudent(widget.homeworkId);
+    // for (classroomHashIdInfo) {
+    //   FOR (answerHashIdInfo) {
+    //     IF(classroomHashIdInfo = answerHashIdInfo ) {
+    //       classroomHashIdInfo.ANS = answerHashIdInfo
+    //     }
+    //   }
+    // }
+    print('sdvsvsdv::: ::: ' + widget.homeworkId);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xFFecf0f5),
@@ -92,7 +115,8 @@ class _DetailExersiceState extends State<DetailExersice> {
                   ),
                   Container(
                     child: Text(
-                        'Gửi bài tập qua nhom Zalo để phụ huynh / học sinh có thể nộp bài online'),
+                      'Gửi bài tập qua nhom Zalo để phụ huynh / học sinh có thể nộp bài online',
+                    ),
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(width: 2.0, color: Colors.black12),
@@ -157,106 +181,179 @@ class _DetailExersiceState extends State<DetailExersice> {
                               ),
                             ),
                           ),
-                          Container(
-                            child: Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        child: Column(
-                                          children: [
-                                            Text('Hoàng thùy linh'),
-                                            Container(
-                                              alignment: Alignment.topLeft,
-                                              child: Text(
-                                                '9 giờ trước',
-                                                style: TextStyle(
-                                                  color: Colors.black26,
+                          FutureBuilder<ClassroomHashIdInfo>(
+                            future: classroomHashIdInfo,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Column(
+                                  children: [
+                                    ...snapshot.data.data.map(
+                                      (dynamic item) => Column(
+                                        children: [
+                                          Container(
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      child: Column(
+                                                        children: [
+                                                          Container(
+                                                            alignment: Alignment
+                                                                .topLeft,
+                                                            child: Text(item[
+                                                                'fullName']),
+                                                          ),
+                                                          Container(
+                                                            alignment: Alignment
+                                                                .topLeft,
+                                                            child: Text(
+                                                              '9 giờ trước',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black26,
+                                                              ),
+                                                            ),
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                              top: 3,
+                                                              bottom: 3,
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            alignment: Alignment
+                                                                .topLeft,
+                                                            child: Text(
+                                                              'yêu cầu nộp lại',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.blue,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      width: 120,
+                                                    ),
+                                                    FutureBuilder<
+                                                        AnswerHashIdInfo>(
+                                                      future: answerHashIdInfo,
+                                                      builder:
+                                                          // ignore: missing_return
+                                                          (context, snapshot) {
+                                                        if (snapshot.hasData) {
+                                                          return Container(
+                                                            child:
+                                                                ElevatedButton(
+                                                              child: Text(snapshot
+                                                                  .data
+                                                                  .dataAnswer
+                                                                  .toString()),
+                                                              onPressed: () {},
+                                                              style:
+                                                                  ElevatedButton
+                                                                      .styleFrom(
+                                                                primary: Colors
+                                                                    .yellow
+                                                                    .shade800,
+                                                              ),
+                                                            ),
+                                                            // width: ,
+                                                          );
+                                                        }
+                                                      },
+                                                    ),
+                                                  ],
                                                 ),
-                                              ),
-                                              width: 95,
-                                              margin: EdgeInsets.only(
-                                                top: 3,
-                                                bottom: 3,
+                                                // GridView.count(
+                                                //   padding: EdgeInsets.only(
+                                                //       top: 15, bottom: 10),
+                                                //   shrinkWrap: true,
+                                                //   crossAxisSpacing: 5,
+                                                //   crossAxisCount: 2,
+                                                //   childAspectRatio: 5,
+                                                //   children: <Widget>[
+                                                //     Container(
+                                                //       padding:
+                                                //           const EdgeInsets.all(
+                                                //               8),
+                                                //       child: const Text(
+                                                //           "He'd have you all unravel at the"),
+                                                //     ),
+                                                //     Container(
+                                                //       padding:
+                                                //           const EdgeInsets.all(
+                                                //               8),
+                                                //       child: const Text(
+                                                //           'Heed not the rabble'),
+                                                //     ),
+                                                //     Container(
+                                                //       padding:
+                                                //           const EdgeInsets.all(
+                                                //               8),
+                                                //       child: const Text(
+                                                //           'Sound of screams but the'),
+                                                //     ),
+                                                //     Container(
+                                                //       padding:
+                                                //           const EdgeInsets.all(
+                                                //               8),
+                                                //       child: const Text(
+                                                //           'Who scream'),
+                                                //     ),
+                                                //     Container(
+                                                //       padding:
+                                                //           const EdgeInsets.all(
+                                                //               8),
+                                                //       child: const Text(
+                                                //           'Revolution is coming...'),
+                                                //     ),
+                                                //     Container(
+                                                //       padding:
+                                                //           const EdgeInsets.all(
+                                                //               8),
+                                                //       child: const Text(
+                                                //           'Revolution, they...'),
+                                                //     ),
+                                                //   ],
+                                                // ),
+                                              ],
+                                            ),
+                                            decoration: BoxDecoration(
+                                              border: Border(
+                                                bottom: BorderSide(
+                                                    width: 2.0,
+                                                    color: Colors.black12),
                                               ),
                                             ),
-                                            Text(
-                                              'yêu cầu nộp lại',
-                                              style: TextStyle(
-                                                color: Colors.blue,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        child: ElevatedButton(
-                                          child: Text('CHẤM BÀI'),
-                                          onPressed: () {},
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.yellow.shade800,
+                                            padding: EdgeInsets.only(
+                                                top: 10, bottom: 10),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                GridView.count(
-                                  padding: EdgeInsets.only(top: 15, bottom: 10),
-                                  shrinkWrap: true,
-                                  crossAxisSpacing: 5,
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 5,
-                                  children: <Widget>[
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      child: const Text(
-                                          "He'd have you all unravel at the"),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      child: const Text('Heed not the rabble'),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      child: const Text(
-                                          'Sound of screams but the'),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      child: const Text('Who scream'),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      child:
-                                          const Text('Revolution is coming...'),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      child: const Text('Revolution, they...'),
                                     ),
                                   ],
-                                ),
-                              ],
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                    width: 2.0, color: Colors.black12),
-                              ),
-                            ),
-                            padding: EdgeInsets.only(top: 10),
+                                );
+                                // (BuildContext context, int index) {
+                                //   return Text('snapshot.data.data[');
+                                // };
+                              } else if (snapshot.hasError) {
+                                return Text("${snapshot.error}");
+                              }
+
+                              // By default, show a loading spinner.
+                              return CircularProgressIndicator();
+                            },
                           ),
                           Container(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  child: Text('Hoàng thùy linh'),
+                                  child: Text('dfb name'),
                                 ),
                                 Container(
                                   child: ElevatedButton(

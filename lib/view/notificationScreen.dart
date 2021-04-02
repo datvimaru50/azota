@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'dart:io';
+import 'package:azt/view/listClass_teacher.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/view/notification/notificationStudent.dart';
 import 'package:azt/view/notification/notificationTeacher.dart';
@@ -149,7 +150,14 @@ class _NotificationScreenState extends State<NotificationScreen>
                 children: [
                   GestureDetector(
                     onTap: () {
-                      launch('$baseAccess/en/admin/classes');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              // LoginForm(),
+                              ListClass(),
+                        ),
+                      );
                     },
                     child: Column(
                       children: [
@@ -158,8 +166,9 @@ class _NotificationScreenState extends State<NotificationScreen>
                           height: 90,
                         ),
                         Text(
-                          '  Giao\nbài tập',
+                          'Giao \nbài tập',
                           style: TextStyle(color: Colors.white, fontSize: 16),
+                          textAlign: TextAlign.center,
                         )
                       ],
                     ),
@@ -366,11 +375,42 @@ class _NotificationScreenState extends State<NotificationScreen>
                 _showMyDialog();
               },
             )
-                //: Text(''),
+            //: Text(''),
           ],
         ),
       ),
       body: _buildList(),
+      //menu
+      // floatingActionButton: FabCircularMenu(
+      //   fabElevation: 10,
+      //   ringWidth: 80,
+      //   ringDiameter: 260,
+      //   fabSize: 40,
+      //   children: <Widget>[
+      //     IconButton(
+      //         icon: Icon(Icons.notifications_none),
+      //         onPressed: () {
+      //           Navigator.of(context).pushAndRemoveUntil(
+      //               MaterialPageRoute(
+      //                   builder: (context) => NotificationScreen(
+      //                         role: 'teacher',
+      //                       )),
+      //               (Route<dynamic> route) => false);
+      //         }),
+      //     IconButton(
+      //         icon: Icon(Icons.add),
+      //         onPressed: () {
+      //           Navigator.push(
+      //             context,
+      //             MaterialPageRoute(
+      //               builder: (context) =>
+      //                   // LoginForm(),
+      //                   ListClass(),
+      //             ),
+      //           );
+      //         }),
+      //   ],
+      // ),
     );
   }
 }

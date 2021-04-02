@@ -39,7 +39,6 @@ class SubmitExersice extends StatefulWidget {
 }
 
 class _SubmitExersiceState extends State<SubmitExersice> {
-
   List<Asset> images;
   List<dynamic> imgUploadedFiles = [];
   SubmitStatus submitStatus = SubmitStatus.notSubmitted;
@@ -57,6 +56,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
         textColor: Colors.white,
         fontSize: 16.0);
   }
+
   Future<void> _showErrorToast(String errMsg) async {
     return Fluttertoast.showToast(
       msg: errMsg,
@@ -69,20 +69,23 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     );
   }
 
-  Future<void> loadFiles() async{
-    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.custom, allowedExtensions: ['mp3', 'mp4', 'mov'],);
+  Future<void> loadFiles() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['mp3', 'mp4', 'mov'],
+    );
 
-    if(result != null) {
+    if (result != null) {
       print('chon file thanh cong');
       // List<File> files = result.paths.map((path) => File(path)).toList();
       setState(() {
-        fileNames = result.names.map((name)=> name).toList();
-        filePaths = result.paths.map((path)=> path).toList();
+        fileNames = result.names.map((name) => name).toList();
+        filePaths = result.paths.map((path) => path).toList();
       });
     } else {
       print('User không chọn file!');
     }
-
   }
 
   // *** Load ảnh thừ thư viện
@@ -90,18 +93,17 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     List<Asset> resultList;
     try {
       resultList = await MultiImagePicker.pickImages(
-          maxImages: 300,
-          enableCamera: true,
-          materialOptions: MaterialOptions(
-            actionBarTitle: "Ảnh theo nhóm",
-            allViewTitle: "Chọn hình ảnh",
-            startInAllView: true,
-            selectionLimitReachedText: "Bạn không thể chọn thêm",
-          ),
+        maxImages: 300,
+        enableCamera: true,
+        materialOptions: MaterialOptions(
+          actionBarTitle: "Ảnh theo nhóm",
+          allViewTitle: "Chọn hình ảnh",
+          startInAllView: true,
+          selectionLimitReachedText: "Bạn không thể chọn thêm",
+        ),
       );
-
     } on Exception catch (e) {
-      print('Lỗi: '+e.toString());
+      print('Lỗi: ' + e.toString());
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -112,34 +114,30 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     setState(() {
       images = resultList;
     });
-
   }
-
 
   // Build grid of photos
   Widget buildGridView() {
     if (images != null)
       return Container(
-        padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-        child: GridView.count(
-          shrinkWrap: true,
-          crossAxisCount: 3,
-          mainAxisSpacing: 3,
-          crossAxisSpacing: 3,
-          children: List.generate(images.length, (index) {
-            Asset asset = images[index];
-            return AssetThumb(
-              asset: asset,
-              width: 300,
-              height: 300,
-            );
-          }),
-        )
-      );
+          padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+          child: GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 3,
+            mainAxisSpacing: 3,
+            crossAxisSpacing: 3,
+            children: List.generate(images.length, (index) {
+              Asset asset = images[index];
+              return AssetThumb(
+                asset: asset,
+                width: 300,
+                height: 300,
+              );
+            }),
+          ));
     else
       return Container(color: Colors.white);
   }
-
 
   // Build grid of photos
   Widget buildGridViewFiles() {
@@ -148,7 +146,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
           child: Column(
-             children: List.generate(fileNames.length, (index) {
+            children: List.generate(fileNames.length, (index) {
               return Row(
                 children: [
                   Icon(
@@ -157,18 +155,17 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                   ),
                   Flexible(
                     child: Container(
-                      child: Text(fileNames[index],
-                        style: TextStyle(fontStyle: FontStyle.italic),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,)
-                    ),
+                        child: Text(
+                      fileNames[index],
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )),
                   )
-
                 ],
               );
             }),
-          )
-      );
+          ));
     else
       return Container(color: Colors.white);
   }
@@ -178,8 +175,10 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     return httpClient;
   }
 
-  Future uploadSingleImage(Asset image, OnUploadProgressCallback onUploadProgress) async {
-    final String imgPath = await FlutterAbsolutePath.getAbsolutePath(image.identifier);
+  Future uploadSingleImage(
+      Asset image, OnUploadProgressCallback onUploadProgress) async {
+    final String imgPath =
+        await FlutterAbsolutePath.getAbsolutePath(image.identifier);
     var fileStream = File(imgPath).openRead();
     var fileName = image.name;
     int totalByteLength = File(imgPath).lengthSync();
@@ -244,7 +243,8 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     }
   }
 
-  Future uploadSingleFile(String filePath, OnUploadProgressCallback onUploadProgress) async {
+  Future uploadSingleFile(
+      String filePath, OnUploadProgressCallback onUploadProgress) async {
     var fileStream = File(filePath).openRead();
     var fileName = filePath.split('/').last;
     int totalByteLength = File(filePath).lengthSync();
@@ -258,7 +258,8 @@ class _SubmitExersiceState extends State<SubmitExersice> {
 
     final request = await httpClient.putUrl(Uri.parse(uploadInfor.upload_url));
 
-    request.headers.set(HttpHeaders.contentTypeHeader, lookupMimeType(filePath));
+    request.headers
+        .set(HttpHeaders.contentTypeHeader, lookupMimeType(filePath));
     request.headers.add("x-amz-acl", 'public-read');
     request.contentLength = totalByteLength;
 
@@ -367,7 +368,6 @@ class _SubmitExersiceState extends State<SubmitExersice> {
     Intl.defaultLocale = 'vi_VN';
     initializeDateFormatting();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -538,21 +538,20 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                 ],
                               )
                             : Container(),
-
                     buildGridView(),
-
                     buildGridViewFiles(),
-
-                    images == null && filePaths == null ? Container()
+                    images == null && filePaths == null
+                        ? Container()
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ElevatedButton.icon(
                                 icon: Icon(Icons.file_upload),
                                 label: Text('NỘP BÀI'),
-                                onPressed: submitStatus == SubmitStatus.submitting
-                                    ? null
-                                    : handleSubmit,
+                                onPressed:
+                                    submitStatus == SubmitStatus.submitting
+                                        ? null
+                                        : handleSubmit,
                               ),
                               Container(
                                 margin: EdgeInsets.only(left: 10),
@@ -562,16 +561,17 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                     ),
                                     icon: Icon(Icons.refresh),
                                     label: Text('LÀM LẠI'),
-                                    onPressed: submitStatus == SubmitStatus.submitting ?
-                                                null :
-                                    (){
-                                      setState(() {
-                                        images = null;
-                                        filePaths = null;
-                                        submitStatus =
-                                            SubmitStatus.notSubmitted;
-                                      });
-                                    }),
+                                    onPressed:
+                                        submitStatus == SubmitStatus.submitting
+                                            ? null
+                                            : () {
+                                                setState(() {
+                                                  images = null;
+                                                  filePaths = null;
+                                                  submitStatus =
+                                                      SubmitStatus.notSubmitted;
+                                                });
+                                              }),
                               )
                             ],
                           ),

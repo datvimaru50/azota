@@ -53,6 +53,8 @@ dependencies:
   flutter_switch: ^0.2.0
   mime: ^1.0.0
   google_fonts: ^1.1.2
+  fab_circular_menu: ^1.0.2
+  html_editor_enhanced: ^1.7.0
   flutter_uploader: ^1.2.1
   flutter_absolute_path: ^1.0.6
   
