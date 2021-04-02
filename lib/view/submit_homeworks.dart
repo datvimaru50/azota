@@ -1,9 +1,11 @@
 import 'dart:ui';
+import 'dart:io';
 import 'package:azt/models/core_mo.dart';
 import 'package:azt/controller/homework_controller.dart';
 import 'package:azt/view/submit_homeworks/graded_exersice.dart';
 import 'package:azt/view/submit_homeworks/history_submit.dart';
 import 'package:azt/view/submit_homeworks/submit_exersice.dart';
+import 'package:azt/view/submit_homeworks/submit_exersice_android.dart';
 import 'package:flutter/material.dart';
 
 import 'package:azt/config/global.dart';
@@ -139,7 +141,14 @@ class _SubmitFormState extends State<SubmitForm> {
               child: ListView(
                 children: <Widget>[
                   // Text(snapshot.data.answerHistoryObjs.toString()),
-                  SubmitExersice(
+                  Platform.isIOS ? SubmitExersice(
+                      homeworkObj: snapshot.data.homeworkObj,
+                      studentObj: snapshot.data.studentObj,
+                      classroomObj: snapshot.data.classroomObj,
+                      answerObj: snapshot.data
+                          .answerObj // Dùng để check trạng thái giáo viên đã chấm bài hay chưa
+                  ) :
+                  SubmitExersiceAndroid(
                       homeworkObj: snapshot.data.homeworkObj,
                       studentObj: snapshot.data.studentObj,
                       classroomObj: snapshot.data.classroomObj,
