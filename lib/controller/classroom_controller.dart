@@ -76,11 +76,11 @@ class ClassroomController extends ControllerMVC {
               fontSize: 16.0);
         } else {
           return Fluttertoast.showToast(
-              msg: 'Lớp đã xóa hoặc không tồn tại',
+              msg: 'Xóa lớp học không thàng công',
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
               timeInSecForIos: 1,
-              backgroundColor: Colors.green[900],
+              backgroundColor: Colors.red,
               textColor: Colors.white,
               fontSize: 16.0);
         }
@@ -96,7 +96,7 @@ class ClassroomController extends ControllerMVC {
   }
 
   static Future deleteStudent(
-      String id, context, classroomId, className) async {
+      String id, context, classroomId, className, countStudents) async {
     final token = await Prefs.getPref(ACCESS_TOKEN);
     final response =
         await http.Client().get(AZO_DELETESTUDENT_INFO + '?id=' + id, headers: {
@@ -113,26 +113,29 @@ class ClassroomController extends ControllerMVC {
                 builder: (context) => ListStudents(
                   id: classroomId,
                   className: className,
+                  countStudents: countStudents,
                 ),
               ),
               (Route<dynamic> route) => false);
           return Fluttertoast.showToast(
-              msg: 'Xóa học sinh thành công',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIos: 1,
-              backgroundColor: Colors.green[900],
-              textColor: Colors.white,
-              fontSize: 16.0);
+            msg: 'Xóa học sinh thành công',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.green[900],
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
         } else {
           return Fluttertoast.showToast(
-              msg: 'học sinh đã xóa hoặc không tồn tại',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIos: 1,
-              backgroundColor: Colors.green[900],
-              textColor: Colors.white,
-              fontSize: 16.0);
+            msg: 'Xóa học sinh không thành công',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
         }
         break;
 
@@ -159,7 +162,7 @@ class ClassroomController extends ControllerMVC {
         if (resBody['success'] == 1) {
           return ClassroomHashIdInfo.fromJson(resBody);
         } else {
-          throw ERR_INVALID_LOGIN_INFO;
+          throw ERR_BAD_REQUEST;
         }
         break;
 
@@ -210,7 +213,6 @@ class ClassroomController extends ControllerMVC {
     switch (response.statusCode) {
       case 200:
         final Map<String, dynamic> resBody = json.decode(response.body);
-        print("class room ánwer112::::: ${json.encode(resBody['data'])}");
         if (resBody['success'] == 1) {
           return AnswerHashIdInfo.fromJson(resBody);
         } else {

@@ -28,13 +28,6 @@ class _DetailExersiceState extends State<DetailExersice> {
     super.initState();
     classroomHashIdInfo = ClassroomController.studentClassroom(widget.id);
     answerHashIdInfo = ClassroomController.answerStudent(widget.homeworkId);
-    // for (classroomHashIdInfo) {
-    //   FOR (answerHashIdInfo) {
-    //     IF(classroomHashIdInfo = answerHashIdInfo ) {
-    //       classroomHashIdInfo.ANS = answerHashIdInfo
-    //     }
-    //   }
-    // }
     print('sdvsvsdv::: ::: ' + widget.homeworkId);
   }
 

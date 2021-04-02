@@ -2,7 +2,6 @@ import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:azt/view/addClass.dart';
 import 'package:azt/view/detailClass_teacher.dart';
-import 'package:azt/view/notificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';

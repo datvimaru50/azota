@@ -55,7 +55,6 @@ class _DetailClassState extends State<DetailClass> {
     });
 
     var data = jsonDecode(reponse.body);
-    print("DATA: ${data}");
     if (data['success'] == 1) {
       Navigator.push(
         context,
@@ -107,20 +106,6 @@ class _DetailClassState extends State<DetailClass> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // ignore: deprecated_member_use
-                // FlatButton.icon(
-                //   onPressed: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(builder: (context) => ListClass()),
-                //     );
-                //   },
-                //   label: Text(
-                //     'Quay lại',
-                //     style: TextStyle(fontSize: 13, color: Colors.black45),
-                //   ),
-                //   icon: Icon(Icons.keyboard_arrow_left),
-                // ),
                 IconButton(
                   icon: Icon(Icons.keyboard_arrow_left),
                   onPressed: () {
@@ -154,7 +139,8 @@ class _DetailClassState extends State<DetailClass> {
                                   MaterialPageRoute(
                                     builder: (context) => ListStudents(
                                         id: widget.id,
-                                        className: widget.className),
+                                        className: widget.className,
+                                        countStudents: widget.countStudents),
                                   ),
                                 );
                               },
@@ -401,6 +387,7 @@ class _DetailClassState extends State<DetailClass> {
                     MaterialPageRoute(
                       builder: (context) => AddExersice(
                         id: widget.id,
+                        className: widget.className,
                         countStudents: widget.countStudents,
                         homeworkId: widget.homeworkId,
                         homeworks: widget.homeworks,

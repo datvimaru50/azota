@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:azt/config/global.dart';
 import 'package:azt/view/detailClass_teacher.dart';
+import 'package:azt/view/listClass_teacher.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -51,16 +52,23 @@ class _AddClassState extends State<AddClass> {
         ),
       );
       return Fluttertoast.showToast(
-          msg: 'Tạo thành công lớp học',
+          msg: 'Tạo lớp học thành công',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
-          backgroundColor: Colors.green[900],
+          backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 16.0);
     } else {
       // ignore: unnecessary_brace_in_string_interps
-      return print("DATA: ${data}");
+      return Fluttertoast.showToast(
+          msg: 'Tạo lớp học không thành công',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 
@@ -86,14 +94,25 @@ class _AddClassState extends State<AddClass> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFecf0f5),
-      appBar: AppBar(
-        title: Text(
-          'Thêm lớp',
-          style: TextStyle(fontSize: 18),
-        ),
-      ),
       body: ListView(
         children: [
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.keyboard_arrow_left),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ListClass()),
+                    );
+                  },
+                ),
+              ],
+            ),
+            margin: EdgeInsets.only(left: 10, right: 10),
+          ),
           Container(
             child: Form(
               key: _formKey,

@@ -5,50 +5,62 @@ import 'package:azt/config/global.dart';
 import 'package:azt/view/listStudents.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:html_editor_enhanced/utils/shims/dart_ui_real.dart';
 import 'package:http/http.dart' as http;
 import 'package:azt/config/connect.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(AddStudent());
+  runApp(EditStudent());
 }
 
-class AddStudent extends StatefulWidget {
-  AddStudent({
+class EditStudent extends StatefulWidget {
+  EditStudent({
     this.classRoomId,
     this.className,
+    this.birthday,
+    this.fullName,
+    this.idStudent,
+    this.checkGender,
     this.countStudents,
   });
   final String countStudents;
+  final String checkGender;
+  final String idStudent;
+  final String fullName;
   final String classRoomId;
+  final String birthday;
   final String className;
   @override
-  _AddStudentState createState() => _AddStudentState();
+  _EditStudentState createState() => _EditStudentState();
 }
 
-class _AddStudentState extends State<AddStudent> {
+class _EditStudentState extends State<EditStudent> {
   final _formKey = GlobalKey<FormState>();
   int gender;
-  TextEditingController fullName = new TextEditingController();
-  TextEditingController birthday = new TextEditingController();
-  // TextEditingController birthday = new TextEditingController();
-  Future addStudentRoom() async {
+  TextEditingController fullName;
+  TextEditingController birthday;
+  Future editStudentRoom() async {
     final token = await Prefs.getPref(ACCESS_TOKEN);
     Map mapdata = <String, dynamic>{
       "fullName": fullName.text,
-      "gender": gender == null ? '0' : gender,
+      "gender": gender == null ? widget.checkGender : gender,
       "birthday": birthday.text,
       "classroomId": widget.classRoomId,
+      "id": widget.idStudent
     };
     //log data in form
     // ignore: unnecessary_brace_in_string_interps
     print("JSON DATA : ${mapdata}");
-    final reponse = await http.Client()
-        .post(AZO_STUDENT_SAVE, body: jsonEncode(mapdata), headers: {
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-      HttpHeaders.authorizationHeader: "Bearer $token",
-    });
+    final reponse = await http.Client().post(
+      AZO_STUDENT_UPDATE + '?id=' + widget.idStudent,
+      body: jsonEncode(mapdata),
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
 
     var data = jsonDecode(reponse.body);
     if (data['success'] == 1) {
@@ -63,7 +75,7 @@ class _AddStudentState extends State<AddStudent> {
         ),
       );
       return Fluttertoast.showToast(
-          msg: 'Thêm học sinh thành công ',
+          msg: 'Sửa học sinh thành công ',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
@@ -72,7 +84,7 @@ class _AddStudentState extends State<AddStudent> {
           fontSize: 16.0);
     } else {
       return Fluttertoast.showToast(
-          msg: 'Thêm học sinh không thành công',
+          msg: 'Sửa học sinh không thành công',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
@@ -84,7 +96,7 @@ class _AddStudentState extends State<AddStudent> {
 
   void initState() {
     super.initState();
-    gender = 0;
+    gender = null;
   }
 
   setgender(int val) {
@@ -100,7 +112,7 @@ class _AddStudentState extends State<AddStudent> {
       backgroundColor: Color(0xFFecf0f5),
       appBar: AppBar(
         title: Text(
-          'Thêm học sinh',
+          'Sửa học sinh',
           style: TextStyle(fontSize: 18),
         ),
       ),
@@ -116,7 +128,7 @@ class _AddStudentState extends State<AddStudent> {
                     child: Padding(
                       padding: EdgeInsets.all(15),
                       child: Text(
-                        'Tạo học sinh',
+                        'Sửa học sinh',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
@@ -125,12 +137,10 @@ class _AddStudentState extends State<AddStudent> {
                     ),
                     color: Color(0xff00a7d0),
                   ),
-
-                  // InputDatePickerFormField(firstDate: firstDate, lastDate: lastDate);
-
                   Container(
                     child: TextFormField(
-                      controller: fullName,
+                      controller: fullName =
+                          new TextEditingController(text: widget.fullName),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Họ tên học sinh*',
@@ -150,7 +160,8 @@ class _AddStudentState extends State<AddStudent> {
                   Container(
                     child: Container(
                       child: DateTimePicker(
-                        controller: birthday,
+                        controller: birthday =
+                            new TextEditingController(text: widget.birthday),
                         decoration: InputDecoration(
                           suffixIcon: Icon(Icons.event),
                           border: OutlineInputBorder(),
@@ -229,7 +240,7 @@ class _AddStudentState extends State<AddStudent> {
                             // Validate will return true if the form is valid, or false if
                             // the form is invalid.
                             if (_formKey.currentState.validate()) {
-                              addStudentRoom();
+                              editStudentRoom();
                               // Navigator.push(
                               //   context,
                               //   MaterialPageRoute(

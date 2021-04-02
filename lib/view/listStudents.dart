@@ -2,6 +2,7 @@ import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:azt/view/addStudents.dart';
 import 'package:azt/view/detailClass_teacher.dart';
+import 'package:azt/view/editStudents.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
@@ -15,9 +16,11 @@ class ListStudents extends StatefulWidget {
   ListStudents({
     this.id,
     this.className,
+    this.countStudents,
   });
   final String id;
   final String className;
+  final String countStudents;
   @override
   _ListStudentsState createState() => _ListStudentsState();
 }
@@ -40,27 +43,18 @@ class _ListStudentsState extends State<ListStudents> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // ignore: deprecated_member_use
-                // FlatButton.icon(
-                //   onPressed: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //           builder: (context) => DetailClass(
-                //               id: widget.id, className: widget.className)),
-                //     );
-                //   },
-                //   label: Text('Quay lại'),
-                //   icon: Icon(Icons.keyboard_arrow_left),
-                // ),
                 IconButton(
                   icon: Icon(Icons.keyboard_arrow_left),
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DetailClass(
-                              id: widget.id, className: widget.className)),
+                        builder: (context) => DetailClass(
+                          id: widget.id,
+                          className: widget.className,
+                          countStudents: widget.countStudents,
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -81,8 +75,12 @@ class _ListStudentsState extends State<ListStudents> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AddStudent(
-                        classRoomId: widget.id, className: widget.className)),
+                  builder: (context) => AddStudent(
+                    classRoomId: widget.id,
+                    className: widget.className,
+                    countStudents: widget.countStudents,
+                  ),
+                ),
               );
             },
             child: Container(
@@ -244,10 +242,25 @@ class _ListStudentsState extends State<ListStudents> {
                                                       context,
                                                       MaterialPageRoute(
                                                         builder: (context) =>
-                                                            ListStudents(
-                                                                id: widget.id,
-                                                                className: widget
-                                                                    .className),
+                                                            EditStudent(
+                                                          countStudents: widget
+                                                              .countStudents,
+                                                          checkGender:
+                                                              item['gender']
+                                                                  .toString(),
+                                                          idStudent: item['id']
+                                                              .toString(),
+                                                          classRoomId:
+                                                              widget.id,
+                                                          fullName:
+                                                              item['fullName']
+                                                                  .toString(),
+                                                          className:
+                                                              widget.className,
+                                                          birthday:
+                                                              item['birthday']
+                                                                  .toString(),
+                                                        ),
                                                       ),
                                                     );
                                                   },
@@ -286,7 +299,9 @@ class _ListStudentsState extends State<ListStudents> {
                                                                         item['classroomId']
                                                                             .toString(),
                                                                         widget
-                                                                            .className);
+                                                                            .className,
+                                                                        widget
+                                                                            .countStudents);
                                                                   },
                                                                 );
                                                               },

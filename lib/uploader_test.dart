@@ -59,8 +59,8 @@ class UploadItem {
 
   bool isCompleted() =>
       this.status == UploadTaskStatus.canceled ||
-          this.status == UploadTaskStatus.complete ||
-          this.status == UploadTaskStatus.failed;
+      this.status == UploadTaskStatus.complete ||
+      this.status == UploadTaskStatus.failed;
 }
 
 enum MediaType { Image, Video }
@@ -135,16 +135,19 @@ class _UploadScreenState extends State<UploadScreen> {
             Container(height: 20.0),
             Text(
               'multipart/form-data uploads',
+              // ignore: deprecated_member_use
               style: Theme.of(context).textTheme.subhead,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                // ignore: deprecated_member_use
                 RaisedButton(
                   onPressed: () => getImage(binary: false),
                   child: Text("upload image"),
                 ),
                 Container(width: 20.0),
+                // ignore: deprecated_member_use
                 RaisedButton(
                   onPressed: null,
                   child: Text("upload video"),
@@ -154,17 +157,20 @@ class _UploadScreenState extends State<UploadScreen> {
             Container(height: 20.0),
             Text(
               'binary uploads',
+              // ignore: deprecated_member_use
               style: Theme.of(context).textTheme.subhead,
             ),
             Text('this will upload selected files as binary'),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                // ignore: deprecated_member_use
                 RaisedButton(
                   onPressed: () => getImage(binary: true),
                   child: Text("upload image"),
                 ),
                 Container(width: 20.0),
+                // ignore: deprecated_member_use
                 RaisedButton(
                   onPressed: null,
                   child: Text("upload video"),
@@ -205,7 +211,7 @@ class _UploadScreenState extends State<UploadScreen> {
   }
 
   Future getImage({@required bool binary}) async {
-
+    // ignore: deprecated_member_use
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
@@ -222,35 +228,33 @@ class _UploadScreenState extends State<UploadScreen> {
 
       var taskId = binary
           ? await uploader.enqueueBinary(
-        url: url,
-        file: fileItem,
-        method: UploadMethod.POST,
-        tag: tag,
-        showNotification: true,
-      )
+              url: url,
+              file: fileItem,
+              method: UploadMethod.POST,
+              tag: tag,
+              showNotification: true,
+            )
           : await uploader.enqueue(
-        url: url,
-        data: {"name": "john"},
-        files: [fileItem],
-        method: UploadMethod.POST,
-        tag: tag,
-        showNotification: true,
-      );
+              url: url,
+              data: {"name": "john"},
+              files: [fileItem],
+              method: UploadMethod.POST,
+              tag: tag,
+              showNotification: true,
+            );
 
       setState(() {
         _tasks.putIfAbsent(
             tag,
-                () => UploadItem(
-              id: taskId,
-              tag: tag,
-              type: MediaType.Video,
-              status: UploadTaskStatus.enqueued,
-            ));
+            () => UploadItem(
+                  id: taskId,
+                  tag: tag,
+                  type: MediaType.Video,
+                  status: UploadTaskStatus.enqueued,
+                ));
       });
     }
   }
-
-
 
   Future cancelUpload(String id) async {
     await uploader.cancel(taskId: id);
@@ -277,13 +281,13 @@ class UploadItemView extends StatelessWidget {
         : Container();
     final buttonWidget = item.status == UploadTaskStatus.running
         ? Container(
-      height: 50,
-      width: 50,
-      child: IconButton(
-        icon: Icon(Icons.cancel),
-        onPressed: () => onCancel(item.id),
-      ),
-    )
+            height: 50,
+            width: 50,
+            child: IconButton(
+              icon: Icon(Icons.cancel),
+              onPressed: () => onCancel(item.id),
+            ),
+          )
         : Container();
     return Row(
       children: <Widget>[

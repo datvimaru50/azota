@@ -38,46 +38,54 @@ class _AddExersiceState extends State<AddExersice> {
 
   Future addExersice() async {
     final token = await Prefs.getPref(ACCESS_TOKEN);
-
-    Map mapdata = <String, dynamic>{
+    final textContent = await content.getText();
+    Map mapdata = <String, String>{
+      "name": "Bài Tập ",
+      "content": textContent,
       "classroomId": widget.id,
       "deadline": deadline.text,
-      "content": "<p>content.editorController.</p>",
-      "name": "Bài Tập"
     };
+    //log data in form
     // ignore: unnecessary_brace_in_string_interps
     print("JSON DATA : ${mapdata}");
-    final reponse = await http.Client()
-        .post(AZO_CLASSROOM_UPDATE, body: jsonEncode(mapdata), headers: {
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-      HttpHeaders.authorizationHeader: "Bearer $token",
-    });
-
+    final reponse = await http.Client().post(
+      AZO_HOMEWORK_SAVE,
+      body: jsonEncode(mapdata),
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      },
+    );
     var data = jsonDecode(reponse.body);
-    final dataClass = data['data'];
     if (data['success'] == 1) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => DetailClass(
-            id: dataClass['id'].toString(),
-            countStudents: dataClass['countStudents'].toString(),
-            className: dataClass['name'].toString(),
-            homeworks: dataClass['homeworks'].toString(),
+            id: widget.id,
+            countStudents: widget.countStudents,
+            className: widget.className,
+            homeworks: widget.homeworks,
           ),
         ),
       );
       return Fluttertoast.showToast(
-          msg: 'Tạo thành công lớp học',
+          msg: 'Tạo bài tập thành công',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
-          backgroundColor: Colors.green[900],
+          backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 16.0);
     } else {
-      // ignore: unnecessary_brace_in_string_interps
-      return print("DATA: ${data}");
+      return Fluttertoast.showToast(
+          msg: 'Tạo bài tập không thành công',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 
@@ -85,14 +93,32 @@ class _AddExersiceState extends State<AddExersice> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFecf0f5),
-      appBar: AppBar(
-        title: Text(
-          'Thêm bài tập',
-          style: TextStyle(fontSize: 18),
-        ),
-      ),
       body: ListView(
         children: [
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.keyboard_arrow_left),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailClass(
+                          id: widget.id,
+                          countStudents: widget.countStudents,
+                          className: widget.className,
+                          homeworks: widget.homeworks,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            margin: EdgeInsets.only(left: 10, right: 10),
+          ),
           Form(
             key: _formKey,
             child: Container(
@@ -158,8 +184,17 @@ class _AddExersiceState extends State<AddExersice> {
                             primary: Colors.white,
                           ),
                           onPressed: () {
-                            // Validate will return true if the form is valid, or false if
-                            // the form is invalid.
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailClass(
+                                  id: widget.id,
+                                  countStudents: widget.countStudents,
+                                  className: widget.className,
+                                  homeworks: widget.homeworks,
+                                ),
+                              ),
+                            );
                           },
                           child: Text('HỦY',
                               style: TextStyle(color: Colors.black)),

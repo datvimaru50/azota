@@ -31,6 +31,7 @@ const AZO_ANSWER_INFO = "$AZT_DEV_SERVER/Answer/GetObjsByHomework";
 const AZO_STUDENT_SAVE = "$AZT_DEV_SERVER/Student/SaveObj";
 const AZO_HOMEWORK_SAVE = "$AZT_DEV_SERVER/Homework/SaveObj";
 const AZO_CLASSROOM_UPDATE = "$AZT_DEV_SERVER/Classroom/UpdateObj";
+const AZO_STUDENT_UPDATE = "$AZT_DEV_SERVER/Student/UpdateObj";
 
 const AZO_ADDCLASS_INFO = "$AZT_DEV_SERVER/Classroom/SaveObj";
 
