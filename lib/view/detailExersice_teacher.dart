@@ -127,8 +127,8 @@ class _DetailExersiceState extends State<DetailExersice> {
                               children: [
                                 Text('Ngầy nộp bài giảm dần '),
                                 FlutterSwitch(
-                                  width: 45.0,
-                                  height: 20.0,
+                                  width: 47.0,
+                                  height: 22.0,
                                   valueFontSize: 13.0,
                                   toggleSize: 13.0,
                                   value: submitDate,
@@ -150,8 +150,8 @@ class _DetailExersiceState extends State<DetailExersice> {
                               children: [
                                 Text('Chỉ hiện những bài chưa chấm '),
                                 FlutterSwitch(
-                                  width: 45.0,
-                                  height: 20.0,
+                                  width: 47.0,
+                                  height: 22.0,
                                   valueFontSize: 13.0,
                                   toggleSize: 13.0,
                                   value: status,

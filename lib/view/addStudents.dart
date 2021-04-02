@@ -19,8 +19,10 @@ class AddStudent extends StatefulWidget {
     this.classRoomId,
     this.className,
     this.countStudents,
+    this.homeworkId,
   });
   final String countStudents;
+  final String homeworkId;
   final String classRoomId;
   final String className;
   @override
@@ -59,6 +61,7 @@ class _AddStudentState extends State<AddStudent> {
             id: widget.classRoomId,
             className: widget.className,
             countStudents: widget.countStudents,
+            homeworkId: widget.homeworkId,
           ),
         ),
       );
@@ -254,6 +257,7 @@ class _AddStudentState extends State<AddStudent> {
                                   id: widget.classRoomId,
                                   className: widget.className,
                                   countStudents: widget.countStudents,
+                                  homeworkId: widget.homeworkId,
                                 ),
                               ),
                             );

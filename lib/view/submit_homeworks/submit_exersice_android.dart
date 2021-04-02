@@ -7,15 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:azt/controller/upload_controller.dart';
 import 'package:mime/mime.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:flutter_html/flutter_html.dart';
-
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 
 typedef void OnDownloadProgressCallback(int receivedBytes, int totalBytes);
 typedef void OnUploadProgressCallback(int sentBytes, int totalBytes);
@@ -64,6 +60,7 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
         textColor: Colors.white,
         fontSize: 16.0);
   }
+
   Future<void> _showErrorToast(String errMsg) async {
     return Fluttertoast.showToast(
       msg: errMsg,
@@ -76,7 +73,7 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
     );
   }
 
-  Future<void> shootImage() async{
+  Future<void> shootImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
 
     setState(() {
@@ -89,42 +86,42 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
     });
   }
 
-  Future<void> loadFiles() async{
-    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.custom, allowedExtensions: ['mp3', 'mp4', 'mov', 'jpg', 'png', 'jpeg'],);
+  Future<void> loadFiles() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['mp3', 'mp4', 'mov', 'jpg', 'png', 'jpeg'],
+    );
 
-    if(result != null) {
+    if (result != null) {
       print('chon file thanh cong');
       // List<File> files = result.paths.map((path) => File(path)).toList();
       setState(() {
-        fileNames = result.names.map((name)=> name).toList();
-        filePaths = result.paths.map((path)=> path).toList();
+        fileNames = result.names.map((name) => name).toList();
+        filePaths = result.paths.map((path) => path).toList();
       });
     } else {
       print('User không chọn file!');
     }
-
   }
-
 
   // Build grid of photos
   Widget buildGridView() {
     if (_camImagesPath.length != 0)
       return Container(
-        padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-        child: GridView.count(
-          shrinkWrap: true,
-          crossAxisCount: 3,
-          mainAxisSpacing: 3,
-          crossAxisSpacing: 3,
-          children: List.generate(_camImagesPath.length, (index) {
-            return Image.file(File(_camImagesPath[index]));
-          }),
-        )
-      );
+          padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+          child: GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 3,
+            mainAxisSpacing: 3,
+            crossAxisSpacing: 3,
+            children: List.generate(_camImagesPath.length, (index) {
+              return Image.file(File(_camImagesPath[index]));
+            }),
+          ));
     else
       return Container(color: Colors.white);
   }
-
 
   // Build grid of photos
   Widget buildGridViewFiles() {
@@ -133,7 +130,7 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
           child: Column(
-             children: List.generate(fileNames.length, (index) {
+            children: List.generate(fileNames.length, (index) {
               return Row(
                 children: [
                   Icon(
@@ -142,18 +139,17 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
                   ),
                   Flexible(
                     child: Container(
-                      child: Text(fileNames[index],
-                        style: TextStyle(fontStyle: FontStyle.italic),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,)
-                    ),
+                        child: Text(
+                      fileNames[index],
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )),
                   )
-
                 ],
               );
             }),
-          )
-      );
+          ));
     else
       return Container(color: Colors.white);
   }
@@ -163,7 +159,8 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
     return httpClient;
   }
 
-  Future uploadSingleFile(String filePath, OnUploadProgressCallback onUploadProgress) async {
+  Future uploadSingleFile(
+      String filePath, OnUploadProgressCallback onUploadProgress) async {
     var fileStream = File(filePath).openRead();
     var fileName = filePath.split('/').last;
     int totalByteLength = File(filePath).lengthSync();
@@ -177,7 +174,8 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
 
     final request = await httpClient.putUrl(Uri.parse(uploadInfor.upload_url));
 
-    request.headers.set(HttpHeaders.contentTypeHeader, lookupMimeType(filePath));
+    request.headers
+        .set(HttpHeaders.contentTypeHeader, lookupMimeType(filePath));
     request.headers.add("x-amz-acl", 'public-read');
     request.contentLength = totalByteLength;
 
@@ -233,7 +231,9 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
       setState(() {
         submitStatus = SubmitStatus.submitting;
       });
-      _camImagesPath.length != 0 ? await uploadAllImage() : print('no image selected');
+      _camImagesPath.length != 0
+          ? await uploadAllImage()
+          : print('no image selected');
       filePaths != null ? await uploadAllFile() : print('no file selected');
       String successStr = await UploadController.saveUploadInfo({
         "files": jsonEncode(imgUploadedFiles),
@@ -286,7 +286,6 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
     Intl.defaultLocale = 'vi_VN';
     initializeDateFormatting();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -457,21 +456,20 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
                                 ],
                               )
                             : Container(),
-
                     buildGridView(),
-
                     buildGridViewFiles(),
-
-                    _camImagesPath.length == 0 && filePaths == null ? Container()
+                    _camImagesPath.length == 0 && filePaths == null
+                        ? Container()
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ElevatedButton.icon(
                                 icon: Icon(Icons.file_upload),
                                 label: Text('NỘP BÀI'),
-                                onPressed: submitStatus == SubmitStatus.submitting
-                                    ? null
-                                    : handleSubmit,
+                                onPressed:
+                                    submitStatus == SubmitStatus.submitting
+                                        ? null
+                                        : handleSubmit,
                               ),
                               Container(
                                 margin: EdgeInsets.only(left: 10),
@@ -481,16 +479,17 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
                                     ),
                                     icon: Icon(Icons.refresh),
                                     label: Text('LÀM LẠI'),
-                                    onPressed: submitStatus == SubmitStatus.submitting ?
-                                                null :
-                                    (){
-                                      setState(() {
-                                        _camImagesPath.clear();
-                                        filePaths = null;
-                                        submitStatus =
-                                            SubmitStatus.notSubmitted;
-                                      });
-                                    }),
+                                    onPressed:
+                                        submitStatus == SubmitStatus.submitting
+                                            ? null
+                                            : () {
+                                                setState(() {
+                                                  _camImagesPath.clear();
+                                                  filePaths = null;
+                                                  submitStatus =
+                                                      SubmitStatus.notSubmitted;
+                                                });
+                                              }),
                               )
                             ],
                           ),

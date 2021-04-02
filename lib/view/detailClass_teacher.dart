@@ -138,9 +138,11 @@ class _DetailClassState extends State<DetailClass> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ListStudents(
-                                        id: widget.id,
-                                        className: widget.className,
-                                        countStudents: widget.countStudents),
+                                      id: widget.id,
+                                      className: widget.className,
+                                      countStudents: widget.countStudents,
+                                      homeworkId: widget.homeworkId,
+                                    ),
                                   ),
                                 );
                               },
@@ -429,8 +431,8 @@ class _DetailClassState extends State<DetailClass> {
                   children: [
                     Container(
                       child: FlutterSwitch(
-                        width: 45.0,
-                        height: 20.0,
+                        width: 47.0,
+                        height: 22.0,
                         valueFontSize: 13.0,
                         toggleSize: 13.0,
                         value: status,

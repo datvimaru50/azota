@@ -24,6 +24,7 @@ class EditStudent extends StatefulWidget {
     this.idStudent,
     this.checkGender,
     this.countStudents,
+    this.homeworkId,
   });
   final String countStudents;
   final String checkGender;
@@ -32,6 +33,7 @@ class EditStudent extends StatefulWidget {
   final String classRoomId;
   final String birthday;
   final String className;
+  final String homeworkId;
   @override
   _EditStudentState createState() => _EditStudentState();
 }
@@ -71,6 +73,7 @@ class _EditStudentState extends State<EditStudent> {
             id: widget.classRoomId,
             className: widget.className,
             countStudents: widget.countStudents,
+            homeworkId: widget.homeworkId,
           ),
         ),
       );
@@ -265,6 +268,7 @@ class _EditStudentState extends State<EditStudent> {
                                   id: widget.classRoomId,
                                   className: widget.className,
                                   countStudents: widget.countStudents,
+                                  homeworkId: widget.homeworkId,
                                 ),
                               ),
                             );
@@ -275,7 +279,11 @@ class _EditStudentState extends State<EditStudent> {
                       ],
                     ),
                     margin: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 10),
+                      left: 20,
+                      right: 20,
+                      top: 10,
+                      bottom: 10,
+                    ),
                   )
                 ],
               ),

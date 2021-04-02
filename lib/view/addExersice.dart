@@ -66,6 +66,7 @@ class _AddExersiceState extends State<AddExersice> {
             countStudents: widget.countStudents,
             className: widget.className,
             homeworks: widget.homeworks,
+            homeworkId: widget.homeworkId,
           ),
         ),
       );
@@ -192,6 +193,7 @@ class _AddExersiceState extends State<AddExersice> {
                                   countStudents: widget.countStudents,
                                   className: widget.className,
                                   homeworks: widget.homeworks,
+                                  homeworkId: widget.homeworkId,
                                 ),
                               ),
                             );

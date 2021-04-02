@@ -96,7 +96,13 @@ class ClassroomController extends ControllerMVC {
   }
 
   static Future deleteStudent(
-      String id, context, classroomId, className, countStudents) async {
+    String id,
+    context,
+    classroomId,
+    className,
+    countStudents,
+    homeworkId,
+  ) async {
     final token = await Prefs.getPref(ACCESS_TOKEN);
     final response =
         await http.Client().get(AZO_DELETESTUDENT_INFO + '?id=' + id, headers: {
@@ -114,6 +120,7 @@ class ClassroomController extends ControllerMVC {
                   id: classroomId,
                   className: className,
                   countStudents: countStudents,
+                  homeworkId: homeworkId,
                 ),
               ),
               (Route<dynamic> route) => false);
