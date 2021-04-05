@@ -1,6 +1,7 @@
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
 void main() {
@@ -92,14 +93,94 @@ class _DetailExersiceState extends State<DetailExersice> {
                           splashColor: Colors.red,
                           color: Colors.lightBlueAccent,
                         ),
-                        GestureDetector(
-                          child: Container(
-                            child: Icon(Icons.more_vert),
-                            padding: EdgeInsets.only(top: 5, bottom: 5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              color: Colors.white,
-                            ),
+                        Container(
+                          child: IconButton(
+                            icon: Icon(Icons.more_vert),
+                            onPressed: () {
+                              showAnimatedDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return ClassicGeneralDialogWidget(
+                                    actions: [
+                                      Container(
+                                        width: 300,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () {},
+                                              child: Container(
+                                                // color: Colors.black,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  'Sửa',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                showAnimatedDialog(
+                                                  context: context,
+                                                  barrierDismissible: true,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return ClassicGeneralDialogWidget(
+                                                      titleText:
+                                                          'Bạn có chắc chắn',
+                                                      actions: [
+                                                        // ignore: deprecated_member_use
+                                                        FlatButton(
+                                                          onPressed: () {},
+                                                          child: Text('Xóa'),
+                                                          color: Colors.red,
+                                                        ),
+                                                        // ignore: deprecated_member_use
+                                                        FlatButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: Text('Hủy'),
+                                                          color: Colors.black38,
+                                                        )
+                                                      ],
+                                                    );
+                                                  },
+                                                  animationType:
+                                                      DialogTransitionType.size,
+                                                  curve: Curves.fastOutSlowIn,
+                                                  duration:
+                                                      Duration(seconds: 1),
+                                                );
+                                              },
+                                              child: Container(
+                                                // color: Colors.black,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  'Xóa',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                },
+                                animationType: DialogTransitionType.size,
+                                curve: Curves.fastOutSlowIn,
+                                duration: Duration(seconds: 1),
+                              );
+                            },
                           ),
                         ),
                       ],

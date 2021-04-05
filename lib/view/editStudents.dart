@@ -1,13 +1,7 @@
-import 'dart:io';
-import 'dart:async';
-import 'dart:convert';
-import 'package:azt/config/global.dart';
+import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/view/listStudents.dart';
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html_editor_enhanced/utils/shims/dart_ui_real.dart';
-import 'package:http/http.dart' as http;
-import 'package:azt/config/connect.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -43,59 +37,6 @@ class _EditStudentState extends State<EditStudent> {
   int gender;
   TextEditingController fullName;
   TextEditingController birthday;
-  Future editStudentRoom() async {
-    final token = await Prefs.getPref(ACCESS_TOKEN);
-    Map mapdata = <String, dynamic>{
-      "fullName": fullName.text,
-      "gender": gender == null ? widget.checkGender : gender,
-      "birthday": birthday.text,
-      "classroomId": widget.classRoomId,
-      "id": widget.idStudent
-    };
-    //log data in form
-    // ignore: unnecessary_brace_in_string_interps
-    print("JSON DATA : ${mapdata}");
-    final reponse = await http.Client().post(
-      AZO_STUDENT_UPDATE + '?id=' + widget.idStudent,
-      body: jsonEncode(mapdata),
-      headers: {
-        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-        HttpHeaders.authorizationHeader: "Bearer $token",
-      },
-    );
-
-    var data = jsonDecode(reponse.body);
-    if (data['success'] == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ListStudents(
-            id: widget.classRoomId,
-            className: widget.className,
-            countStudents: widget.countStudents,
-            homeworkId: widget.homeworkId,
-          ),
-        ),
-      );
-      return Fluttertoast.showToast(
-          msg: 'Sửa học sinh thành công ',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    } else {
-      return Fluttertoast.showToast(
-          msg: 'Sửa học sinh không thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
-  }
 
   void initState() {
     super.initState();
@@ -243,13 +184,17 @@ class _EditStudentState extends State<EditStudent> {
                             // Validate will return true if the form is valid, or false if
                             // the form is invalid.
                             if (_formKey.currentState.validate()) {
-                              editStudentRoom();
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => DetailExersice(),
-                              //   ),
-                              // );
+                              ClassroomController.editStudentRoom(
+                                  fullName.text,
+                                  gender,
+                                  widget.checkGender,
+                                  birthday,
+                                  widget.classRoomId,
+                                  widget.idStudent,
+                                  context,
+                                  widget.className,
+                                  widget.countStudents,
+                                  widget.homeworkId);
                             }
                           },
                           child: Text(

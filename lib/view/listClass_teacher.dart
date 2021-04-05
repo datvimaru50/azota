@@ -18,7 +18,6 @@ class ListClass extends StatefulWidget {
 
 class _ListClassState extends State<ListClass> {
   Future<ClassroomHashIdInfo> classroomHashIdInfo;
-  Future<ClassroomHashIdInfo> deleteClassroom;
   @override
   void initState() {
     super.initState();
@@ -81,9 +80,8 @@ class _ListClassState extends State<ListClass> {
                                               onPressed: () {
                                                 setState(
                                                   () {
-                                                    deleteClassroom =
-                                                        ClassroomController
-                                                            .deleteClassroom(
+                                                    ClassroomController
+                                                        .deleteClassroom(
                                                       item['id'].toString(),
                                                       context,
                                                     );
