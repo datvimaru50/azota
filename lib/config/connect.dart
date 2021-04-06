@@ -38,6 +38,7 @@ const AZO_ADDCLASS_INFO = "$AZT_DEV_SERVER/Classroom/SaveObj";
 
 /* ERROR MESSAGE */
 const ERR_INVALID_LOGIN_INFO = "Sai tên đăng nhập hoặc mật khẩu!";
+const ERR_INVALID_REGISTER_INFO = "Số điện thoại đã tồn tại";
 const ERR_SERVER_CONNECT = "Kết nối tới máy chủ bị lỗi!";
 const ERR_BAD_REQUEST = "Dữ liệu gửi lên không hợp lệ!";
 

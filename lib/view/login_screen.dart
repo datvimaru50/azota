@@ -3,7 +3,7 @@ import 'package:azt/config/connect.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/view/notificationScreen.dart';
-// import 'package:azt/view/register_screen.dart';
+import 'package:azt/view/register_screen.dart';
 import 'dart:io';
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:azt/controller/login_controller.dart';
@@ -320,6 +320,18 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         ),
                       ),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => RegisterScreen()),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text('Đăng ký tài khoản'),
+                        ),
+                      )
                     ],
                   ),
                   margin:
