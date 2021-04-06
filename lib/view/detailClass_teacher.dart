@@ -431,10 +431,10 @@ class _DetailClassState extends State<DetailClass> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => DetailExersice(
-                                        id: widget.id,
-                                        homeworkId: widget.homeworkId,
-                                        exerciseId:  item['id'].toString()
-                                      ),
+                                          // content: item['content'].toString(),
+                                          id: widget.id,
+                                          homeworkId: widget.homeworkId,
+                                          exerciseId: item['id'].toString()),
                                     ),
                                   );
                                 },
@@ -537,7 +537,10 @@ class _DetailClassState extends State<DetailClass> {
                   } else if (snapshot.hasError) {
                     return Text("${snapshot.error}");
                   }
-                  return Container();
+                  return Container(
+                    margin: EdgeInsets.all(20),
+                    child: CircularProgressIndicator(),
+                  );
                 },
               ),
             ],

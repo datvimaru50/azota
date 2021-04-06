@@ -38,15 +38,16 @@ class _DetailExersiceState extends State<DetailExersice> {
   Future<AnswerHashIdInfo> submitedStudents;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     Intl.defaultLocale = 'vi_VN';
     initializeDateFormatting();
     submitedStudents = ClassroomController.answerStudent(widget.exerciseId);
-    classroomHashIdInfo = ClassroomController.studentClassroom(widget.id); // list all student
+    classroomHashIdInfo =
+        ClassroomController.studentClassroom(widget.id); // list all student
   }
 
-  Future<void> _showMyDialog(int studentId){
+  Future<void> _showMyDialog(int studentId) {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -60,7 +61,6 @@ class _DetailExersiceState extends State<DetailExersice> {
                   margin: EdgeInsets.only(bottom: 10),
                   child: Text('Nhập lý do yêu cầu nộp lại'),
                 ),
-
                 Form(
                   key: _formKey,
                   child: Column(
@@ -72,8 +72,7 @@ class _DetailExersiceState extends State<DetailExersice> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           hintText: 'Ghi chú',
-                          prefixIcon:
-                          Icon(Icons.phone_android_outlined),
+                          prefixIcon: Icon(Icons.phone_android_outlined),
                         ),
                         //validator: (value) => validatePhone(value),
                       ),
@@ -95,10 +94,11 @@ class _DetailExersiceState extends State<DetailExersice> {
                 'Xác nhận',
                 style: TextStyle(color: Colors.red),
               ),
-              onPressed: (){
+              onPressed: () {
                 print('nop lai $studentId');
 
-                HomeworkController.requestResubmitAnswer({"id": studentId.toString(), "resendNote": noteText.text});
+                HomeworkController.requestResubmitAnswer(
+                    {"id": studentId.toString(), "resendNote": noteText.text});
               },
             ),
           ],
@@ -107,10 +107,7 @@ class _DetailExersiceState extends State<DetailExersice> {
     );
   }
 
-  void markExercise(){
-
-  }
-  
+  void markExercise() {}
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -335,158 +332,202 @@ class _DetailExersiceState extends State<DetailExersice> {
                               ),
                             ),
                           ),
-
                           FutureBuilder<AnswerHashIdInfo>(
-                            future: submitedStudents,
-                            builder: (context, snapshot) {
-                              if(snapshot.hasData) {
-                                // Xử lý if-else
-                                var submitteData = snapshot.data.dataAnswer;
-                                print('lalalala:::::: '+snapshot.data.dataAnswer.length.toString());
+                              future: submitedStudents,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  // Xử lý if-else
+                                  var submitteData = snapshot.data.dataAnswer;
+                                  print('lalalala:::::: ' +
+                                      snapshot.data.dataAnswer.length
+                                          .toString());
 
+                                  SubmitStatus checkSubmitStatus(
+                                      int studentId) {
+                                    var result = SubmitStatus.notSubmitted;
 
-                                SubmitStatus checkSubmitStatus(int studentId) {
-                                  var result = SubmitStatus.notSubmitted;
+                                    if (submitteData.isEmpty) {
+                                      return result;
+                                    }
 
-                                  if (submitteData.isEmpty){
+                                    for (var i = 0;
+                                        i < submitteData.length;
+                                        i++) {
+                                      if (submitteData
+                                              .elementAt(i)["studentId"] ==
+                                          studentId) {
+                                        if (submitteData
+                                                .elementAt(i)["confirmedAt"] !=
+                                            null) {
+                                          result = SubmitStatus.notMarked;
+                                        } else {
+                                          result = SubmitStatus.marked;
+                                        }
+
+                                        break;
+                                      }
+                                    }
                                     return result;
                                   }
 
-                                  for (var i=0; i<submitteData.length; i++) {
-                                    if(submitteData.elementAt(i)["studentId"] == studentId){
-
-                                      if(submitteData.elementAt(i)["confirmedAt"] != null){
-                                        result = SubmitStatus.notMarked;
-                                      } else {
-                                        result = SubmitStatus.marked;
+                                  return FutureBuilder<ClassroomHashIdInfo>(
+                                    future: classroomHashIdInfo,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        return Column(
+                                          children: [
+                                            ...snapshot.data.data.map(
+                                              (dynamic item) => Column(
+                                                children: [
+                                                  Container(
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Container(
+                                                              child: Column(
+                                                                children: [
+                                                                  Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topLeft,
+                                                                    child: Text(
+                                                                        item[
+                                                                            'fullName']),
+                                                                  ),
+                                                                  checkSubmitStatus(item[
+                                                                              "id"]) ==
+                                                                          SubmitStatus
+                                                                              .notSubmitted
+                                                                      ? Container()
+                                                                      : Container(
+                                                                          alignment:
+                                                                              Alignment.topLeft,
+                                                                          child:
+                                                                              Text(
+                                                                            DateTimeFormat.relative(DateTime.parse(item["updatedAt"]),
+                                                                                relativeTo: DateTime.now(),
+                                                                                levelOfPrecision: 1,
+                                                                                appendIfAfter: ' ago',
+                                                                                abbr: true),
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: Colors.black26,
+                                                                            ),
+                                                                          ),
+                                                                          margin:
+                                                                              EdgeInsets.only(
+                                                                            top:
+                                                                                3,
+                                                                            bottom:
+                                                                                3,
+                                                                          ),
+                                                                        ),
+                                                                  checkSubmitStatus(item[
+                                                                              "id"]) ==
+                                                                          SubmitStatus
+                                                                              .notSubmitted
+                                                                      ? Container()
+                                                                      : GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            _showMyDialog(item["id"]);
+                                                                          },
+                                                                          child:
+                                                                              Container(
+                                                                            alignment:
+                                                                                Alignment.topLeft,
+                                                                            child:
+                                                                                Text(
+                                                                              'Yêu cầu nộp lại',
+                                                                              style: TextStyle(
+                                                                                color: Colors.blue,
+                                                                              ),
+                                                                            ),
+                                                                          ))
+                                                                ],
+                                                              ),
+                                                              width: 120,
+                                                            ),
+                                                            ElevatedButton(
+                                                              child: Text(checkSubmitStatus(
+                                                                          item[
+                                                                              "id"]) ==
+                                                                      SubmitStatus
+                                                                          .notSubmitted
+                                                                  ? 'Chưa nộp'
+                                                                  : checkSubmitStatus(item[
+                                                                              "id"]) ==
+                                                                          SubmitStatus
+                                                                              .notMarked
+                                                                      ? 'Chấm lại'
+                                                                      : 'Chấm bài'),
+                                                              onPressed: checkSubmitStatus(
+                                                                          item[
+                                                                              "id"]) ==
+                                                                      SubmitStatus
+                                                                          .notSubmitted
+                                                                  ? null
+                                                                  : checkSubmitStatus(item[
+                                                                              "id"]) ==
+                                                                          SubmitStatus
+                                                                              .notMarked
+                                                                      ? markExercise
+                                                                      : markExercise,
+                                                              style:
+                                                                  ElevatedButton
+                                                                      .styleFrom(
+                                                                primary: checkSubmitStatus(item[
+                                                                            "id"]) ==
+                                                                        SubmitStatus
+                                                                            .notMarked
+                                                                    ? Colors
+                                                                        .blueGrey
+                                                                        .shade800
+                                                                    : Colors
+                                                                        .yellow
+                                                                        .shade800,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      border: Border(
+                                                        bottom: BorderSide(
+                                                            width: 2.0,
+                                                            color:
+                                                                Colors.black12),
+                                                      ),
+                                                    ),
+                                                    padding: EdgeInsets.only(
+                                                        top: 10, bottom: 10),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                        // (BuildContext context, int index) {
+                                        //   return Text('snapshot.data.data[');
+                                        // };
+                                      } else if (snapshot.hasError) {
+                                        return Text("${snapshot.error}");
                                       }
 
-                                      break;
-                                    }
-                                  }
-                                  return result;
+                                      // By default, show a loading spinner.
+                                      return CircularProgressIndicator();
+                                    },
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text("${snapshot.error}");
                                 }
-
-                                return FutureBuilder<ClassroomHashIdInfo>(
-                                  future: classroomHashIdInfo,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return Column(
-                                        children: [
-                                          ...snapshot.data.data.map(
-                                                (dynamic item) => Column(
-
-                                              children: [
-                                                Container(
-                                                  child: Column(
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                        children: [
-                                                          Container(
-                                                            child: Column(
-                                                              children: [
-                                                                Container(
-                                                                  alignment: Alignment
-                                                                      .topLeft,
-                                                                  child: Text(item[
-                                                                  'fullName']),
-                                                                ),
-                                                                checkSubmitStatus(item["id"]) == SubmitStatus.notSubmitted? Container():
-                                                                Container(
-                                                                  alignment: Alignment
-                                                                      .topLeft,
-                                                                  child: Text(
-                                                                    DateTimeFormat.relative(
-                                                                        DateTime.parse(item["updatedAt"]),
-                                                                        relativeTo: DateTime.now(),
-                                                                        levelOfPrecision: 1,
-                                                                        appendIfAfter: ' ago',
-                                                                        abbr: true),
-
-                                                                    style: TextStyle(
-                                                                      color: Colors
-                                                                          .black26,
-                                                                    ),
-                                                                  ),
-                                                                  margin:
-                                                                  EdgeInsets.only(
-                                                                    top: 3,
-                                                                    bottom: 3,
-                                                                  ),
-                                                                ),
-
-                                                                checkSubmitStatus(item["id"]) == SubmitStatus.notSubmitted? Container():
-                                                                GestureDetector(
-                                                                    onTap: (){
-                                                                      _showMyDialog(item["id"]);
-                                                                    },
-                                                                  child: Container(
-                                                                    alignment: Alignment
-                                                                        .topLeft,
-                                                                    child: Text(
-                                                                      'Yêu cầu nộp lại',
-                                                                      style: TextStyle(
-                                                                        color:
-                                                                        Colors.blue,
-                                                                      ),
-                                                                    ),
-                                                                  )
-                                                                )
-
-                                                              ],
-                                                            ),
-                                                            width: 120,
-                                                          ),
-
-                                                          ElevatedButton(
-                                                            child: Text(checkSubmitStatus(item["id"]) == SubmitStatus.notSubmitted? 'Chưa nộp': checkSubmitStatus(item["id"]) == SubmitStatus.notMarked? 'Chấm lại' : 'Chấm bài'),
-                                                            onPressed: checkSubmitStatus(item["id"]) == SubmitStatus.notSubmitted? null: checkSubmitStatus(item["id"]) == SubmitStatus.notMarked? markExercise : markExercise,
-                                                            style: ElevatedButton.styleFrom(
-                                                              primary:checkSubmitStatus(item["id"]) == SubmitStatus.notMarked? Colors.blueGrey.shade800 : Colors.yellow.shade800,
-                                                            ),
-                                                          ),
-
-                                                        ],
-                                                      ),
-
-                                                    ],
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    border: Border(
-                                                      bottom: BorderSide(
-                                                          width: 2.0,
-                                                          color: Colors.black12),
-                                                    ),
-                                                  ),
-                                                  padding: EdgeInsets.only(
-                                                      top: 10, bottom: 10),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                      // (BuildContext context, int index) {
-                                      //   return Text('snapshot.data.data[');
-                                      // };
-                                    } else if (snapshot.hasError) {
-                                      return Text("${snapshot.error}");
-                                    }
-
-                                    // By default, show a loading spinner.
-                                    return CircularProgressIndicator();
-                                  },
-                                );
-
-                              } else if (snapshot.hasError) {
-                                return Text("${snapshot.error}");
-                              }
-                              return CircularProgressIndicator();
-                            }
-                          ),
+                                return CircularProgressIndicator();
+                              }),
                         ],
                       ),
                       padding: EdgeInsets.only(top: 15),

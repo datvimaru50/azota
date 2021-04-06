@@ -50,7 +50,6 @@ class HomeworkController extends ControllerMVC {
     }
   }
 
-
   /* **********************************
   Get homework info from hashId
   <after update parent>
@@ -59,7 +58,7 @@ class HomeworkController extends ControllerMVC {
     final token = await Prefs.getPref(ANONYMOUS_TOKEN);
     final hashId = await Prefs.getPref(HASH_ID);
     final response =
-    await http.Client().get(AZO_HOMEWORK_INFO + '?id=' + hashId, headers: {
+        await http.Client().get(AZO_HOMEWORK_INFO + '?id=' + hashId, headers: {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
@@ -113,11 +112,11 @@ class HomeworkController extends ControllerMVC {
     }
   }
 
-
   /* **********************************
   Request resend answer
   ********************************** */
-  static Future<String> requestResubmitAnswer(Map<String, dynamic> params) async {
+  static Future<String> requestResubmitAnswer(
+      Map<String, dynamic> params) async {
     final String token = await Prefs.getPref(ACCESS_TOKEN);
 
     final response = await http.Client()
