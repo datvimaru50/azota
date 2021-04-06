@@ -65,6 +65,41 @@ class LoginController extends ControllerMVC {
     }
   }
 
+  /* **********************************
+  Register new account
+  ********************************** */
+  static Future<User> register(Map<String, dynamic> params) async {
+
+    final response = await http.Client().post(AZO_REGISTER,
+        body: jsonEncode(params),
+        headers: {
+          HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
+        });
+
+    switch (response.statusCode) {
+      case 200:
+        final Map<String, dynamic> resBody = json.decode(response.body);
+
+        if (resBody['success'] == 1) {
+          var userData = resBody['data'];
+          User authUser = User.fromJson(userData);
+          Prefs.savePrefs( ACCESS_TOKEN, authUser.rememberToken);
+          Prefs.savePrefs( UPLOAD_TOKEN, authUser.uploadToken);
+          return authUser;
+        } else {
+          throw ERR_INVALID_REGISTER_INFO;
+        }
+        break;
+
+      case 400:
+        throw ERR_BAD_REQUEST;
+        break;
+
+      default:
+        throw ERR_SERVER_CONNECT;
+    }
+  }
+
 
   /* **********************************
   Call API to get user information
