@@ -400,11 +400,6 @@ class _ListStudentsState extends State<ListStudents> {
                                                                               homeworkId: widget.homeworkId,
                                                                               id: widget.id,
                                                                             );
-                                                                            // deleteParent(
-                                                                            //   idStudent: item['id'].toString(),
-                                                                            //   fullName: item['fullName'],
-                                                                            //   birthday: item['birthday'],
-                                                                            // );
                                                                           },
                                                                           child:
                                                                               Text('Xóa'),

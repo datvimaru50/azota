@@ -237,8 +237,8 @@ class ClassroomController extends ControllerMVC {
     }
   }
 
-  static Future updateClassroom(
-      String id, name, countStudents, homeworkId, context, homeworks) async {
+  static Future updateClassroom(String id, name, countStudents, homeworkId,
+      homeworks, BuildContext context) async {
     final token = await Prefs.getPref(ACCESS_TOKEN);
     Map mapdata = <String, dynamic>{"id": id, "name": name.text};
     // ignore: unnecessary_brace_in_string_interps

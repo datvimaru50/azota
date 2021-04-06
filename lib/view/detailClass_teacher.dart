@@ -178,9 +178,9 @@ class _DetailClassState extends State<DetailClass> {
                                                                         .countStudents,
                                                                     widget
                                                                         .homeworkId,
-                                                                    context,
                                                                     widget
-                                                                        .homeworks);
+                                                                        .homeworks,
+                                                                    context);
                                                           }
                                                         },
                                                         child: Text(
