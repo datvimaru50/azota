@@ -501,7 +501,10 @@ class _DetailClassState extends State<DetailClass> {
                                           data:
                                               """<div class="limit">${item['content']}</div>""",
                                           style: {
-                                            "div": Style(height: 18),
+                                            "div": Style(
+                                              height: 18,
+                                              color: Colors.white,
+                                            ),
                                             "p": Style(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
@@ -510,6 +513,7 @@ class _DetailClassState extends State<DetailClass> {
                                             "h1": Style(color: Colors.white),
                                           },
                                         ),
+                                        padding: EdgeInsets.only(left: 9),
                                       )
                                     ],
                                   ),
