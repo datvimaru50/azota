@@ -433,6 +433,7 @@ class _DetailClassState extends State<DetailClass> {
                                       builder: (context) => DetailExersice(
                                         id: widget.id,
                                         homeworkId: widget.homeworkId,
+                                        exerciseId:  item['id'].toString()
                                       ),
                                     ),
                                   );
@@ -451,7 +452,7 @@ class _DetailClassState extends State<DetailClass> {
                                                 Container(
                                                   alignment: Alignment.topLeft,
                                                   child: Text(
-                                                    'Bài tập ngày: ${DateFormat.yMd().format(DateTime.parse(item["createdAt"]))}',
+                                                    'Bài tập ngày: ${DateFormat.yMd().format(DateTime.parse(item["createdAt"]))}', // dfdfdfd
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 15,

@@ -1,43 +1,123 @@
 import 'package:azt/controller/classroom_controller.dart';
+import 'package:azt/controller/homework_controller.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
-void main() {
-  runApp(DetailExersice());
-}
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:date_time_format/date_time_format.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
+enum SubmitStatus { notSubmitted, notMarked, marked }
 
 class DetailExersice extends StatefulWidget {
   DetailExersice({
     this.id,
     this.homeworkId,
+    this.exerciseId,
   });
   final String id;
   final String homeworkId;
+  final String exerciseId;
   @override
   _DetailExersiceState createState() => _DetailExersiceState();
 }
 
 class _DetailExersiceState extends State<DetailExersice> {
+  final _formKey = GlobalKey<FormState>();
+  final noteText = TextEditingController();
   bool status = false;
   bool submitDate = false;
   Future<ClassroomHashIdInfo> classroomHashIdInfo;
-  Future<AnswerHashIdInfo> answerHashIdInfo;
+
+  Future<AnswerHashIdInfo> submitedStudents;
+
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    classroomHashIdInfo = ClassroomController.studentClassroom(widget.id);
-    answerHashIdInfo = ClassroomController.answerStudent(widget.homeworkId);
-    print('sdvsvsdv::: ::: ' + widget.homeworkId);
+    Intl.defaultLocale = 'vi_VN';
+    initializeDateFormatting();
+    submitedStudents = ClassroomController.answerStudent(widget.exerciseId);
+    classroomHashIdInfo = ClassroomController.studentClassroom(widget.id); // list all student
   }
+
+  Future<void> _showMyDialog(int studentId){
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Gửi yêu cầu nộp lại'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: Text('Nhập lý do yêu cầu nộp lại'),
+                ),
+
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: noteText,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          hintText: 'Ghi chú',
+                          prefixIcon:
+                          Icon(Icons.phone_android_outlined),
+                        ),
+                        //validator: (value) => validatePhone(value),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Hủy'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Xác nhận',
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: (){
+                print('nop lai $studentId');
+
+                HomeworkController.requestResubmitAnswer({"id": studentId.toString(), "resendNote": noteText.text});
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void markExercise(){
+
+  }
+  
 
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xFFecf0f5),
         appBar: AppBar(
           title: Text(
-            'bài tập',
+            'Bài tập',
             style: TextStyle(fontSize: 18),
           ),
         ),
@@ -51,7 +131,7 @@ class _DetailExersiceState extends State<DetailExersice> {
                     margin: EdgeInsets.only(
                         left: 20, right: 20, top: 10, bottom: 10),
                     child: Text(
-                      'yêu cầu nộp lại Hed have you all unravel at the Hed have you all unravel at the',
+                      'Yêu cầu nộp lại Hed have you all unravel at the Hed have you all unravel at the',
                       style: TextStyle(fontSize: 15),
                     ),
                   ),
@@ -255,198 +335,157 @@ class _DetailExersiceState extends State<DetailExersice> {
                               ),
                             ),
                           ),
-                          FutureBuilder<ClassroomHashIdInfo>(
-                            future: classroomHashIdInfo,
+
+                          FutureBuilder<AnswerHashIdInfo>(
+                            future: submitedStudents,
                             builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Column(
-                                  children: [
-                                    ...snapshot.data.data.map(
-                                      (dynamic item) => Column(
+                              if(snapshot.hasData) {
+                                // Xử lý if-else
+                                var submitteData = snapshot.data.dataAnswer;
+                                print('lalalala:::::: '+snapshot.data.dataAnswer.length.toString());
+
+
+                                SubmitStatus checkSubmitStatus(int studentId) {
+                                  var result = SubmitStatus.notSubmitted;
+
+                                  if (submitteData.isEmpty){
+                                    return result;
+                                  }
+
+                                  for (var i=0; i<submitteData.length; i++) {
+                                    if(submitteData.elementAt(i)["studentId"] == studentId){
+
+                                      if(submitteData.elementAt(i)["confirmedAt"] != null){
+                                        result = SubmitStatus.notMarked;
+                                      } else {
+                                        result = SubmitStatus.marked;
+                                      }
+
+                                      break;
+                                    }
+                                  }
+                                  return result;
+                                }
+
+                                return FutureBuilder<ClassroomHashIdInfo>(
+                                  future: classroomHashIdInfo,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Column(
                                         children: [
-                                          Container(
-                                            child: Column(
+                                          ...snapshot.data.data.map(
+                                                (dynamic item) => Column(
+
                                               children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Container(
-                                                      child: Column(
+                                                Container(
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                         children: [
                                                           Container(
-                                                            alignment: Alignment
-                                                                .topLeft,
-                                                            child: Text(item[
-                                                                'fullName']),
+                                                            child: Column(
+                                                              children: [
+                                                                Container(
+                                                                  alignment: Alignment
+                                                                      .topLeft,
+                                                                  child: Text(item[
+                                                                  'fullName']),
+                                                                ),
+                                                                checkSubmitStatus(item["id"]) == SubmitStatus.notSubmitted? Container():
+                                                                Container(
+                                                                  alignment: Alignment
+                                                                      .topLeft,
+                                                                  child: Text(
+                                                                    DateTimeFormat.relative(
+                                                                        DateTime.parse(item["updatedAt"]),
+                                                                        relativeTo: DateTime.now(),
+                                                                        levelOfPrecision: 1,
+                                                                        appendIfAfter: ' ago',
+                                                                        abbr: true),
+
+                                                                    style: TextStyle(
+                                                                      color: Colors
+                                                                          .black26,
+                                                                    ),
+                                                                  ),
+                                                                  margin:
+                                                                  EdgeInsets.only(
+                                                                    top: 3,
+                                                                    bottom: 3,
+                                                                  ),
+                                                                ),
+
+                                                                checkSubmitStatus(item["id"]) == SubmitStatus.notSubmitted? Container():
+                                                                GestureDetector(
+                                                                    onTap: (){
+                                                                      _showMyDialog(item["id"]);
+                                                                    },
+                                                                  child: Container(
+                                                                    alignment: Alignment
+                                                                        .topLeft,
+                                                                    child: Text(
+                                                                      'Yêu cầu nộp lại',
+                                                                      style: TextStyle(
+                                                                        color:
+                                                                        Colors.blue,
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                )
+
+                                                              ],
+                                                            ),
+                                                            width: 120,
                                                           ),
-                                                          Container(
-                                                            alignment: Alignment
-                                                                .topLeft,
-                                                            child: Text(
-                                                              '9 giờ trước',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .black26,
-                                                              ),
-                                                            ),
-                                                            margin:
-                                                                EdgeInsets.only(
-                                                              top: 3,
-                                                              bottom: 3,
+
+                                                          ElevatedButton(
+                                                            child: Text(checkSubmitStatus(item["id"]) == SubmitStatus.notSubmitted? 'Chưa nộp': checkSubmitStatus(item["id"]) == SubmitStatus.notMarked? 'Chấm lại' : 'Chấm bài'),
+                                                            onPressed: checkSubmitStatus(item["id"]) == SubmitStatus.notSubmitted? null: checkSubmitStatus(item["id"]) == SubmitStatus.notMarked? markExercise : markExercise,
+                                                            style: ElevatedButton.styleFrom(
+                                                              primary:checkSubmitStatus(item["id"]) == SubmitStatus.notMarked? Colors.blueGrey.shade800 : Colors.yellow.shade800,
                                                             ),
                                                           ),
-                                                          Container(
-                                                            alignment: Alignment
-                                                                .topLeft,
-                                                            child: Text(
-                                                              'yêu cầu nộp lại',
-                                                              style: TextStyle(
-                                                                color:
-                                                                    Colors.blue,
-                                                              ),
-                                                            ),
-                                                          )
+
                                                         ],
                                                       ),
-                                                      width: 120,
+
+                                                    ],
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    border: Border(
+                                                      bottom: BorderSide(
+                                                          width: 2.0,
+                                                          color: Colors.black12),
                                                     ),
-                                                    FutureBuilder<
-                                                        AnswerHashIdInfo>(
-                                                      future: answerHashIdInfo,
-                                                      builder:
-                                                          // ignore: missing_return
-                                                          (context, snapshot) {
-                                                        if (snapshot.hasData) {
-                                                          return Container(
-                                                            child:
-                                                                ElevatedButton(
-                                                              child: Text(snapshot
-                                                                  .data
-                                                                  .dataAnswer
-                                                                  .toString()),
-                                                              onPressed: () {},
-                                                              style:
-                                                                  ElevatedButton
-                                                                      .styleFrom(
-                                                                primary: Colors
-                                                                    .yellow
-                                                                    .shade800,
-                                                              ),
-                                                            ),
-                                                            // width: ,
-                                                          );
-                                                        }
-                                                      },
-                                                    ),
-                                                  ],
+                                                  ),
+                                                  padding: EdgeInsets.only(
+                                                      top: 10, bottom: 10),
                                                 ),
-                                                // GridView.count(
-                                                //   padding: EdgeInsets.only(
-                                                //       top: 15, bottom: 10),
-                                                //   shrinkWrap: true,
-                                                //   crossAxisSpacing: 5,
-                                                //   crossAxisCount: 2,
-                                                //   childAspectRatio: 5,
-                                                //   children: <Widget>[
-                                                //     Container(
-                                                //       padding:
-                                                //           const EdgeInsets.all(
-                                                //               8),
-                                                //       child: const Text(
-                                                //           "He'd have you all unravel at the"),
-                                                //     ),
-                                                //     Container(
-                                                //       padding:
-                                                //           const EdgeInsets.all(
-                                                //               8),
-                                                //       child: const Text(
-                                                //           'Heed not the rabble'),
-                                                //     ),
-                                                //     Container(
-                                                //       padding:
-                                                //           const EdgeInsets.all(
-                                                //               8),
-                                                //       child: const Text(
-                                                //           'Sound of screams but the'),
-                                                //     ),
-                                                //     Container(
-                                                //       padding:
-                                                //           const EdgeInsets.all(
-                                                //               8),
-                                                //       child: const Text(
-                                                //           'Who scream'),
-                                                //     ),
-                                                //     Container(
-                                                //       padding:
-                                                //           const EdgeInsets.all(
-                                                //               8),
-                                                //       child: const Text(
-                                                //           'Revolution is coming...'),
-                                                //     ),
-                                                //     Container(
-                                                //       padding:
-                                                //           const EdgeInsets.all(
-                                                //               8),
-                                                //       child: const Text(
-                                                //           'Revolution, they...'),
-                                                //     ),
-                                                //   ],
-                                                // ),
                                               ],
                                             ),
-                                            decoration: BoxDecoration(
-                                              border: Border(
-                                                bottom: BorderSide(
-                                                    width: 2.0,
-                                                    color: Colors.black12),
-                                              ),
-                                            ),
-                                            padding: EdgeInsets.only(
-                                                top: 10, bottom: 10),
                                           ),
                                         ],
-                                      ),
-                                    ),
-                                  ],
+                                      );
+                                      // (BuildContext context, int index) {
+                                      //   return Text('snapshot.data.data[');
+                                      // };
+                                    } else if (snapshot.hasError) {
+                                      return Text("${snapshot.error}");
+                                    }
+
+                                    // By default, show a loading spinner.
+                                    return CircularProgressIndicator();
+                                  },
                                 );
-                                // (BuildContext context, int index) {
-                                //   return Text('snapshot.data.data[');
-                                // };
+
                               } else if (snapshot.hasError) {
                                 return Text("${snapshot.error}");
                               }
-
-                              // By default, show a loading spinner.
                               return CircularProgressIndicator();
-                            },
-                          ),
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  child: Text('dfb name'),
-                                ),
-                                Container(
-                                  child: ElevatedButton(
-                                    child: Text('CHƯA NỘP'),
-                                    onPressed: () {},
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.black12,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                    width: 2.0, color: Colors.black12),
-                              ),
-                            ),
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            }
                           ),
                         ],
                       ),

@@ -23,6 +23,7 @@ const AZO_ANSWER_SAVE = "$AZT_DEV_SERVER/FrontAnswer/SaveObj";
 const AZO_S3SPACE_SAVE = "$AZT_DEV_SERVER/S3space/get_public_upload_url";
 
 const AZO_CLASSROOM_INFO = "$AZT_DEV_SERVER/Classroom/GetObjs";
+const AZO_RESEND_ANSWER = "$AZT_DEV_SERVER/Answer/ResendAnswer";
 const AZO_DELETECLASSROOM_INFO = "$AZT_DEV_SERVER/Classroom/DeleteObj";
 const AZO_EXERSICE_INFO = "$AZT_DEV_SERVER/Homework/GetObjsByClassroom";
 const AZO_DELETESTUDENT_INFO = "$AZT_DEV_SERVER/Student/DeleteObj";
