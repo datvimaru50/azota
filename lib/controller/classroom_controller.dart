@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:azt/view/detailClass_teacher.dart';
 import 'package:azt/view/listClass_teacher.dart';
 import 'package:azt/view/listStudents.dart';
 import 'package:flutter/cupertino.dart';
@@ -233,6 +234,177 @@ class ClassroomController extends ControllerMVC {
 
       default:
         throw ERR_SERVER_CONNECT;
+    }
+  }
+
+  static Future updateClassroom(String id, name, countStudents, homeworkId,
+      homeworks, BuildContext context) async {
+    final token = await Prefs.getPref(ACCESS_TOKEN);
+    Map mapdata = <String, dynamic>{"id": id, "name": name.text};
+    // ignore: unnecessary_brace_in_string_interps
+    print("JSON DATA : ${mapdata}");
+    final reponse =
+        await http.Client().post(AZO_CLASSROOM_UPDATE, body: mapdata, headers: {
+      HttpHeaders.authorizationHeader: "Bearer $token",
+    });
+
+    var data = jsonDecode(reponse.body);
+    if (data['success'] == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailClass(
+            id: id,
+            className: name.text,
+            countStudents: countStudents,
+            homeworkId: homeworkId,
+            homeworks: homeworks,
+          ),
+        ),
+      );
+      return Fluttertoast.showToast(
+          msg: 'Sửa lớp thành công',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      return Fluttertoast.showToast(
+          msg: 'Sửa lớp không thành công',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red[400],
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  static Future deleteParent(
+      {String idStudent,
+      fullName,
+      birthday,
+      id,
+      className,
+      countStudents,
+      context,
+      homeworkId}) async {
+    final token = await Prefs.getPref(ACCESS_TOKEN);
+    Map mapdata = <String, dynamic>{
+      "id": idStudent,
+      "classroomId": id,
+      "fullName": fullName,
+      "parentId": "0",
+      "birthday": birthday,
+    };
+    //log data in form
+    // ignore: unnecessary_brace_in_string_interps
+    print("JSON DATA : ${mapdata}");
+    final reponse = await http.Client().post(
+      AZO_STUDENT_UPDATE + '?id=' + idStudent,
+      body: jsonEncode(mapdata),
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+
+    var data = jsonDecode(reponse.body);
+    if (data['success'] == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ListStudents(
+            id: id,
+            className: className,
+            countStudents: countStudents,
+            homeworkId: homeworkId,
+          ),
+        ),
+      );
+      return Fluttertoast.showToast(
+          msg: 'Xóa phụ huynh thành công ',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      return Fluttertoast.showToast(
+          msg: 'Xóa phụ huynh không thành công',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  static Future editStudentRoom(
+      String fullName,
+      gender,
+      checkGender,
+      birthday,
+      classRoomId,
+      idStudent,
+      context,
+      className,
+      countStudents,
+      homeworkId) async {
+    final token = await Prefs.getPref(ACCESS_TOKEN);
+    Map mapdata = <String, dynamic>{
+      "fullName": fullName,
+      "gender": gender == null ? checkGender : gender,
+      "birthday": birthday.text,
+      "classroomId": classRoomId,
+      "id": idStudent
+    };
+    //log data in form
+    // ignore: unnecessary_brace_in_string_interps
+    print("JSON DATA : ${mapdata}");
+    final reponse = await http.Client().post(
+      AZO_STUDENT_UPDATE + '?id=' + idStudent,
+      body: jsonEncode(mapdata),
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+
+    var data = jsonDecode(reponse.body);
+    if (data['success'] == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ListStudents(
+            id: classRoomId,
+            className: className,
+            countStudents: countStudents,
+            homeworkId: homeworkId,
+          ),
+        ),
+      );
+      return Fluttertoast.showToast(
+          msg: 'Sửa học sinh thành công ',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      return Fluttertoast.showToast(
+          msg: 'Sửa học sinh không thành công',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 }

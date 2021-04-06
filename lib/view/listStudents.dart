@@ -1,10 +1,13 @@
+import 'dart:async';
+import 'package:date_time_picker/date_time_picker.dart';
+import 'package:html_editor_enhanced/utils/shims/dart_ui_real.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:azt/view/addStudents.dart';
 import 'package:azt/view/detailClass_teacher.dart';
 import 'package:azt/view/editStudents.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:intl/intl.dart';
 
@@ -31,6 +34,7 @@ class _ListStudentsState extends State<ListStudents> {
   Future<ClassroomHashIdInfo> classroomHashIdInfo;
   Future<ClassroomHashIdInfo> deleteStudent;
   int i = 1;
+
   @override
   void initState() {
     super.initState();
@@ -386,14 +390,16 @@ class _ListStudentsState extends State<ListStudents> {
                                                                         FlatButton(
                                                                           onPressed:
                                                                               () {
-                                                                            // setState(
-                                                                            //   () {
-                                                                            //     deleteClassroom =
-                                                                            //         ClassroomController
-                                                                            //             .deleteClassroom(
-                                                                            //                 widget.id, context);
-                                                                            //   },
-                                                                            // );
+                                                                            ClassroomController.deleteParent(
+                                                                              idStudent: item['id'].toString(),
+                                                                              fullName: item['fullName'],
+                                                                              birthday: item['birthday'],
+                                                                              countStudents: widget.countStudents,
+                                                                              context: context,
+                                                                              className: widget.className,
+                                                                              homeworkId: widget.homeworkId,
+                                                                              id: widget.id,
+                                                                            );
                                                                           },
                                                                           child:
                                                                               Text('Xóa'),

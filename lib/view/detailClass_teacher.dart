@@ -1,8 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'package:azt/config/connect.dart';
-import 'package:azt/config/global.dart';
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:azt/view/addExersice.dart';
@@ -15,7 +10,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 void main() {
@@ -43,50 +37,6 @@ class _DetailClassState extends State<DetailClass> {
   final _formKey = GlobalKey<FormState>();
   bool status = false;
   TextEditingController name;
-
-  Future updateClassroom() async {
-    final token = await Prefs.getPref(ACCESS_TOKEN);
-    Map mapdata = <String, dynamic>{"id": widget.id, "name": name.text};
-    // ignore: unnecessary_brace_in_string_interps
-    print("JSON DATA : ${mapdata}");
-    final reponse =
-        await http.Client().post(AZO_CLASSROOM_UPDATE, body: mapdata, headers: {
-      HttpHeaders.authorizationHeader: "Bearer $token",
-    });
-
-    var data = jsonDecode(reponse.body);
-    if (data['success'] == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DetailClass(
-            id: widget.id,
-            className: name.text,
-            countStudents: widget.countStudents,
-            homeworkId: widget.homeworkId,
-            homeworks: widget.homeworks,
-          ),
-        ),
-      );
-      return Fluttertoast.showToast(
-          msg: 'Sửa lớp thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    } else {
-      return Fluttertoast.showToast(
-          msg: 'Sửa lớp không thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red[400],
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
-  }
 
   Future<ClassroomHashIdInfo> classroomHashIdInfo;
   Future<ClassroomHashIdInfo> deleteClassroom;
@@ -220,7 +170,17 @@ class _DetailClassState extends State<DetailClass> {
                                                           if (_formKey
                                                               .currentState
                                                               .validate()) {
-                                                            updateClassroom();
+                                                            ClassroomController
+                                                                .updateClassroom(
+                                                                    widget.id,
+                                                                    name,
+                                                                    widget
+                                                                        .countStudents,
+                                                                    widget
+                                                                        .homeworkId,
+                                                                    widget
+                                                                        .homeworks,
+                                                                    context);
                                                           }
                                                         },
                                                         child: Text(
