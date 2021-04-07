@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
+import 'package:azt/config/connect.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:azt/models/authen.dart';
-
 
 class LoginController extends ControllerMVC {
   factory LoginController() {
@@ -21,24 +20,24 @@ class LoginController extends ControllerMVC {
   /* **********************************
   Handle 4 different types of login
   ********************************** */
-  static Future<User> login(String loginType, [Map<String, dynamic> params]) async {
+  static Future<User> login(String loginType,
+      [Map<String, dynamic> params]) async {
     const headers = {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
     };
 
-    final String apiUrl = loginType == 'APPLE' ?
-        AZO_AUTH_APPLE + '?code=${params['md5']}&email=${params['email']}'
+    final String apiUrl = loginType == 'APPLE'
+        ? AZO_AUTH_APPLE + '?code=${params['md5']}&email=${params['email']}'
+        : loginType == 'ZALO'
+            ? AZO_AUTH_ZALO +
+                '?code=${params['code']}&isteacher=${params['role'].toString()}'
+            : loginType == 'ANONYMOUS'
+                ? AZO_LOGIN_ANONYMOUS
+                : AZO_LOGIN;
 
-        : loginType == 'ZALO' ?
-        AZO_AUTH_ZALO + '?code=${params['code']}&isteacher=${params['role'].toString()}'
-
-        : loginType == 'ANONYMOUS' ? AZO_LOGIN_ANONYMOUS
-
-        : AZO_LOGIN;
-
-
-    final response = loginType == 'NORMAL' ? await http.Client().post(
-        apiUrl, body: jsonEncode(params), headers: headers)
+    final response = loginType == 'NORMAL'
+        ? await http.Client()
+            .post(apiUrl, body: jsonEncode(params), headers: headers)
         : await http.Client().get(apiUrl, headers: headers);
 
     switch (response.statusCode) {
@@ -48,8 +47,10 @@ class LoginController extends ControllerMVC {
         if (resBody['success'] == 1) {
           var userData = resBody['data'];
           User authUser = User.fromJson(userData);
-          Prefs.savePrefs( loginType == 'ANONYMOUS' ? ANONYMOUS_TOKEN : ACCESS_TOKEN, authUser.rememberToken);
-          Prefs.savePrefs( UPLOAD_TOKEN, authUser.uploadToken);
+          Prefs.savePrefs(
+              loginType == 'ANONYMOUS' ? ANONYMOUS_TOKEN : ACCESS_TOKEN,
+              authUser.rememberToken);
+          Prefs.savePrefs(UPLOAD_TOKEN, authUser.uploadToken);
           return authUser;
         } else {
           throw ERR_INVALID_LOGIN_INFO;
@@ -69,7 +70,6 @@ class LoginController extends ControllerMVC {
   Register new account
   ********************************** */
   static Future<User> register(Map<String, dynamic> params) async {
-
     final response = await http.Client().post(AZO_REGISTER,
         body: jsonEncode(params),
         headers: {
@@ -83,8 +83,8 @@ class LoginController extends ControllerMVC {
         if (resBody['success'] == 1) {
           var userData = resBody['data'];
           User authUser = User.fromJson(userData);
-          Prefs.savePrefs( ACCESS_TOKEN, authUser.rememberToken);
-          Prefs.savePrefs( UPLOAD_TOKEN, authUser.uploadToken);
+          Prefs.savePrefs(ACCESS_TOKEN, authUser.rememberToken);
+          Prefs.savePrefs(UPLOAD_TOKEN, authUser.uploadToken);
           return authUser;
         } else {
           throw ERR_INVALID_REGISTER_INFO;
@@ -100,7 +100,6 @@ class LoginController extends ControllerMVC {
     }
   }
 
-
   /* **********************************
   Call API to get user information
   ********************************** */
@@ -114,6 +113,8 @@ class LoginController extends ControllerMVC {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> resBody = json.decode(response.body);
+      // ignore: unnecessary_brace_in_string_interps
+      print('object ${resBody}');
       var userData = resBody['data'];
       User authUser = User.fromJson(userData);
 
@@ -123,4 +124,3 @@ class LoginController extends ControllerMVC {
     }
   }
 }
-

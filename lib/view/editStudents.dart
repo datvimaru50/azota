@@ -34,16 +34,16 @@ class EditStudent extends StatefulWidget {
 
 class _EditStudentState extends State<EditStudent> {
   final _formKey = GlobalKey<FormState>();
-  int gender;
+  String gender;
   TextEditingController fullName;
   TextEditingController birthday;
 
   void initState() {
     super.initState();
-    gender = null;
+    gender = widget.checkGender;
   }
 
-  setgender(int val) {
+  setgender(String val) {
     setState(
       () {
         gender = val;
@@ -137,7 +137,7 @@ class _EditStudentState extends State<EditStudent> {
                       alignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Radio(
-                          value: 0,
+                          value: '0',
                           groupValue: gender,
                           activeColor: Colors.green,
                           onChanged: (val) {
@@ -147,7 +147,7 @@ class _EditStudentState extends State<EditStudent> {
                         ),
                         Text('Nam'),
                         Radio(
-                          value: 1,
+                          value: '1',
                           groupValue: gender,
                           activeColor: Colors.blue,
                           onChanged: (val) {
@@ -168,17 +168,6 @@ class _EditStudentState extends State<EditStudent> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.purple[900],
-                          ),
-                          onPressed: () {
-                            // Validate will return true if the form is valid, or false if
-                            // the form is invalid.
-                          },
-                          child: Text('FILE EXCEL',
-                              style: TextStyle(color: Colors.white)),
-                        ),
                         ElevatedButton(
                           onPressed: () {
                             // Validate will return true if the form is valid, or false if
@@ -218,8 +207,10 @@ class _EditStudentState extends State<EditStudent> {
                               ),
                             );
                           },
-                          child: Text('HỦY',
-                              style: TextStyle(color: Colors.black)),
+                          child: Text(
+                            'HỦY',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
                       ],
                     ),

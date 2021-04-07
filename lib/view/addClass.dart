@@ -2,8 +2,9 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'package:azt/config/global.dart';
+import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/view/detailClass_teacher.dart';
-import 'package:azt/view/listClass_teacher.dart';
+import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -27,51 +28,6 @@ class _AddClassState extends State<AddClass> {
 
   TextEditingController name = new TextEditingController();
 
-  Future addClassRoom() async {
-    final token = await Prefs.getPref(ACCESS_TOKEN);
-    final reponse = await http.Client().post(
-      AZO_ADDCLASS_INFO,
-      headers: {
-        HttpHeaders.authorizationHeader: "Bearer $token",
-      },
-      body: {"name": name.text},
-    );
-
-    var data = jsonDecode(reponse.body);
-    final dataClass = data['data'];
-    if (data['success'] == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DetailClass(
-            id: dataClass['id'].toString(),
-            countStudents: dataClass['countStudents'].toString(),
-            className: dataClass['name'].toString(),
-            homeworks: dataClass['homeworks'].toString(),
-          ),
-        ),
-      );
-      return Fluttertoast.showToast(
-          msg: 'Tạo lớp học thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    } else {
-      // ignore: unnecessary_brace_in_string_interps
-      return Fluttertoast.showToast(
-          msg: 'Tạo lớp học không thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
-  }
-
   //upload file
   // ignore: unused_field
   File _image;
@@ -94,25 +50,20 @@ class _AddClassState extends State<AddClass> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFecf0f5),
+      appBar: AppBar(
+        title: Text('Thêm lớp học', style: TextStyle(fontSize: 18)),
+        leading: IconButton(
+          icon: Icon(Icons.keyboard_arrow_left),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
+            );
+          },
+        ),
+      ),
       body: ListView(
         children: [
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.keyboard_arrow_left),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ListClass()),
-                    );
-                  },
-                ),
-              ],
-            ),
-            margin: EdgeInsets.only(left: 10, right: 10),
-          ),
           Container(
             child: Form(
               key: _formKey,
@@ -137,11 +88,9 @@ class _AddClassState extends State<AddClass> {
                     child: TextFormField(
                       controller: name,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        hintText: 'Nhập vào tên lớp',
-                        prefixIcon: Icon(Icons.code_sharp),
+                        border: OutlineInputBorder(),
+                        labelText: 'Tên lớp học* ',
+                        hintText: 'Nhập tên lớp học',
                       ),
                       validator: (value) {
                         if (value.isEmpty) {
@@ -228,16 +177,8 @@ class _AddClassState extends State<AddClass> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            // Validate will return true if the form is valid, or false if
-                            // the form is invalid.
                             if (_formKey.currentState.validate()) {
-                              addClassRoom();
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => DetailExersice(),
-                              //   ),
-                              // );
+                              ClassroomController.addClassRoom(name, context);
                             }
                           },
                           child: Text(
@@ -249,8 +190,11 @@ class _AddClassState extends State<AddClass> {
                             primary: Colors.white,
                           ),
                           onPressed: () {
-                            // Validate will return true if the form is valid, or false if
-                            // the form is invalid.
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => GroupScreenTeacher()),
+                            );
                           },
                           child: Text('HỦY',
                               style: TextStyle(color: Colors.black)),

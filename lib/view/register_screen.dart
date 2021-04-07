@@ -45,9 +45,9 @@ class _RegisterScreen extends State<RegisterScreen> {
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
             builder: (context) => NotificationScreen(
-              role: 'teacher',
-            )),
-            (Route<dynamic> route) => false);
+                  role: 'teacher',
+                )),
+        (Route<dynamic> route) => false);
   }
 
   bool _showPass = true;
@@ -76,8 +76,8 @@ class _RegisterScreen extends State<RegisterScreen> {
                       children: <Widget>[
                         Text(
                           'ĐĂNG KÝ',
-                          style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         Form(
                           key: _formKey,
@@ -92,10 +92,9 @@ class _RegisterScreen extends State<RegisterScreen> {
                                 child: TextFormField(
                                   controller: fullName,
                                   decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    hintText: 'Họ tên',
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Họ tên*',
+                                    hintText: 'Nhập họ tên',
                                     prefixIcon: Icon(Icons.account_circle),
                                   ),
                                   validator: (value) {
@@ -118,11 +117,11 @@ class _RegisterScreen extends State<RegisterScreen> {
                                 child: TextFormField(
                                   controller: phone,
                                   decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    hintText: 'Số điện thoại',
-                                    prefixIcon: Icon(Icons.phone_android_outlined),
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Số điện thoại*',
+                                    hintText: 'Nhập số điện thoại',
+                                    prefixIcon:
+                                        Icon(Icons.phone_android_outlined),
                                   ),
                                   validator: (value) {
                                     if (value.isEmpty) {
@@ -149,9 +148,8 @@ class _RegisterScreen extends State<RegisterScreen> {
                                   controller: email,
                                   initialValue: null,
                                   decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Email*',
                                     hintText: 'email (không bắt buộc)',
                                     prefixIcon: Icon(Icons.email),
                                   ),
@@ -181,11 +179,9 @@ class _RegisterScreen extends State<RegisterScreen> {
                                       controller: password,
                                       obscureText: _showPass,
                                       decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(10.0),
-                                        ),
-                                        hintText: 'Mật Khẩu',
+                                        border: OutlineInputBorder(),
+                                        labelText: 'Mật khẩu*',
+                                        hintText: 'Nhập mật Khẩu',
                                         prefixIcon: Icon(Icons.lock),
                                         // suffixIcon: Icon(Icons.remove_red_eye),
                                       ),
@@ -194,7 +190,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                                           return 'Vui lòng nhập mật khẩu';
                                         }
                                         if (value.length < 6) {
-                                          return 'Mật khẩu phải trên 6 ký tự';
+                                          return 'Mật khẩu phải trên 6 ký tự ';
                                         }
                                         return null;
                                       },
@@ -220,16 +216,21 @@ class _RegisterScreen extends State<RegisterScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 10),
                                 child: ElevatedButton(
-                                  onPressed: _isRegistering ? null : () {
-                                    if (_formKey.currentState.validate()) {
-                                      _register({
-                                        'fullName': fullName.text,
-                                        'email': email.text != null ? null : email.text,
-                                        'phone': phone.text,
-                                        'password': password.text,
-                                      });
-                                    }
-                                  },
+                                  onPressed: _isRegistering
+                                      ? null
+                                      : () {
+                                          if (_formKey.currentState
+                                              .validate()) {
+                                            _register({
+                                              'fullName': fullName.text,
+                                              'email': email.text != null
+                                                  ? null
+                                                  : email.text,
+                                              'phone': phone.text,
+                                              'password': password.text,
+                                            });
+                                          }
+                                        },
                                   child: Text('Đăng Ký'),
                                 ),
                               ),
@@ -243,7 +244,6 @@ class _RegisterScreen extends State<RegisterScreen> {
                             style: TextStyle(fontSize: 15),
                           ),
                         ),
-
                         Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: Column(
@@ -265,7 +265,8 @@ class _RegisterScreen extends State<RegisterScreen> {
                         ),
                       ],
                     ),
-                    margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+                    margin:
+                        const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
                     padding: const EdgeInsets.all(20.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5.0),
@@ -279,7 +280,6 @@ class _RegisterScreen extends State<RegisterScreen> {
               ),
             )
           ],
-        )
-    );
+        ));
   }
 }

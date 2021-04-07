@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:azt/controller/login_controller.dart';
 import 'package:http/http.dart' as http;
 import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:azt/models/core_mo.dart';
-import 'package:azt/controller/login_controller.dart';
 
 class HomeworkController extends ControllerMVC {
   factory HomeworkController() {
@@ -119,11 +119,14 @@ class HomeworkController extends ControllerMVC {
       Map<String, dynamic> params) async {
     final String token = await Prefs.getPref(ACCESS_TOKEN);
 
-    final response = await http.Client()
-        .post(AZO_RESEND_ANSWER, body: jsonEncode(params), headers: {
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-      HttpHeaders.authorizationHeader: "Bearer $token"
-    });
+    final response = await http.Client().post(
+      AZO_RESEND_ANSWER,
+      body: jsonEncode(params),
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+        HttpHeaders.authorizationHeader: "Bearer $token"
+      },
+    );
 
     switch (response.statusCode) {
       case 200:
