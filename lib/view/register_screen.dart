@@ -190,7 +190,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                                           return 'Vui lòng nhập mật khẩu';
                                         }
                                         if (value.length < 6) {
-                                          return 'Mật khẩu phải trên 6 ký tự';
+                                          return 'Mật khẩu phải trên 6 ký tự ';
                                         }
                                         return null;
                                       },
