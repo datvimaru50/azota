@@ -90,40 +90,6 @@ class _NotificationScreenState extends State<NotificationScreen>
     );
   }
 
-  // Widget _buildFeatures() {
-  //   return widget.role == 'teacher'
-  //       ? Container(
-  //           color: Color(0xff1970b6),
-  //           child: Padding(
-  //             padding: EdgeInsets.all(15),
-  //             child: Row(
-  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //               crossAxisAlignment: CrossAxisAlignment.center,
-  //               children: [
-  //                 GestureDetector(
-  //                   onTap: () {
-  //                     launch('$baseAccess/en/admin/content-store');
-  //                   },
-  //                   child: Column(
-  //                     children: [
-  //                       Image(
-  //                         image: AssetImage('assets/store.png'),
-  //                         height: 90,
-  //                       ),
-  //                       Text(
-  //                         'Ngân hàng \n  nội dung',
-  //                         style: TextStyle(color: Colors.white, fontSize: 16),
-  //                       )
-  //                     ],
-  //                   ),
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //         )
-  //       : Text('');
-  // }
-
   Widget _buildList() {
     return _notiArr.length != 0
         ? RefreshIndicator(
@@ -167,11 +133,7 @@ class _NotificationScreenState extends State<NotificationScreen>
             ),
             onRefresh: _getData,
           )
-        : Center(
-            child: Text(
-            'Bạn không có thông báo nào!',
-            style: TextStyle(fontSize: 18),
-          ));
+        : Center(child: CircularProgressIndicator());
   }
 
   Future<void> _getData() async {
@@ -297,37 +259,6 @@ class _NotificationScreenState extends State<NotificationScreen>
         ),
       ),
       body: _buildList(),
-      //menu
-      // floatingActionButton: FabCircularMenu(
-      //   fabElevation: 10,
-      //   ringWidth: 80,
-      //   ringDiameter: 260,
-      //   fabSize: 40,
-      //   children: <Widget>[
-      //     IconButton(
-      //         icon: Icon(Icons.notifications_none),
-      //         onPressed: () {
-      //           Navigator.of(context).pushAndRemoveUntil(
-      //               MaterialPageRoute(
-      //                   builder: (context) => NotificationScreen(
-      //                         role: 'teacher',
-      //                       )),
-      //               (Route<dynamic> route) => false);
-      //         }),
-      //     IconButton(
-      //         icon: Icon(Icons.add),
-      //         onPressed: () {
-      //           Navigator.push(
-      //             context,
-      //             MaterialPageRoute(
-      //               builder: (context) =>
-      //                   // LoginForm(),
-      //                   ListClass(),
-      //             ),
-      //           );
-      //         }),
-      //   ],
-      // ),
     );
   }
 }

@@ -33,7 +33,7 @@ class _UserProfileState extends State<UserProfile> {
         future: getUserInfo,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ListView(
+            return Column(
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -89,6 +89,7 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                     ],
                   ),
+                  padding: EdgeInsets.only(top: 25),
                   margin: EdgeInsets.only(bottom: 20),
                 ),
                 Container(

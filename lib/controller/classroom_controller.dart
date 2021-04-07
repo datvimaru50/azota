@@ -407,4 +407,49 @@ class ClassroomController extends ControllerMVC {
           fontSize: 16.0);
     }
   }
+
+  static Future addClassRoom(name, context) async {
+    final token = await Prefs.getPref(ACCESS_TOKEN);
+    final reponse = await http.Client().post(
+      AZO_ADDCLASS_INFO,
+      headers: {
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: {"name": name.text},
+    );
+
+    var data = jsonDecode(reponse.body);
+    final dataClass = data['data'];
+    if (data['success'] == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailClass(
+            id: dataClass['id'].toString(),
+            countStudents: dataClass['countStudents'].toString(),
+            className: dataClass['name'].toString(),
+            homeworks: dataClass['homeworks'].toString(),
+          ),
+        ),
+      );
+      return Fluttertoast.showToast(
+          msg: 'Tạo lớp học thành công',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      // ignore: unnecessary_brace_in_string_interps
+      return Fluttertoast.showToast(
+          msg: 'Tạo lớp học không thành công',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
 }
