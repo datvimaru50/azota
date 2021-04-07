@@ -31,9 +31,6 @@ class _ListClassState extends State<ListClass> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Color(0xFFecf0f5),
-        appBar: AppBar(
-          title: Text('Danh sách lớp'),
-        ),
         body: ListView(
           children: [
             Column(

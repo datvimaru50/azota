@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:azt/config/global.dart';
 import 'package:azt/view/detailClass_teacher.dart';
+import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:azt/view/listClass_teacher.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -94,25 +95,20 @@ class _AddClassState extends State<AddClass> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFecf0f5),
+      appBar: AppBar(
+        title: Text('Thêm lớp học', style: TextStyle(fontSize: 18)),
+        leading: IconButton(
+          icon: Icon(Icons.keyboard_arrow_left),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
+            );
+          },
+        ),
+      ),
       body: ListView(
         children: [
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.keyboard_arrow_left),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ListClass()),
-                    );
-                  },
-                ),
-              ],
-            ),
-            margin: EdgeInsets.only(left: 10, right: 10),
-          ),
           Container(
             child: Form(
               key: _formKey,

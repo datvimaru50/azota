@@ -94,32 +94,27 @@ class _AddExersiceState extends State<AddExersice> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFecf0f5),
+      appBar: AppBar(
+        title: Text('Thêm bài tập', style: TextStyle(fontSize: 18)),
+        leading: IconButton(
+          icon: Icon(Icons.keyboard_arrow_left),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailClass(
+                  id: widget.id,
+                  countStudents: widget.countStudents,
+                  className: widget.className,
+                  homeworks: widget.homeworks,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
       body: ListView(
         children: [
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.keyboard_arrow_left),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailClass(
-                          id: widget.id,
-                          countStudents: widget.countStudents,
-                          className: widget.className,
-                          homeworks: widget.homeworks,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-            margin: EdgeInsets.only(left: 10, right: 10),
-          ),
           Form(
             key: _formKey,
             child: Container(

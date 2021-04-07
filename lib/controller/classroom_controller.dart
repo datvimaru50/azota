@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:azt/view/detailClass_teacher.dart';
+import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:azt/view/listClass_teacher.dart';
 import 'package:azt/view/listStudents.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,7 +65,7 @@ class ClassroomController extends ControllerMVC {
         if (resBody['success'] == 1) {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (context) => ListClass(),
+                builder: (context) => GroupScreenTeacher(),
               ),
               (Route<dynamic> route) => false);
           return Fluttertoast.showToast(

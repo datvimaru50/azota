@@ -43,39 +43,38 @@ class _ListStudentsState extends State<ListStudents> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFecf0f5),
+      appBar: AppBar(
+        title: Text('Học sinh', style: TextStyle(fontSize: 18)),
+        leading: IconButton(
+          icon: Icon(Icons.keyboard_arrow_left),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailClass(
+                  id: widget.id,
+                  className: widget.className,
+                  countStudents: widget.countStudents,
+                  homeworkId: widget.homeworkId,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
       body: ListView(
         children: [
           Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.keyboard_arrow_left),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailClass(
-                          id: widget.id,
-                          className: widget.className,
-                          countStudents: widget.countStudents,
-                          homeworkId: widget.homeworkId,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                Text('Lớp: ${widget.className}'),
-                IconButton(
-                  icon: Icon(
-                    Icons.nat,
-                    color: Colors.white,
-                  ),
-                  onPressed: null,
-                )
-              ],
+            alignment: Alignment.center,
+            child: Text(
+              'Lớp: ${widget.className}',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            margin: EdgeInsets.only(left: 10, right: 10),
+            margin: EdgeInsets.all(10),
           ),
           GestureDetector(
             onTap: () {
@@ -98,7 +97,7 @@ class _ListStudentsState extends State<ListStudents> {
                 style: TextStyle(color: Colors.blue),
               ),
               padding: EdgeInsets.all(15),
-              margin: EdgeInsets.only(top: 10, left: 25, right: 25),
+              margin: EdgeInsets.only(left: 25, right: 25),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.0),
                 border: Border.all(

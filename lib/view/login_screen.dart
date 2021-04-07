@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:azt/config/connect.dart';
+import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:azt/view/notificationScreen.dart';
 import 'package:azt/view/register_screen.dart';
 import 'dart:io';
 import 'package:apple_sign_in/apple_sign_in.dart';
@@ -71,10 +71,7 @@ class _LoginFormState extends State<LoginForm> {
 
   void _enterNotificationScreenTeacher() {
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) => NotificationScreen(
-                  role: 'teacher',
-                )),
+        MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
         (Route<dynamic> route) => false);
   }
 
@@ -204,12 +201,10 @@ class _LoginFormState extends State<LoginForm> {
                               child: TextFormField(
                                 controller: numberPhone,
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  hintText: 'Số điện thoại',
-                                  prefixIcon:
-                                      Icon(Icons.phone_android_outlined),
+                                  prefixIcon: Icon(Icons.phone_iphone_outlined),
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Số điện thoại*',
+                                  hintText: 'Nhập số điện thoại ',
                                 ),
                                 validator: (value) => validatePhone(value),
                               ),
@@ -227,13 +222,10 @@ class _LoginFormState extends State<LoginForm> {
                                     controller: password,
                                     obscureText: _showPass,
                                     decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      hintText: 'Mật Khẩu',
                                       prefixIcon: Icon(Icons.lock),
-                                      // suffixIcon: Icon(Icons.remove_red_eye),
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Mật khẩu*',
+                                      hintText: 'Nhập mật khẩu ',
                                     ),
                                     validator: (value) =>
                                         validatePassword(value),
@@ -290,13 +282,14 @@ class _LoginFormState extends State<LoginForm> {
                           style: TextStyle(fontSize: 15),
                         ),
                       ),
-                       Platform.isAndroid
+                      Platform.isAndroid
                           ? Container()
-                          :Container(
-                         child: AppleSignInButton(
-                        type: ButtonType.continueButton,
-                        onPressed: _appleLogIn,
-                      ),),
+                          : Container(
+                              child: AppleSignInButton(
+                                type: ButtonType.continueButton,
+                                onPressed: _appleLogIn,
+                              ),
+                            ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
                         // ignore: deprecated_member_use
@@ -321,10 +314,11 @@ class _LoginFormState extends State<LoginForm> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => RegisterScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => RegisterScreen()),
                           );
                         },
                         child: Padding(

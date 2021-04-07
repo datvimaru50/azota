@@ -55,51 +55,6 @@ class _NotificationScreenState extends State<NotificationScreen>
     print('accesstoken::: ' + token);
   }
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Đăng xuất'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Bạn có thực sự muốn thoát ứng dụng?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Hủy'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              child: Text(
-                'Đăng xuất',
-                style: TextStyle(color: Colors.red),
-              ),
-              onPressed: () {
-                SavedToken.deleteToken(accessToken);
-                Prefs.deletePref();
-                _firebaseMessaging.deleteInstanceID();
-                Navigator.pop(context);
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => Splash()),
-                  ModalRoute.withName('/'),
-                );
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Future<void> _showUpdateDialog(
       String dialogTitle, String dialogDesc, String storeUrl) async {
     return showDialog<void>(
@@ -138,71 +93,45 @@ class _NotificationScreenState extends State<NotificationScreen>
     );
   }
 
-  Widget _buildFeatures() {
-    return widget.role == 'teacher'
-        ? Container(
-            color: Color(0xff1970b6),
-            child: Padding(
-              padding: EdgeInsets.all(15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              // LoginForm(),
-                              ListClass(),
-                        ),
-                      );
-                    },
-                    child: Column(
-                      children: [
-                        Image(
-                          image: AssetImage('assets/class.png'),
-                          height: 90,
-                        ),
-                        Text(
-                          'Giao \nbài tập',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      launch('$baseAccess/en/admin/content-store');
-                    },
-                    child: Column(
-                      children: [
-                        Image(
-                          image: AssetImage('assets/store.png'),
-                          height: 90,
-                        ),
-                        Text(
-                          'Ngân hàng \n  nội dung',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
-        : Text('');
-  }
+  // Widget _buildFeatures() {
+  //   return widget.role == 'teacher'
+  //       ? Container(
+  //           color: Color(0xff1970b6),
+  //           child: Padding(
+  //             padding: EdgeInsets.all(15),
+  //             child: Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               crossAxisAlignment: CrossAxisAlignment.center,
+  //               children: [
+  //                 GestureDetector(
+  //                   onTap: () {
+  //                     launch('$baseAccess/en/admin/content-store');
+  //                   },
+  //                   child: Column(
+  //                     children: [
+  //                       Image(
+  //                         image: AssetImage('assets/store.png'),
+  //                         height: 90,
+  //                       ),
+  //                       Text(
+  //                         'Ngân hàng \n  nội dung',
+  //                         style: TextStyle(color: Colors.white, fontSize: 16),
+  //                       )
+  //                     ],
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //         )
+  //       : Text('');
+  // }
 
   Widget _buildList() {
     return _notiArr.length != 0
         ? RefreshIndicator(
             child: Column(
               children: <Widget>[
-                _buildFeatures(),
                 Expanded(
                   child: ListView.builder(
                       padding: EdgeInsets.all(8),
@@ -361,21 +290,12 @@ class _NotificationScreenState extends State<NotificationScreen>
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(widget.role == 'teacher'
-                ? 'Thông báo giáo viên'
-                : 'Thông báo phụ huynh'),
-
-            //widget.role == 'teacher' ?
-            GestureDetector(
-              child: Icon(
-                Icons.logout,
-                color: Colors.white,
-              ),
-              onTap: () {
-                _showMyDialog();
-              },
-            )
-            //: Text(''),
+            Text(
+              widget.role == 'teacher' ? 'Thông báo' : 'Thông báo phụ huynh',
+              style: TextStyle(fontSize: 18),
+            ),
+            IconButton(
+                icon: Icon(Icons.delete_forever_outlined), onPressed: () {})
           ],
         ),
       ),

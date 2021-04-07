@@ -1,3 +1,4 @@
+import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:azt/view/notificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/config/global.dart';
@@ -26,9 +27,7 @@ class _MyAppState extends State<Splash> {
         future: accessToken,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return NotificationScreen(
-              role: 'teacher',
-            );
+            return GroupScreenTeacher();
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
