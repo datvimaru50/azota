@@ -3,7 +3,6 @@ import 'package:azt/models/core_mo.dart';
 import 'package:azt/view/addExersice.dart';
 import 'package:azt/view/detailExersice_teacher.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
-import 'package:azt/view/listClass_teacher.dart';
 import 'package:azt/view/listStudents.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';

@@ -220,8 +220,10 @@ class _ListStudentsState extends State<ListStudents> {
                                           child: Text(
                                             'Ngày sinh: ' +
                                                 DateFormat.yMd().format(
-                                                    DateTime.parse(
-                                                        item['birthday'])),
+                                                  DateTime.parse(
+                                                    item['birthday'],
+                                                  ),
+                                                ),
                                             style: TextStyle(
                                               fontSize: 13,
                                               fontStyle: FontStyle.italic,

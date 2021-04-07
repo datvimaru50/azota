@@ -1,5 +1,4 @@
 import 'package:azt/view/groupScreenTeacher.dart';
-import 'package:azt/view/notificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/config/global.dart';
 import 'package:azt/view/mainHome.dart';

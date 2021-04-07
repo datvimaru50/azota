@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:azt/config/global.dart';
 import 'package:azt/view/detailClass_teacher.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
-import 'package:azt/view/listClass_teacher.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;

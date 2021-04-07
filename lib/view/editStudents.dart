@@ -207,8 +207,10 @@ class _EditStudentState extends State<EditStudent> {
                               ),
                             );
                           },
-                          child: Text('HỦY',
-                              style: TextStyle(color: Colors.black)),
+                          child: Text(
+                            'HỦY',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
                       ],
                     ),

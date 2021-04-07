@@ -49,7 +49,11 @@ class _ListClassState extends State<ListClass> {
                       style: TextStyle(color: Colors.blue),
                     ),
                     padding: EdgeInsets.all(15),
-                    margin: EdgeInsets.only(top: 10, left: 25, right: 25),
+                    margin: EdgeInsets.only(
+                      top: 10,
+                      left: 25,
+                      right: 25,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5.0),
                       border: Border.all(

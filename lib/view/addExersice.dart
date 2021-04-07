@@ -124,7 +124,11 @@ class _AddExersiceState extends State<AddExersice> {
                     alignment: Alignment.topLeft,
                     child: Container(
                       margin: EdgeInsets.only(
-                          left: 10, right: 50, top: 5, bottom: 5),
+                        left: 10,
+                        right: 50,
+                        top: 5,
+                        bottom: 5,
+                      ),
                       child: DateTimePicker(
                         controller: deadline,
                         decoration: InputDecoration(

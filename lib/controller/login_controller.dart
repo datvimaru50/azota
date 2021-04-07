@@ -113,6 +113,7 @@ class LoginController extends ControllerMVC {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> resBody = json.decode(response.body);
+      // ignore: unnecessary_brace_in_string_interps
       print('object ${resBody}');
       var userData = resBody['data'];
       User authUser = User.fromJson(userData);

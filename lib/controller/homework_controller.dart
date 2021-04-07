@@ -119,11 +119,14 @@ class HomeworkController extends ControllerMVC {
       Map<String, dynamic> params) async {
     final String token = await Prefs.getPref(ACCESS_TOKEN);
 
-    final response = await http.Client()
-        .post(AZO_RESEND_ANSWER, body: jsonEncode(params), headers: {
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-      HttpHeaders.authorizationHeader: "Bearer $token"
-    });
+    final response = await http.Client().post(
+      AZO_RESEND_ANSWER,
+      body: jsonEncode(params),
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+        HttpHeaders.authorizationHeader: "Bearer $token"
+      },
+    );
 
     switch (response.statusCode) {
       case 200:

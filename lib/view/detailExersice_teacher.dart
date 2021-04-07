@@ -4,12 +4,8 @@ import 'package:azt/models/core_mo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-
-import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:date_time_format/date_time_format.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -102,11 +98,15 @@ class _DetailExersiceState extends State<DetailExersice> {
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
                   try {
-                    await HomeworkController.requestResubmitAnswer({"id": studentId.toString(), "resendNote": noteText.text});
+                    await HomeworkController.requestResubmitAnswer({
+                      "id": studentId.toString(),
+                      "resendNote": noteText.text
+                    });
                     Navigator.pop(context);
                     // reload
                     setState(() {
-                      submitedStudents = ClassroomController.answerStudent(widget.exerciseId);
+                      submitedStudents =
+                          ClassroomController.answerStudent(widget.exerciseId);
                     });
                   } catch (err) {
                     Fluttertoast.showToast(
@@ -359,7 +359,9 @@ class _DetailExersiceState extends State<DetailExersice> {
                                 if (snapshot.hasData) {
                                   // Xử lý if-else
                                   var submitteData = snapshot.data.dataAnswer;
-                                  print('lalalala:::::: ' + snapshot.data.dataAnswer.length.toString());
+                                  print('lalalala:::::: ' +
+                                      snapshot.data.dataAnswer.length
+                                          .toString());
 
                                   SubmitStatus checkSubmitStatus(
                                       int studentId) {
@@ -395,9 +397,14 @@ class _DetailExersiceState extends State<DetailExersice> {
                                       return result;
                                     }
 
-                                    for (var i = 0;i < submitteData.length;i++) {
-                                      if (submitteData.elementAt(i)["studentId"] == studentId) {
-                                        result = submitteData.elementAt(i)["id"];
+                                    for (var i = 0;
+                                        i < submitteData.length;
+                                        i++) {
+                                      if (submitteData
+                                              .elementAt(i)["studentId"] ==
+                                          studentId) {
+                                        result =
+                                            submitteData.elementAt(i)["id"];
                                         break;
                                       }
                                     }
@@ -428,7 +435,9 @@ class _DetailExersiceState extends State<DetailExersice> {
                                                                     alignment:
                                                                         Alignment
                                                                             .topLeft,
-                                                                    child: Text(item['fullName']),
+                                                                    child: Text(
+                                                                        item[
+                                                                            'fullName']),
                                                                   ),
                                                                   checkSubmitStatus(item[
                                                                               "id"]) ==
@@ -458,7 +467,9 @@ class _DetailExersiceState extends State<DetailExersice> {
                                                                                 3,
                                                                           ),
                                                                         ),
-                                                                  getAnswerId(item["id"]) == null
+                                                                  getAnswerId(item[
+                                                                              "id"]) ==
+                                                                          null
                                                                       ? Container()
                                                                       : GestureDetector(
                                                                           onTap:
