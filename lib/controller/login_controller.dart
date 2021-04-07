@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
+import 'package:azt/config/connect.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:azt/models/authen.dart';
 
