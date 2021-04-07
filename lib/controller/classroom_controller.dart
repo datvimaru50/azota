@@ -183,7 +183,7 @@ class ClassroomController extends ControllerMVC {
     }
   }
 
-  static Future<ClassroomHashIdInfo> studentClassroom(String id) async {
+  static Future<List<dynamic>> studentClassroom({@required String id}) async {
     final token = await Prefs.getPref(ACCESS_TOKEN);
     final response = await http.Client()
         .get(AZO_STUDENT_INFO + '?classroomId=' + id, headers: {
@@ -195,9 +195,10 @@ class ClassroomController extends ControllerMVC {
       case 200:
         final Map<String, dynamic> resBody = json.decode(response.body);
         if (resBody['success'] == 1) {
-          return ClassroomHashIdInfo.fromJson(resBody);
+          List<dynamic> result = resBody["data"];
+          return result;
         } else {
-          throw ERR_UPDATE_PARENT;
+          throw "Lấy thông tin học sinh bị lỗi";
         }
         break;
 

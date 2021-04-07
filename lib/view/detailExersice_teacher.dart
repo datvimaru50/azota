@@ -32,8 +32,8 @@ class _DetailExersiceState extends State<DetailExersice> {
   final _formKey = GlobalKey<FormState>();
   final noteText = TextEditingController();
   bool status = false;
-  bool submitDate = false;
-  Future<ClassroomHashIdInfo> classroomHashIdInfo;
+  bool isSubmitDateDecending = false;
+  Future<List<dynamic>> classroomHashIdInfo;
 
   Future<AnswerHashIdInfo> submitedStudents;
 
@@ -43,8 +43,9 @@ class _DetailExersiceState extends State<DetailExersice> {
     Intl.defaultLocale = 'vi_VN';
     initializeDateFormatting();
     submitedStudents = ClassroomController.answerStudent(widget.exerciseId);
+
     classroomHashIdInfo =
-        ClassroomController.studentClassroom(widget.id); // list all student
+        ClassroomController.studentClassroom(id: widget.id); // list all student
   }
 
   Future<void> _showMyDialog(int studentId) {
@@ -287,7 +288,8 @@ class _DetailExersiceState extends State<DetailExersice> {
                   ),
                   Container(
                     child: Text(
-                      'Gửi bài tập qua nhom Zalo để phụ huynh / học sinh có thể nộp bài online',
+                      'Gửi bài tập qua nhóm Zalo để phụ huynh / học sinh có thể nộp bài online',
+                      style: TextStyle(fontSize: 13),
                     ),
                     decoration: BoxDecoration(
                       border: Border(
@@ -304,19 +306,20 @@ class _DetailExersiceState extends State<DetailExersice> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text('Ngầy nộp bài giảm dần '),
+                                Text('Ngày nộp bài giảm dần '),
                                 FlutterSwitch(
                                   width: 47.0,
                                   height: 22.0,
                                   valueFontSize: 13.0,
                                   toggleSize: 13.0,
-                                  value: submitDate,
+                                  value: isSubmitDateDecending,
                                   borderRadius: 30.0,
                                   padding: 4.0,
                                   showOnOff: true,
                                   onToggle: (val) {
                                     setState(() {
-                                      submitDate = val;
+                                      isSubmitDateDecending = val;
+                                      classroomHashIdInfo = ClassroomController.studentClassroom(id: widget.id);
                                     });
                                   },
                                 ),
@@ -340,6 +343,7 @@ class _DetailExersiceState extends State<DetailExersice> {
                                   onToggle: (val) {
                                     setState(() {
                                       status = val;
+                                      classroomHashIdInfo = ClassroomController.studentClassroom(id: widget.id);
                                     });
                                   },
                                 ),
@@ -358,26 +362,20 @@ class _DetailExersiceState extends State<DetailExersice> {
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   // Xử lý if-else
-                                  var submitteData = snapshot.data.dataAnswer;
-                                  print('lalalala:::::: ' + snapshot.data.dataAnswer.length.toString());
+                                  var submittedData = snapshot.data.dataAnswer;
 
+                                  // Check submit status
                                   SubmitStatus checkSubmitStatus(
                                       int studentId) {
                                     var result = SubmitStatus.notSubmitted;
 
-                                    if (submitteData.isEmpty) {
+                                    if (submittedData.isEmpty) {
                                       return result;
                                     }
 
-                                    for (var i = 0;
-                                        i < submitteData.length;
-                                        i++) {
-                                      if (submitteData
-                                              .elementAt(i)["studentId"] ==
-                                          studentId) {
-                                        if (submitteData
-                                                .elementAt(i)["confirmedAt"] !=
-                                            null) {
+                                    for (var i = 0;i < submittedData.length;i++) {
+                                      if (submittedData.elementAt(i)["studentId"] == studentId) {
+                                        if (submittedData.elementAt(i)["confirmedAt"] == null) {
                                           result = SubmitStatus.notMarked;
                                         } else {
                                           result = SubmitStatus.marked;
@@ -389,28 +387,52 @@ class _DetailExersiceState extends State<DetailExersice> {
                                     return result;
                                   }
 
+                                  // Get answer ID
                                   dynamic getAnswerId(int studentId) {
                                     var result;
-                                    if (submitteData.isEmpty) {
+                                    if (submittedData.isEmpty) {
                                       return result;
                                     }
 
-                                    for (var i = 0;i < submitteData.length;i++) {
-                                      if (submitteData.elementAt(i)["studentId"] == studentId) {
-                                        result = submitteData.elementAt(i)["id"];
+                                    for (var i = 0;i < submittedData.length;i++) {
+                                      if (submittedData.elementAt(i)["studentId"] == studentId) {
+                                        result = submittedData.elementAt(i)["id"];
                                         break;
                                       }
                                     }
                                     return result;
                                   }
 
-                                  return FutureBuilder<ClassroomHashIdInfo>(
+                                  // Get submitDate
+                                  DateTime getSubmitDate({@required int studentId}){
+                                    var result = DateTime.parse("1900-04-07T15:04:14"); // along time ago: 17/04/1900
+
+                                    if (submittedData.isEmpty) {
+                                      return result;
+                                    }
+                                    for (var i = 0;i < submittedData.length;i++) {
+                                      if (submittedData.elementAt(i)["studentId"] == studentId) {
+                                        result = DateTime.parse(submittedData.elementAt(i)["updatedAt"]);
+                                        break;
+                                      }
+                                    }
+                                    return result;
+                                  }
+
+                                  return FutureBuilder<List<dynamic>>(
                                     future: classroomHashIdInfo,
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
+                                        var arr = snapshot.data;
+                                        if(status){
+                                          arr = snapshot.data.where((item) => checkSubmitStatus(item["id"]) == SubmitStatus.notMarked).toList();
+                                        }
+                                        if(isSubmitDateDecending){
+                                          arr.sort((a,b)=>getSubmitDate(studentId:b["id"]).compareTo(getSubmitDate(studentId: a["id"])));
+                                        }
                                         return Column(
                                           children: [
-                                            ...snapshot.data.data.map(
+                                            ...arr.map(
                                               (dynamic item) => Column(
                                                 children: [
                                                   Container(
@@ -482,43 +504,22 @@ class _DetailExersiceState extends State<DetailExersice> {
                                                               width: 120,
                                                             ),
                                                             ElevatedButton(
-                                                              child: Text(checkSubmitStatus(
-                                                                          item[
-                                                                              "id"]) ==
-                                                                      SubmitStatus
-                                                                          .notSubmitted
+                                                              child: Text(checkSubmitStatus(item["id"]) == SubmitStatus.notSubmitted
                                                                   ? 'Chưa nộp'
-                                                                  : checkSubmitStatus(item[
-                                                                              "id"]) ==
-                                                                          SubmitStatus
-                                                                              .notMarked
+                                                                  : checkSubmitStatus(item["id"]) == SubmitStatus.marked
                                                                       ? 'Chấm lại'
                                                                       : 'Chấm bài'),
-                                                              onPressed: checkSubmitStatus(
-                                                                          item[
-                                                                              "id"]) ==
-                                                                      SubmitStatus
-                                                                          .notSubmitted
+                                                              onPressed: checkSubmitStatus(item["id"]) == SubmitStatus.notSubmitted
                                                                   ? null
-                                                                  : checkSubmitStatus(item[
-                                                                              "id"]) ==
-                                                                          SubmitStatus
-                                                                              .notMarked
+                                                                  : checkSubmitStatus(item["id"]) == SubmitStatus.notMarked
                                                                       ? markExercise
                                                                       : markExercise,
                                                               style:
                                                                   ElevatedButton
                                                                       .styleFrom(
-                                                                primary: checkSubmitStatus(item[
-                                                                            "id"]) ==
-                                                                        SubmitStatus
-                                                                            .notMarked
-                                                                    ? Colors
-                                                                        .blueGrey
-                                                                        .shade800
-                                                                    : Colors
-                                                                        .yellow
-                                                                        .shade800,
+                                                                primary: checkSubmitStatus(item["id"]) == SubmitStatus.marked
+                                                                    ? Colors.blueGrey.shade800
+                                                                    : Colors.yellow.shade800,
                                                               ),
                                                             ),
                                                           ],
@@ -541,9 +542,7 @@ class _DetailExersiceState extends State<DetailExersice> {
                                             ),
                                           ],
                                         );
-                                        // (BuildContext context, int index) {
-                                        //   return Text('snapshot.data.data[');
-                                        // };
+
                                       } else if (snapshot.hasError) {
                                         return Text("${snapshot.error}");
                                       }

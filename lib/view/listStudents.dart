@@ -31,14 +31,14 @@ class ListStudents extends StatefulWidget {
 }
 
 class _ListStudentsState extends State<ListStudents> {
-  Future<ClassroomHashIdInfo> classroomHashIdInfo;
+  Future<List<dynamic>> classroomHashIdInfo;
   Future<ClassroomHashIdInfo> deleteStudent;
   int i = 1;
 
   @override
   void initState() {
     super.initState();
-    classroomHashIdInfo = ClassroomController.studentClassroom(widget.id);
+    classroomHashIdInfo = ClassroomController.studentClassroom(id: widget.id);
   }
 
   Widget build(BuildContext context) {
@@ -169,13 +169,13 @@ class _ListStudentsState extends State<ListStudents> {
                     ),
                   ),
                 ),
-                FutureBuilder<ClassroomHashIdInfo>(
+                FutureBuilder<List<dynamic>>(
                   future: classroomHashIdInfo,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Column(
                         children: [
-                          ...snapshot.data.data.map(
+                          ...snapshot.data.map(
                             (dynamic item) => Container(
                               child: Row(
                                 children: [
