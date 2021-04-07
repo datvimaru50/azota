@@ -74,7 +74,12 @@ class _DetailExersiceState extends State<DetailExersice> {
                           hintText: 'Ghi chú',
                           prefixIcon: Icon(Icons.phone_android_outlined),
                         ),
-                        //validator: (value) => validatePhone(value),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Vui lòng nêu lý do yêu cầu nộp lại';
+                          }
+                          return null;
+                        },
                       ),
                     ],
                   ),
@@ -94,11 +99,27 @@ class _DetailExersiceState extends State<DetailExersice> {
                 'Xác nhận',
                 style: TextStyle(color: Colors.red),
               ),
-              onPressed: () {
-                print('nop lai $studentId');
-
-                HomeworkController.requestResubmitAnswer(
-                    {"id": studentId.toString(), "resendNote": noteText.text});
+              onPressed: () async {
+                if (_formKey.currentState.validate()) {
+                  try {
+                    await HomeworkController.requestResubmitAnswer({"id": studentId.toString(), "resendNote": noteText.text});
+                    Navigator.pop(context);
+                    // reload
+                    setState(() {
+                      submitedStudents = ClassroomController.answerStudent(widget.exerciseId);
+                    });
+                  } catch (err) {
+                    Fluttertoast.showToast(
+                        msg: err.toString(),
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIos: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                    Navigator.pop(context);
+                  }
+                }
               },
             ),
           ],
@@ -338,9 +359,7 @@ class _DetailExersiceState extends State<DetailExersice> {
                                 if (snapshot.hasData) {
                                   // Xử lý if-else
                                   var submitteData = snapshot.data.dataAnswer;
-                                  print('lalalala:::::: ' +
-                                      snapshot.data.dataAnswer.length
-                                          .toString());
+                                  print('lalalala:::::: ' + snapshot.data.dataAnswer.length.toString());
 
                                   SubmitStatus checkSubmitStatus(
                                       int studentId) {
@@ -364,6 +383,21 @@ class _DetailExersiceState extends State<DetailExersice> {
                                           result = SubmitStatus.marked;
                                         }
 
+                                        break;
+                                      }
+                                    }
+                                    return result;
+                                  }
+
+                                  dynamic getAnswerId(int studentId) {
+                                    var result;
+                                    if (submitteData.isEmpty) {
+                                      return result;
+                                    }
+
+                                    for (var i = 0;i < submitteData.length;i++) {
+                                      if (submitteData.elementAt(i)["studentId"] == studentId) {
+                                        result = submitteData.elementAt(i)["id"];
                                         break;
                                       }
                                     }
@@ -394,9 +428,7 @@ class _DetailExersiceState extends State<DetailExersice> {
                                                                     alignment:
                                                                         Alignment
                                                                             .topLeft,
-                                                                    child: Text(
-                                                                        item[
-                                                                            'fullName']),
+                                                                    child: Text(item['fullName']),
                                                                   ),
                                                                   checkSubmitStatus(item[
                                                                               "id"]) ==
@@ -426,15 +458,12 @@ class _DetailExersiceState extends State<DetailExersice> {
                                                                                 3,
                                                                           ),
                                                                         ),
-                                                                  checkSubmitStatus(item[
-                                                                              "id"]) ==
-                                                                          SubmitStatus
-                                                                              .notSubmitted
+                                                                  getAnswerId(item["id"]) == null
                                                                       ? Container()
                                                                       : GestureDetector(
                                                                           onTap:
                                                                               () {
-                                                                            _showMyDialog(item["id"]);
+                                                                            _showMyDialog(getAnswerId(item["id"]));
                                                                           },
                                                                           child:
                                                                               Container(
