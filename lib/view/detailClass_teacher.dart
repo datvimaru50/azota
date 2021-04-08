@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
@@ -18,13 +19,13 @@ void main() {
 
 class DetailClass extends StatefulWidget {
   DetailClass({
-    this.id,
+    this.idClassroom,
     this.countStudents,
     this.className,
     this.homeworkId,
     this.homeworks,
   });
-  final String id;
+  final String idClassroom;
   final String countStudents;
   final String className;
   final String homeworkId;
@@ -43,7 +44,8 @@ class _DetailClassState extends State<DetailClass> {
   @override
   void initState() {
     super.initState();
-    classroomHashIdInfo = ClassroomController.getExersiceInfoAgain(widget.id);
+    classroomHashIdInfo =
+        ClassroomController.getExersiceInfoAgain(widget.idClassroom);
   }
 
   @override
@@ -81,7 +83,7 @@ class _DetailClassState extends State<DetailClass> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ListStudents(
-                                    id: widget.id,
+                                    id: widget.idClassroom,
                                     className: widget.className,
                                     countStudents: widget.countStudents,
                                     homeworkId: widget.homeworkId,
@@ -162,7 +164,8 @@ class _DetailClassState extends State<DetailClass> {
                                                             .validate()) {
                                                           ClassroomController
                                                               .updateClassroom(
-                                                                  widget.id,
+                                                                  widget
+                                                                      .idClassroom,
                                                                   name,
                                                                   widget
                                                                       .countStudents,
@@ -189,7 +192,8 @@ class _DetailClassState extends State<DetailClass> {
                                                             builder:
                                                                 (context) =>
                                                                     DetailClass(
-                                                              id: widget.id,
+                                                              idClassroom: widget
+                                                                  .idClassroom,
                                                               className: widget
                                                                   .className,
                                                               countStudents: widget
@@ -262,7 +266,8 @@ class _DetailClassState extends State<DetailClass> {
                                               deleteClassroom =
                                                   ClassroomController
                                                       .deleteClassroom(
-                                                          widget.id, context);
+                                                          widget.idClassroom,
+                                                          context);
                                             },
                                           );
                                         },
@@ -349,7 +354,7 @@ class _DetailClassState extends State<DetailClass> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => AddExersice(
-                        id: widget.id,
+                        id: widget.idClassroom,
                         className: widget.className,
                         countStudents: widget.countStudents,
                         homeworkId: widget.homeworkId,
@@ -426,110 +431,231 @@ class _DetailClassState extends State<DetailClass> {
                         ...snapshot.data.data.map(
                           (dynamic item) => Column(
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => DetailExersice(
-                                          // content: item['content'].toString(),
-                                          id: widget.id,
-                                          homeworkId: widget.homeworkId,
-                                          exerciseId: item['id'].toString()),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.topLeft,
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text(
-                                                    'Bài tập ngày: ${DateFormat.yMd().format(DateTime.parse(item["createdAt"]))}', // dfdfdfd
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  margin: EdgeInsets.only(
-                                                    top: 5,
-                                                    bottom: 2,
-                                                  ),
-                                                  width: 165,
-                                                ),
-                                                Container(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text(
-                                                    'Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(item["deadline"]))}',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                  width: 165,
-                                                ),
-                                              ],
-                                            ),
-                                            margin: EdgeInsets.only(left: 15),
-                                          ),
-                                          Container(
-                                            child: Text(
-                                              'Đã nộp: ${item['count']}/${widget.countStudents}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
+                              Container(
+                                child: Slidable(
+                                  actionPane: SlidableDrawerActionPane(),
+                                  actionExtentRatio: 0.25,
+                                  child: GestureDetector(
+                                    onLongPress: () {
+                                      showAnimatedDialog(
+                                        context: context,
+                                        barrierDismissible: true,
+                                        builder: (BuildContext context) {
+                                          return ClassicGeneralDialogWidget(
+                                            titleText: 'Bạn có chắc chắn',
+                                            actions: [
+                                              // ignore: deprecated_member_use
+                                              FlatButton(
+                                                onPressed: () {
+                                                  setState(
+                                                    () {
+                                                      ClassroomController
+                                                          .deleteExersice(
+                                                        widget.countStudents,
+                                                        widget.className,
+                                                        widget.homeworkId,
+                                                        widget.homeworks,
+                                                        widget.idClassroom,
+                                                        idExersice: item['id']
+                                                            .toString(),
+                                                        context: context,
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                child: Text('Xóa'),
+                                                color: Colors.red,
                                               ),
-                                            ),
-                                            margin: EdgeInsets.only(right: 15),
-                                            height: 32,
+                                              // ignore: deprecated_member_use
+                                              FlatButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Hủy'),
+                                                color: Colors.black38,
+                                              )
+                                            ],
+                                          );
+                                        },
+                                        animationType:
+                                            DialogTransitionType.size,
+                                        curve: Curves.fastOutSlowIn,
+                                        duration: Duration(seconds: 1),
+                                      );
+                                    },
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DetailExersice(
+                                            deadline:
+                                                item["deadline"].toString(),
+                                            exerciseId: item['id'].toString(),
+                                            content: item['content'].toString(),
+                                            countStudents: widget.countStudents,
+                                            className: widget.className,
+                                            homeworkId: widget.homeworkId,
+                                            homeworks: widget.homeworks,
+                                            idClassroom: widget.idClassroom,
+                                            idExersice: item['id'].toString(),
                                           ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.topLeft,
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Text(
+                                                        'Bài tập ngày: ${DateFormat.yMd().format(DateTime.parse(item["createdAt"]))}', // dfdfdfd
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      margin: EdgeInsets.only(
+                                                        top: 5,
+                                                        bottom: 2,
+                                                      ),
+                                                      width: 165,
+                                                    ),
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Text(
+                                                        'Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(item["deadline"]))}',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      width: 165,
+                                                    ),
+                                                  ],
+                                                ),
+                                                margin:
+                                                    EdgeInsets.only(left: 15),
+                                              ),
+                                              Container(
+                                                child: Text(
+                                                  'Đã nộp: ${item['count']}/${widget.countStudents}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                margin:
+                                                    EdgeInsets.only(right: 15),
+                                                height: 32,
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            child: Html(
+                                              data:
+                                                  """<div class="limit">${item['content']}</div>""",
+                                              style: {
+                                                "div": Style(
+                                                  height: 18,
+                                                  color: Colors.white,
+                                                ),
+                                                "p": Style(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                "a": Style(color: Colors.white),
+                                                "h1":
+                                                    Style(color: Colors.white),
+                                              },
+                                            ),
+                                            padding: EdgeInsets.only(left: 9),
+                                          )
                                         ],
                                       ),
-                                      Container(
-                                        child: Html(
-                                          data:
-                                              """<div class="limit">${item['content']}</div>""",
-                                          style: {
-                                            "div": Style(
-                                              height: 18,
-                                              color: Colors.white,
-                                            ),
-                                            "p": Style(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            "a": Style(color: Colors.white),
-                                            "h1": Style(color: Colors.white),
-                                          },
+                                      margin:
+                                          EdgeInsets.only(left: 25, right: 25),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                        border: Border.all(
+                                          color: Colors.black12,
                                         ),
-                                        padding: EdgeInsets.only(left: 9),
-                                      )
-                                    ],
-                                  ),
-                                  margin: EdgeInsets.only(
-                                      left: 25, right: 25, top: 8, bottom: 5),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: Colors.black12,
+                                        color: Color(0xff00c0ef),
+                                      ),
                                     ),
-                                    color: Color(0xff00c0ef),
                                   ),
+                                  secondaryActions: <Widget>[
+                                    IconSlideAction(
+                                      caption: 'Xóa',
+                                      color: Colors.red,
+                                      icon: Icons.delete,
+                                      onTap: () {
+                                        showAnimatedDialog(
+                                          context: context,
+                                          barrierDismissible: true,
+                                          builder: (BuildContext context) {
+                                            return ClassicGeneralDialogWidget(
+                                              titleText: 'Bạn có chắc chắn',
+                                              actions: [
+                                                // ignore: deprecated_member_use
+                                                FlatButton(
+                                                  onPressed: () {
+                                                    setState(
+                                                      () {
+                                                        ClassroomController
+                                                            .deleteExersice(
+                                                          widget.countStudents,
+                                                          widget.className,
+                                                          widget.homeworkId,
+                                                          widget.homeworks,
+                                                          widget.idClassroom,
+                                                          idExersice: item['id']
+                                                              .toString(),
+                                                          context: context,
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Text('Xóa'),
+                                                  color: Colors.red,
+                                                ),
+                                                // ignore: deprecated_member_use
+                                                FlatButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text('Hủy'),
+                                                  color: Colors.black38,
+                                                )
+                                              ],
+                                            );
+                                          },
+                                          animationType:
+                                              DialogTransitionType.size,
+                                          curve: Curves.fastOutSlowIn,
+                                          duration: Duration(seconds: 1),
+                                        );
+                                      },
+                                    ),
+                                  ],
                                 ),
-                              )
+                                margin: EdgeInsets.only(top: 8, bottom: 5),
+                              ),
                             ],
                           ),
                         ),

@@ -122,7 +122,7 @@ class _ListClassState extends State<ListClass> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => DetailClass(
-                                            id: item['id'].toString(),
+                                            idClassroom: item['id'].toString(),
                                             countStudents: item['countStudents']
                                                 .toString(),
                                             className: item['name'].toString(),

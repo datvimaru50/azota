@@ -24,6 +24,7 @@ const AZO_S3SPACE_SAVE = "$AZT_DEV_SERVER/S3space/get_public_upload_url";
 
 const AZO_CLASSROOM_INFO = "$AZT_DEV_SERVER/Classroom/GetObjs";
 const AZO_DELETECLASSROOM_INFO = "$AZT_DEV_SERVER/Classroom/DeleteObj";
+const AZO_DELETEEXERSICE_INFO = "$AZT_DEV_SERVER/Homework/DeleteObj";
 const AZO_RESEND_ANSWER = "$AZT_DEV_SERVER/Answer/ResendAnswer";
 const AZO_EXERSICE_INFO = "$AZT_DEV_SERVER/Homework/GetObjsByClassroom";
 const AZO_DELETESTUDENT_INFO = "$AZT_DEV_SERVER/Student/DeleteObj";
@@ -35,6 +36,7 @@ const AZO_CLASSROOM_UPDATE = "$AZT_DEV_SERVER/Classroom/UpdateObj";
 const AZO_STUDENT_UPDATE = "$AZT_DEV_SERVER/Student/UpdateObj";
 
 const AZO_ADDCLASS_INFO = "$AZT_DEV_SERVER/Classroom/SaveObj";
+const AZO_UPDATEEXERSICE_INFO = "$AZT_DEV_SERVER/Homework/UpdateObj";
 
 /* ERROR MESSAGE */
 const ERR_INVALID_LOGIN_INFO = "Sai tên đăng nhập hoặc mật khẩu!";
