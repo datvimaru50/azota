@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:azt/view/notification/notificationStudent.dart';
 import 'package:azt/view/notification/notificationTeacher.dart';
 import 'package:azt/controller/notification_controller.dart';
@@ -24,6 +25,7 @@ class _NotificationScreenState extends State<NotificationScreen>
   Iterable _notiArr = [];
   var baseAccess;
   var accessToken;
+  bool doneLoading = false;
   var currentVerion = '';
   var latestVerion = '';
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -35,6 +37,7 @@ class _NotificationScreenState extends State<NotificationScreen>
         ? await NotiController.getNotiAnonymous(1)
         : await NotiController.getNoti(1);
     setState(() {
+      doneLoading = true;
       _notiArr = result.objs;
     });
   }
@@ -91,8 +94,10 @@ class _NotificationScreenState extends State<NotificationScreen>
   }
 
   Widget _buildList() {
-    return _notiArr.length != 0
-        ? RefreshIndicator(
+    return doneLoading == false ?
+        Center(child: CircularProgressIndicator()) :
+        _notiArr.length != 0 ?
+        RefreshIndicator(
             child: Column(
               children: <Widget>[
                 Expanded(
@@ -117,6 +122,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                                     .toString(),
                               )
                             : NotificationTeacherItem(
+                                noticeId: _notiArr.elementAt(index)['id'],
+                                read:  _notiArr.elementAt(index)['readAt'] != null ? true : false,
                                 className:
                                     _notiArr.elementAt(index)['classroomName'],
                                 student:
@@ -133,7 +140,7 @@ class _NotificationScreenState extends State<NotificationScreen>
             ),
             onRefresh: _getData,
           )
-        : Center(child: CircularProgressIndicator());
+        : Center(child: Text('Bạn không có thông báo nào!', style: TextStyle(fontSize: 16),));
   }
 
   Future<void> _getData() async {
@@ -253,8 +260,66 @@ class _NotificationScreenState extends State<NotificationScreen>
               widget.role == 'teacher' ? 'Thông báo' : 'Thông báo phụ huynh',
               style: TextStyle(fontSize: 18),
             ),
+            _notiArr.length != 0 ?
             IconButton(
-                icon: Icon(Icons.delete_forever_outlined), onPressed: () {})
+                icon: Icon(Icons.delete_forever_outlined),
+              onPressed: () {
+                showAnimatedDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (BuildContext context) {
+                    return ClassicGeneralDialogWidget(
+                      actions: [
+                        Container(
+                          width: 300,
+                          child: Column(
+                            mainAxisAlignment:
+                            MainAxisAlignment.start,
+                            children: [
+                              TextButton(
+                                onPressed: () async{
+                                  await NotiController.markAllAsRead();
+                                  await _getData();
+                                },
+                                child: Container(
+                                  // color: Colors.black,
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Đánh dấu tất cả là đã đọc',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () async{
+                                  await NotiController.deleteAllNotif();
+                                  await _getData();
+                                },
+                                child: Container(
+                                  // color: Colors.black,
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Xóa tất cả thông báo',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                  animationType: DialogTransitionType.size,
+                  curve: Curves.fastOutSlowIn,
+                  duration: Duration(seconds: 1),
+                );
+              },
+            ) : Container()
           ],
         ),
       ),

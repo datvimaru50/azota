@@ -13,6 +13,10 @@ const AZO_AUTH_APPLE = "$AZT_DEV_SERVER/auth/RegisterByAppleId";
 const AZO_TOKEN_SAVE = "$AZT_DEV_SERVER/Firebase/SaveToken";
 const AZO_TOKEN_DELETE = "$AZT_DEV_SERVER/Firebase/RemoveToken";
 const AZO_GET_NOTIF = "$AZT_DEV_SERVER/Notice/GetObjs";
+const AZO_NOTIF_MARK_READ = "$AZT_DEV_SERVER/Notice/MarkAsRead";
+const AZO_NOTIF_MARK_ALL_READ = "$AZT_DEV_SERVER/Notice/MarAllAsRead";
+const AZO_DELETE_NOTIF = "$AZT_DEV_SERVER/Notice/DeleteObj";
+const AZO_DELETE_ALL_NOTIF = "$AZT_DEV_SERVER/Notice/DeleteAllObjs";
 
 const AZO_HOMEWORK_INFO = "$AZT_DEV_SERVER/FrontHomework/GetObj";
 const AZO_LOGIN_ANONYMOUS = "$AZT_DEV_SERVER/Auth/LoginAnonymous";

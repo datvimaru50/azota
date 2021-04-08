@@ -1,17 +1,23 @@
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:azt/controller/notification_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class NotificationTeacherItem extends StatefulWidget {
   NotificationTeacherItem(
-      {this.className,
+      {this.noticeId,
+      this.className,
+        this.read,
       this.deadline,
       this.student,
       this.submitTime,
       this.webUrl});
 
+  final int noticeId;
+  final bool read;
   final String className;
   final String student;
   final String deadline;
@@ -42,11 +48,17 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
   Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _clickedStatus = true;
-          });
-          launch(widget.webUrl);
+        onTap: () async{
+          try {
+            setState(() {
+              _clickedStatus = true;
+            });
+            await NotiController.markAsRead(noticeId: widget.noticeId);
+            launch(widget.webUrl);
+          } catch(err) {
+            Fluttertoast.showToast(msg: err.toString(),backgroundColor: Colors.red,);
+          }
+
         },
         child: Container(
           child: Row(
@@ -153,7 +165,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black12),
             // color: Colors.white,
-            color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
+            color: _clickedStatus || widget.read ? Colors.black38 : Color(0xff00c0ef),
           ),
         ),
       ),
