@@ -251,7 +251,6 @@ class _LoginFormState extends State<LoginForm> {
                             Padding(
                               padding: const EdgeInsets.only(top: 10),
                               child: ElevatedButton.icon(
-                                //ElevatedButton.icon(onPressed: onPressed, icon: icon, label: label),
                                 icon: Icon(Icons.arrow_right_alt),
                                 label: Text(_isSigningIn
                                     ? 'Đang đăng nhập...'

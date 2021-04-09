@@ -569,7 +569,7 @@ class _DetailClassState extends State<DetailClass> {
                                           Container(
                                             child: Html(
                                               data:
-                                                  """<div class="limit">${item['content']}</div>""",
+                                                  """<div >${item['content']}</div>""",
                                               style: {
                                                 "div": Style(
                                                   height: 18,

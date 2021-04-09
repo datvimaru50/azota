@@ -120,20 +120,6 @@ class _AddExersiceState extends State<AddExersice> {
               child: Column(
                 children: [
                   Container(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Text(
-                        'Tạo lớp mới',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    color: Color(0xff00a7d0),
-                  ),
-                  Container(
                     child: DateTimePicker(
                       controller: deadline,
                       decoration: InputDecoration(
@@ -168,6 +154,9 @@ class _AddExersiceState extends State<AddExersice> {
                   Container(
                     child: TextFormField(
                       controller: content,
+                      minLines: 6,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 10,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Nội dung bài tập* ',
@@ -187,43 +176,53 @@ class _AddExersiceState extends State<AddExersice> {
                       bottom: 15,
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        '+ Thêm file bài tập',
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(width: 1.0, color: Colors.black38),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              '+ Thêm file bài tập',
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom:
+                                    BorderSide(width: 1, color: Colors.black12),
+                              ),
+                            ),
+                            padding: EdgeInsets.all(10),
+                          ),
                         ),
-                        color: Colors.black12,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        '+ Chọn từ ngân hàng đê thi',
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(width: 1.0, color: Colors.black38),
+                        Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            '636b279ea5d0578e0ec1.abc636b279ea5d0578e0ec1',
+                            maxLines: 1,
+                            style: TextStyle(color: Colors.black38),
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom:
+                                  BorderSide(width: 1, color: Colors.black12),
+                            ),
+                          ),
+                          margin: EdgeInsets.all(10),
+                          padding: EdgeInsets.all(8),
                         ),
-                        color: Colors.black12,
-                      ),
+                      ],
                     ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1.5, color: Colors.black12),
+                    ),
+                    margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                   ),
                   Container(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ElevatedButton(
                           onPressed: () {
@@ -262,18 +261,18 @@ class _AddExersiceState extends State<AddExersice> {
                         left: 35, top: 10, bottom: 10, right: 35),
                     decoration: BoxDecoration(
                       border: Border(
-                        top: BorderSide(width: 1.5, color: Colors.black38),
+                        top: BorderSide(width: 2, color: Colors.black12),
                       ),
                     ),
                   )
                 ],
               ),
             ),
-            margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+            margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 15),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
               border: Border.all(
-                width: 2,
+                width: 1,
                 color: Color(0xff00a7d0),
               ),
             ),

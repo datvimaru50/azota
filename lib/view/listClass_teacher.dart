@@ -388,7 +388,8 @@ class _ListClassState extends State<ListClass> {
                         ],
                       );
                     } else if (snapshot.hasError) {
-                      return Center(
+                      return Container(
+                        margin: EdgeInsets.only(top: 20),
                         child: Text('Kiểm tra lại kết nối'),
                       );
                     }

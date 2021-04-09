@@ -179,10 +179,9 @@ class _DetailExersiceState extends State<DetailExersice> {
                   margin: EdgeInsets.only(left: 15, right: 20, top: 10),
                   child: Html(
                     data:
-                        """<div class="limit">${widget.content == '' ? 'Không có nội dung' : widget.content}</div>""",
+                        """<div>${widget.content == '' ? 'Không có nội dung' : widget.content}</div>""",
                     style: {
                       "div": Style(
-                        height: 18,
                         color: Colors.black,
                       ),
                     },

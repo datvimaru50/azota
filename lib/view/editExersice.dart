@@ -124,6 +124,9 @@ class _EditExersiceState extends State<EditExersice> {
                     child: TextFormField(
                       controller: content =
                           TextEditingController(text: widget.content),
+                      minLines: 6,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 10,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Nội dung bài tập* ',
@@ -143,39 +146,49 @@ class _EditExersiceState extends State<EditExersice> {
                       bottom: 15,
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        '+ Thêm file bài tập',
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(width: 1.0, color: Colors.black38),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              '+ Thêm file bài tập',
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom:
+                                    BorderSide(width: 1, color: Colors.black12),
+                              ),
+                            ),
+                            padding: EdgeInsets.all(10),
+                          ),
                         ),
-                        color: Colors.black12,
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        '+ Chọn từ ngân hàng đê thi',
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(width: 1.0, color: Colors.black38),
+                        Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            '636b279ea5d0578e0ec1.abc636b279ea5d0578e0ec1',
+                            maxLines: 1,
+                            style: TextStyle(color: Colors.black38),
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom:
+                                  BorderSide(width: 1, color: Colors.black12),
+                            ),
+                          ),
+                          margin: EdgeInsets.all(10),
+                          padding: EdgeInsets.all(8),
                         ),
-                        color: Colors.black12,
-                      ),
+                      ],
                     ),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1.5, color: Colors.black12),
+                    ),
+                    margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
                   ),
                   Container(
                     child: Row(

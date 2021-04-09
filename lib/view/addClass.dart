@@ -63,20 +63,6 @@ class _AddClassState extends State<AddClass> {
               key: _formKey,
               child: Column(
                 children: [
-                  Container(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Text(
-                        'Tạo lớp mới',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    color: Color(0xff00a7d0),
-                  ),
                   Padding(
                     padding: EdgeInsets.only(top: 20, left: 15, right: 15),
                     child: TextFormField(
@@ -167,7 +153,7 @@ class _AddClassState extends State<AddClass> {
                   )),
                   Container(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ElevatedButton(
                           onPressed: () {
@@ -206,11 +192,11 @@ class _AddClassState extends State<AddClass> {
                 ],
               ),
             ),
-            margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+            margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 15),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
               border: Border.all(
-                width: 2,
+                width: 1,
                 color: Color(0xff00a7d0),
               ),
             ),
