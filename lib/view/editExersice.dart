@@ -74,20 +74,6 @@ class _EditExersiceState extends State<EditExersice> {
               child: Column(
                 children: [
                   Container(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Text(
-                        'Tạo bài tập',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    color: Color(0xff00a7d0),
-                  ),
-                  Container(
                     child: DateTimePicker(
                       controller: deadline =
                           TextEditingController(text: widget.deadline),
@@ -146,49 +132,35 @@ class _EditExersiceState extends State<EditExersice> {
                       bottom: 15,
                     ),
                   ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        '+ Thêm file bài tập',
+                        style: TextStyle(color: Colors.blue, fontSize: 16),
+                      ),
+                      padding: EdgeInsets.only(left: 32, top: 10, bottom: 5),
+                    ),
+                  ),
+                  Container(
+                    child: Text(
+                        'Chụp ảnh bài tập hoặc chọn file word, pdf, audio, video có sẵn'),
+                    margin: EdgeInsets.only(left: 30, right: 30, bottom: 5),
+                  ),
                   Container(
                     alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              '+ Thêm file bài tập',
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom:
-                                    BorderSide(width: 1, color: Colors.black12),
-                              ),
-                            ),
-                            padding: EdgeInsets.all(10),
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            '636b279ea5d0578e0ec1.abc636b279ea5d0578e0ec1',
-                            maxLines: 1,
-                            style: TextStyle(color: Colors.black38),
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom:
-                                  BorderSide(width: 1, color: Colors.black12),
-                            ),
-                          ),
-                          margin: EdgeInsets.all(10),
-                          padding: EdgeInsets.all(8),
-                        ),
-                      ],
+                    child: Text(
+                      '636b279ea5d0578e0ec1.abc636b279ea5d0578e0ec1',
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.black38),
                     ),
                     decoration: BoxDecoration(
-                      border: Border.all(width: 1.5, color: Colors.black12),
+                      border: Border.all(width: 1, color: Colors.black12),
+                      color: Color(0xFFecf0f5),
                     ),
-                    margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                    margin: EdgeInsets.only(left: 30, right: 30, bottom: 6),
+                    padding: EdgeInsets.all(10),
                   ),
                   Container(
                     child: Row(
@@ -217,7 +189,7 @@ class _EditExersiceState extends State<EditExersice> {
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
+                            primary: Colors.yellow[800],
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -237,8 +209,10 @@ class _EditExersiceState extends State<EditExersice> {
                               ),
                             );
                           },
-                          child: Text('HỦY',
-                              style: TextStyle(color: Colors.black)),
+                          child: Text(
+                            'HỦY',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     ),
@@ -246,7 +220,7 @@ class _EditExersiceState extends State<EditExersice> {
                         left: 35, top: 10, bottom: 10, right: 35),
                     decoration: BoxDecoration(
                       border: Border(
-                        top: BorderSide(width: 1.5, color: Colors.black38),
+                        top: BorderSide(width: 1.5, color: Colors.black12),
                       ),
                     ),
                   )
@@ -257,11 +231,12 @@ class _EditExersiceState extends State<EditExersice> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
               border: Border.all(
-                width: 2,
+                width: 1,
                 color: Color(0xff00a7d0),
               ),
+              color: Colors.white,
             ),
-          )
+          ),
         ],
       ),
     );

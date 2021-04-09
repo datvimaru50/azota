@@ -3,6 +3,7 @@ import 'package:azt/controller/homework_controller.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:azt/view/detailClass_teacher.dart';
 import 'package:azt/view/editExersice.dart';
+import 'package:azt/view/listStudents.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -529,153 +530,160 @@ class _DetailExersiceState extends State<DetailExersice> {
                                               .compareTo(getSubmitDate(
                                                   studentId: a["id"])));
                                     }
-                                    return Column(
-                                      children: [
-                                        ...arr.map(
-                                          (dynamic item) => Column(
+                                    return snapshot.data.length.toString() ==
+                                            '0'
+                                        ? Container(
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                    'Không có dữ liệu học sinh ! '),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ListStudents(
+                                                          id: widget
+                                                              .idClassroom,
+                                                          className:
+                                                              widget.className,
+                                                          countStudents: widget
+                                                              .countStudents,
+                                                          homeworkId:
+                                                              widget.homeworkId,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Text(
+                                                    'Tạo học sinh ngay.',
+                                                    style: TextStyle(
+                                                        color: Colors.blue),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            margin: EdgeInsets.all(20),
+                                          )
+                                        : Column(
                                             children: [
-                                              Container(
-                                                child: Column(
+                                              ...arr.map(
+                                                (dynamic item) => Column(
                                                   children: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Container(
-                                                          child: Column(
+                                                    Container(
+                                                      child: Column(
+                                                        children: [
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
                                                             children: [
                                                               Container(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .topLeft,
-                                                                child: Text(item[
-                                                                    'fullName']),
-                                                              ),
-                                                              checkSubmitStatus(
-                                                                          item[
-                                                                              "id"]) ==
-                                                                      SubmitStatus
-                                                                          .notSubmitted
-                                                                  ? Container()
-                                                                  : Container(
+                                                                child: Column(
+                                                                  children: [
+                                                                    Container(
                                                                       alignment:
                                                                           Alignment
                                                                               .topLeft,
-                                                                      child:
-                                                                          Text(
-                                                                        DateTimeFormat.relative(
-                                                                            DateTime.parse(item[
-                                                                                "updatedAt"]),
-                                                                            relativeTo: DateTime
-                                                                                .now(),
-                                                                            levelOfPrecision:
-                                                                                1,
-                                                                            appendIfAfter:
-                                                                                ' ago',
-                                                                            abbr:
-                                                                                true),
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Colors.black26,
-                                                                        ),
-                                                                      ),
-                                                                      margin: EdgeInsets
-                                                                          .only(
-                                                                        top: 3,
-                                                                        bottom:
-                                                                            3,
-                                                                      ),
+                                                                      child: Text(
+                                                                          item[
+                                                                              'fullName']),
                                                                     ),
-                                                              getAnswerId(item[
-                                                                          "id"]) ==
-                                                                      null
-                                                                  ? Container()
-                                                                  : GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        _showMyDialog(
-                                                                            getAnswerId(item["id"]));
-                                                                      },
-                                                                      child:
-                                                                          Container(
-                                                                        alignment:
-                                                                            Alignment.topLeft,
-                                                                        child:
-                                                                            Text(
-                                                                          'Yêu cầu nộp lại',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                Colors.blue,
+                                                                    checkSubmitStatus(item["id"]) ==
+                                                                            SubmitStatus.notSubmitted
+                                                                        ? Container()
+                                                                        : Container(
+                                                                            alignment:
+                                                                                Alignment.topLeft,
+                                                                            child:
+                                                                                Text(
+                                                                              DateTimeFormat.relative(DateTime.parse(item["updatedAt"]), relativeTo: DateTime.now(), levelOfPrecision: 1, appendIfAfter: ' ago', abbr: true),
+                                                                              style: TextStyle(
+                                                                                color: Colors.black26,
+                                                                              ),
+                                                                            ),
+                                                                            margin:
+                                                                                EdgeInsets.only(
+                                                                              top: 3,
+                                                                              bottom: 3,
+                                                                            ),
                                                                           ),
-                                                                        ),
-                                                                      ))
+                                                                    getAnswerId(item["id"]) ==
+                                                                            null
+                                                                        ? Container()
+                                                                        : GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              _showMyDialog(getAnswerId(item["id"]));
+                                                                            },
+                                                                            child:
+                                                                                Container(
+                                                                              alignment: Alignment.topLeft,
+                                                                              child: Text(
+                                                                                'Yêu cầu nộp lại',
+                                                                                style: TextStyle(
+                                                                                  color: Colors.blue,
+                                                                                ),
+                                                                              ),
+                                                                            ))
+                                                                  ],
+                                                                ),
+                                                                width: 120,
+                                                              ),
+                                                              ElevatedButton(
+                                                                child: Text(checkSubmitStatus(item[
+                                                                            "id"]) ==
+                                                                        SubmitStatus
+                                                                            .notSubmitted
+                                                                    ? 'Chưa nộp'
+                                                                    : checkSubmitStatus(item["id"]) ==
+                                                                            SubmitStatus.marked
+                                                                        ? 'Chấm lại'
+                                                                        : 'Chấm bài'),
+                                                                onPressed: checkSubmitStatus(item[
+                                                                            "id"]) ==
+                                                                        SubmitStatus
+                                                                            .notSubmitted
+                                                                    ? null
+                                                                    : checkSubmitStatus(item["id"]) ==
+                                                                            SubmitStatus.notMarked
+                                                                        ? markExercise
+                                                                        : markExercise,
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                  primary: checkSubmitStatus(item[
+                                                                              "id"]) ==
+                                                                          SubmitStatus
+                                                                              .marked
+                                                                      ? Colors
+                                                                          .blueGrey
+                                                                          .shade800
+                                                                      : Colors
+                                                                          .yellow
+                                                                          .shade800,
+                                                                ),
+                                                              ),
                                                             ],
                                                           ),
-                                                          width: 120,
+                                                        ],
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        border: Border(
+                                                          bottom: BorderSide(
+                                                              width: 1.5,
+                                                              color: Colors
+                                                                  .black12),
                                                         ),
-                                                        ElevatedButton(
-                                                          child: Text(checkSubmitStatus(
-                                                                      item[
-                                                                          "id"]) ==
-                                                                  SubmitStatus
-                                                                      .notSubmitted
-                                                              ? 'Chưa nộp'
-                                                              : checkSubmitStatus(
-                                                                          item[
-                                                                              "id"]) ==
-                                                                      SubmitStatus
-                                                                          .marked
-                                                                  ? 'Chấm lại'
-                                                                  : 'Chấm bài'),
-                                                          onPressed: checkSubmitStatus(
-                                                                      item[
-                                                                          "id"]) ==
-                                                                  SubmitStatus
-                                                                      .notSubmitted
-                                                              ? null
-                                                              : checkSubmitStatus(
-                                                                          item[
-                                                                              "id"]) ==
-                                                                      SubmitStatus
-                                                                          .notMarked
-                                                                  ? markExercise
-                                                                  : markExercise,
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                            primary: checkSubmitStatus(
-                                                                        item[
-                                                                            "id"]) ==
-                                                                    SubmitStatus
-                                                                        .marked
-                                                                ? Colors
-                                                                    .blueGrey
-                                                                    .shade800
-                                                                : Colors.yellow
-                                                                    .shade800,
-                                                          ),
-                                                        ),
-                                                      ],
+                                                      ),
+                                                      padding: EdgeInsets.only(
+                                                          top: 10, bottom: 10),
                                                     ),
                                                   ],
                                                 ),
-                                                decoration: BoxDecoration(
-                                                  border: Border(
-                                                    bottom: BorderSide(
-                                                        width: 1.5,
-                                                        color: Colors.black12),
-                                                  ),
-                                                ),
-                                                padding: EdgeInsets.only(
-                                                    top: 10, bottom: 10),
                                               ),
                                             ],
-                                          ),
-                                        ),
-                                      ],
-                                    );
+                                          );
                                   } else if (snapshot.hasError) {
                                     return Container(
                                       padding: EdgeInsets.all(20),

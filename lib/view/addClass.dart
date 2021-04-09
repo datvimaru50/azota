@@ -167,7 +167,7 @@ class _AddClassState extends State<AddClass> {
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
+                            primary: Colors.yellow[800],
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -176,8 +176,10 @@ class _AddClassState extends State<AddClass> {
                                   builder: (context) => GroupScreenTeacher()),
                             );
                           },
-                          child: Text('HỦY',
-                              style: TextStyle(color: Colors.black)),
+                          child: Text(
+                            'HỦY',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     ),
