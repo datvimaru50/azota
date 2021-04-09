@@ -53,7 +53,7 @@ class _ListStudentsState extends State<ListStudents> {
               context,
               MaterialPageRoute(
                 builder: (context) => DetailClass(
-                  id: widget.id,
+                  idClassroom: widget.id,
                   className: widget.className,
                   countStudents: widget.countStudents,
                   homeworkId: widget.homeworkId,

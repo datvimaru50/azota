@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:azt/view/detailClass_teacher.dart';
+import 'package:azt/view/detailExersice_teacher.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:azt/view/listStudents.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,11 +63,12 @@ class ClassroomController extends ControllerMVC {
       case 200:
         final resBody = json.decode(response.body);
         if (resBody['success'] == 1) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => GroupScreenTeacher(),
-              ),
-              (Route<dynamic> route) => false);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => GroupScreenTeacher(),
+            ),
+          );
           return Fluttertoast.showToast(
               msg: 'Xóa Lớp Thành công',
               toastLength: Toast.LENGTH_SHORT,
@@ -255,7 +257,7 @@ class ClassroomController extends ControllerMVC {
         context,
         MaterialPageRoute(
           builder: (context) => DetailClass(
-            id: id,
+            idClassroom: id,
             className: name.text,
             countStudents: countStudents,
             homeworkId: homeworkId,
@@ -426,7 +428,7 @@ class ClassroomController extends ControllerMVC {
         context,
         MaterialPageRoute(
           builder: (context) => DetailClass(
-            id: dataClass['id'].toString(),
+            idClassroom: dataClass['id'].toString(),
             countStudents: dataClass['countStudents'].toString(),
             className: dataClass['name'].toString(),
             homeworks: dataClass['homeworks'].toString(),
@@ -445,6 +447,128 @@ class ClassroomController extends ControllerMVC {
       // ignore: unnecessary_brace_in_string_interps
       return Fluttertoast.showToast(
           msg: 'Tạo lớp học không thành công',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  static Future deleteExersice(
+      String countStudents, className, homeworkId, homeworks, idClassroom,
+      {String idExersice, BuildContext context}) async {
+    final token = await Prefs.getPref(ACCESS_TOKEN);
+    final response = await http.Client()
+        .get(AZO_DELETEEXERSICE_INFO + '?id=' + idExersice, headers: {
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.authorizationHeader: "Bearer " + token
+    });
+
+    switch (response.statusCode) {
+      case 200:
+        final resBody = json.decode(response.body);
+        if (resBody['success'] == 1) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => DetailClass(
+                  idClassroom: idClassroom,
+                  className: className,
+                  countStudents: countStudents,
+                  homeworkId: homeworkId,
+                  homeworks: homeworks,
+                ),
+              ),
+              (Route<dynamic> route) => false);
+          return Fluttertoast.showToast(
+              msg: 'Xóa bài tập Thành công',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIos: 1,
+              backgroundColor: Colors.green[900],
+              textColor: Colors.white,
+              fontSize: 16.0);
+        } else {
+          return Fluttertoast.showToast(
+              msg: 'Xóa bài tập không thàng công',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIos: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }
+        break;
+
+      case 400:
+        throw ERR_BAD_REQUEST;
+        break;
+
+      default:
+        throw ERR_SERVER_CONNECT;
+    }
+  }
+
+  static Future editExersice(
+      {String idExersice,
+      String content,
+      String deadline,
+      BuildContext context,
+      String exerciseId,
+      String countStudents,
+      String className,
+      String homeworkId,
+      String homeworks,
+      String idClassroom}) async {
+    final token = await Prefs.getPref(ACCESS_TOKEN);
+    Map mapdata = <String, String>{
+      "id": idExersice,
+      "name": "Bài Tập",
+      "content": content,
+      "deadline": deadline,
+    };
+    //log data in form
+    // ignore: unnecessary_brace_in_string_interps
+    print("JSON DATA : ${mapdata}");
+    final reponse = await http.Client().post(
+      AZO_UPDATEEXERSICE_INFO,
+      body: jsonEncode(mapdata),
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+        HttpHeaders.authorizationHeader: "Bearer " + token,
+      },
+    );
+    var data = jsonDecode(reponse.body);
+    if (data['success'] == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DetailExersice(
+            deadline: deadline,
+            exerciseId: exerciseId,
+            content: content,
+            countStudents: countStudents,
+            className: className,
+            homeworkId: homeworkId,
+            homeworks: homeworks,
+            idClassroom: idClassroom,
+            idExersice: idExersice,
+          ),
+        ),
+      );
+
+      return Fluttertoast.showToast(
+          msg: 'Sửa bài tập thành công',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      return Fluttertoast.showToast(
+          msg: 'Sửa bài tập không thành công',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,

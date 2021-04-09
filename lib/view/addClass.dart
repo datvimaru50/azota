@@ -1,14 +1,8 @@
 import 'dart:io';
 import 'dart:async';
-import 'dart:convert';
-import 'package:azt/config/global.dart';
 import 'package:azt/controller/classroom_controller.dart';
-import 'package:azt/view/detailClass_teacher.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
-import 'package:azt/config/connect.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -69,20 +63,6 @@ class _AddClassState extends State<AddClass> {
               key: _formKey,
               child: Column(
                 children: [
-                  Container(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Text(
-                        'Tạo lớp mới',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    color: Color(0xff00a7d0),
-                  ),
                   Padding(
                     padding: EdgeInsets.only(top: 20, left: 15, right: 15),
                     child: TextFormField(
@@ -173,7 +153,7 @@ class _AddClassState extends State<AddClass> {
                   )),
                   Container(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ElevatedButton(
                           onPressed: () {
@@ -212,11 +192,11 @@ class _AddClassState extends State<AddClass> {
                 ],
               ),
             ),
-            margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+            margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 15),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
               border: Border.all(
-                width: 2,
+                width: 1,
                 color: Color(0xff00a7d0),
               ),
             ),

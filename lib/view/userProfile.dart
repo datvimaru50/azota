@@ -6,6 +6,7 @@ import 'package:azt/view/splash_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 void main() {
   runApp(UserProfile());
@@ -210,15 +211,45 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                     ),
                     onPressed: () {
-                      SavedToken.deleteToken(accessToken);
-                      Prefs.deletePref();
-                      _firebaseMessaging.deleteInstanceID();
-                      Navigator.pop(context);
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => Splash()),
-                        ModalRoute.withName('/'),
+                      showAnimatedDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (BuildContext context) {
+                          return ClassicGeneralDialogWidget(
+                            titleText: 'Bạn có chắc chắn',
+                            actions: [
+                              // ignore: deprecated_member_use
+                              FlatButton(
+                                onPressed: () {
+                                  SavedToken.deleteToken(accessToken);
+                                  Prefs.deletePref();
+                                  _firebaseMessaging.deleteInstanceID();
+                                  Navigator.pop(context);
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            Splash()),
+                                    ModalRoute.withName('/'),
+                                  );
+                                },
+                                child: Text('Đăng xuất'),
+                                color: Colors.red,
+                              ),
+                              // ignore: deprecated_member_use
+                              FlatButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Hủy'),
+                                color: Colors.black38,
+                              )
+                            ],
+                          );
+                        },
+                        animationType: DialogTransitionType.size,
+                        curve: Curves.fastOutSlowIn,
+                        duration: Duration(seconds: 1),
                       );
                     },
                   ),

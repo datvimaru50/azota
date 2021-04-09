@@ -229,16 +229,8 @@ class _AddStudentState extends State<AddStudent> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            // Validate will return true if the form is valid, or false if
-                            // the form is invalid.
                             if (_formKey.currentState.validate()) {
                               addStudentRoom();
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => DetailExersice(),
-                              //   ),
-                              // );
                             }
                           },
                           child: Text(

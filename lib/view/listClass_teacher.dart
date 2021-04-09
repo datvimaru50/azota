@@ -122,7 +122,7 @@ class _ListClassState extends State<ListClass> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => DetailClass(
-                                            id: item['id'].toString(),
+                                            idClassroom: item['id'].toString(),
                                             countStudents: item['countStudents']
                                                 .toString(),
                                             className: item['name'].toString(),
@@ -202,20 +202,6 @@ class _ListClassState extends State<ListClass> {
                                       ),
                                     ),
                                   ),
-                                  // actions: <Widget>[
-                                  //   IconSlideAction(
-                                  //     caption: 'Archive',
-                                  //     color: Colors.blue,
-                                  //     icon: Icons.archive,
-                                  //     onTap: () => () {},
-                                  //   ),
-                                  //   IconSlideAction(
-                                  //     caption: 'Share',
-                                  //     color: Colors.indigo,
-                                  //     icon: Icons.share,
-                                  //     onTap: () => () {},
-                                  //   ),
-                                  // ],
                                   secondaryActions: <Widget>[
                                     IconSlideAction(
                                       caption: 'Sửa',
@@ -402,7 +388,10 @@ class _ListClassState extends State<ListClass> {
                         ],
                       );
                     } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
+                      return Container(
+                        margin: EdgeInsets.only(top: 20),
+                        child: Text('Kiểm tra lại kết nối'),
+                      );
                     }
                     return Container(
                       margin: EdgeInsets.only(top: 20),
