@@ -63,11 +63,12 @@ class ClassroomController extends ControllerMVC {
       case 200:
         final resBody = json.decode(response.body);
         if (resBody['success'] == 1) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => GroupScreenTeacher(),
-              ),
-              (Route<dynamic> route) => false);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => GroupScreenTeacher(),
+            ),
+          );
           return Fluttertoast.showToast(
               msg: 'Xóa Lớp Thành công',
               toastLength: Toast.LENGTH_SHORT,

@@ -2,6 +2,7 @@ import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:azt/view/addExersice.dart';
 import 'package:azt/view/detailExersice_teacher.dart';
+import 'package:azt/view/editExersice.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:azt/view/listStudents.dart';
 import 'package:flutter/material.dart';
@@ -600,6 +601,32 @@ class _DetailClassState extends State<DetailClass> {
                                     ),
                                   ),
                                   secondaryActions: <Widget>[
+                                    IconSlideAction(
+                                      caption: 'Sửa',
+                                      color: Colors.black45,
+                                      icon: Icons.edit,
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => EditExersice(
+                                              deadline:
+                                                  item["deadline"].toString(),
+                                              exerciseId: item['id'].toString(),
+                                              content:
+                                                  item['content'].toString(),
+                                              countStudents:
+                                                  widget.countStudents,
+                                              className: widget.className,
+                                              homeworkId: widget.homeworkId,
+                                              homeworks: widget.homeworks,
+                                              idClassroom: widget.idClassroom,
+                                              idExersice: item['id'].toString(),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                     IconSlideAction(
                                       caption: 'Xóa',
                                       color: Colors.red,

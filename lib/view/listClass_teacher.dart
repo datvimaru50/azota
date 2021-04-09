@@ -202,20 +202,6 @@ class _ListClassState extends State<ListClass> {
                                       ),
                                     ),
                                   ),
-                                  // actions: <Widget>[
-                                  //   IconSlideAction(
-                                  //     caption: 'Archive',
-                                  //     color: Colors.blue,
-                                  //     icon: Icons.archive,
-                                  //     onTap: () => () {},
-                                  //   ),
-                                  //   IconSlideAction(
-                                  //     caption: 'Share',
-                                  //     color: Colors.indigo,
-                                  //     icon: Icons.share,
-                                  //     onTap: () => () {},
-                                  //   ),
-                                  // ],
                                   secondaryActions: <Widget>[
                                     IconSlideAction(
                                       caption: 'Sửa',
@@ -402,7 +388,9 @@ class _ListClassState extends State<ListClass> {
                         ],
                       );
                     } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
+                      return Center(
+                        child: Text('Kiểm tra lại kết nối'),
+                      );
                     }
                     return Container(
                       margin: EdgeInsets.only(top: 20),

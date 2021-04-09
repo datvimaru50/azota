@@ -1,14 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/view/detailExersice_teacher.dart';
-import 'package:http/http.dart' as http;
-import 'package:azt/config/connect.dart';
-import 'package:azt/config/global.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(EditExersice());
@@ -84,7 +78,7 @@ class _EditExersiceState extends State<EditExersice> {
                     child: Padding(
                       padding: EdgeInsets.all(15),
                       child: Text(
-                        'Tạo lớp mới',
+                        'Tạo bài tập',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
@@ -205,7 +199,7 @@ class _EditExersiceState extends State<EditExersice> {
                             }
                           },
                           child: Text(
-                            'THÊM BÀI TẬP',
+                            'CẬP NHẬT',
                           ),
                         ),
                         ElevatedButton(
