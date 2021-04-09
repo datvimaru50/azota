@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'dart:io';
+import 'package:azt/store/notification_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:azt/view/notification/notificationStudent.dart';
@@ -8,6 +9,7 @@ import 'package:azt/controller/notification_controller.dart';
 import 'package:azt/models/firebase_mo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
 import 'package:azt/config/global.dart';
 import 'package:azt/config/connect.dart';
 
@@ -264,7 +266,7 @@ class _NotificationScreenState extends State<NotificationScreen>
             IconButton(
                 icon: Icon(Icons.delete_forever_outlined),
               onPressed: () {
-                showAnimatedDialog(
+                  showAnimatedDialog(
                   context: context,
                   barrierDismissible: true,
                   builder: (BuildContext context) {
