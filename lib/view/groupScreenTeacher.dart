@@ -38,7 +38,7 @@ class _GroupScreenTeacherState extends State<GroupScreenTeacher> {
 
   @override
   Widget build(BuildContext context) {
-      // use noti data from store provider
+    // use noti data from store provider
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -48,7 +48,6 @@ class _GroupScreenTeacherState extends State<GroupScreenTeacher> {
             label: 'Lớp học',
             backgroundColor: Color(0xff17A2B8),
           ),
-
           BottomNavigationBarItem(
             // icon: Icon(Icons.notifications_none),
             icon: Stack(
@@ -59,41 +58,52 @@ class _GroupScreenTeacherState extends State<GroupScreenTeacher> {
                 ),
                 FutureBuilder<ListNotification>(
                     future: notiData,
-                    builder: (context, snapshot){
-                      if(snapshot.hasData){
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
                         return Consumer<NotiModel>(
-                          builder: (context, noti, child){
-                            return noti.totalUnread == 0? Container(width: 0, height: 0,) : Container(
-                              width: 30,
-                              height: 30,
-                              alignment: Alignment.topRight,
-                              child: Container(
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(0xffc32c37),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(0.0),
-                                  child: Center(
-                                    child: Text(
-                                      '${noti.totalUnread}', // <========== access store data
-                                      style: TextStyle(fontSize: 10, color: Colors.white),
+                          builder: (context, noti, child) {
+                            return noti.totalUnread == 0
+                                ? Container(
+                                    width: 0,
+                                    height: 0,
+                                  )
+                                : Container(
+                                    width: 30,
+                                    height: 30,
+                                    alignment: Alignment.topRight,
+                                    child: Container(
+                                      width: 16,
+                                      height: 16,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Color(0xffc32c37),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(0.0),
+                                        child: Center(
+                                          child: Text(
+                                            '${noti.totalUnread}', // <========== access store data
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
-                            );
+                                  );
                           },
                         );
-                      } else if(snapshot.hasError){
-                        return Container(width: 0, height: 0,);
+                      } else if (snapshot.hasError) {
+                        return Container(
+                          width: 0,
+                          height: 0,
+                        );
                       }
-                      return Container(width: 0, height: 0,);
-                    }
-                ),
-
+                      return Container(
+                        width: 0,
+                        height: 0,
+                      );
+                    }),
               ],
             ),
             label: 'Thông báo',

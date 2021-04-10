@@ -204,7 +204,6 @@ class _LoginFormState extends State<LoginForm> {
                                   prefixIcon: Icon(Icons.phone_iphone_outlined),
                                   border: OutlineInputBorder(),
                                   labelText: 'Số điện thoại*',
-                                  hintText: 'Nhập số điện thoại ',
                                 ),
                                 validator: (value) => validatePhone(value),
                               ),
@@ -225,7 +224,6 @@ class _LoginFormState extends State<LoginForm> {
                                       prefixIcon: Icon(Icons.lock),
                                       border: OutlineInputBorder(),
                                       labelText: 'Mật khẩu*',
-                                      hintText: 'Nhập mật khẩu ',
                                     ),
                                     validator: (value) =>
                                         validatePassword(value),
