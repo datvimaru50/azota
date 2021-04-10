@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'dart:io';
+import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:azt/view/notification/notificationStudent.dart';
@@ -258,81 +259,91 @@ class _NotificationScreenState extends State<NotificationScreen>
     print('AppPushs myBackgroundMessageHandler : $message');
   }
 
+  // ignore: missing_return
+  Future<bool> _onBackPressed() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
+        (Route<dynamic> route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              widget.role == 'teacher' ? 'Thông báo' : 'Thông báo phụ huynh',
-              style: TextStyle(fontSize: 18),
-            ),
-            _notiArr.length != 0
-                ? IconButton(
-                    icon: Icon(Icons.delete_forever_outlined),
-                    onPressed: () {
-                      showAnimatedDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext context) {
-                          return ClassicGeneralDialogWidget(
-                            actions: [
-                              Container(
-                                width: 300,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () async {
-                                        await NotiController.markAllAsRead();
-                                        await _getData();
-                                      },
-                                      child: Container(
-                                        // color: Colors.black,
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          'Đánh dấu tất cả là đã đọc',
-                                          style: TextStyle(
-                                            color: Colors.black,
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                widget.role == 'teacher' ? 'Thông báo' : 'Thông báo phụ huynh',
+                style: TextStyle(fontSize: 18),
+              ),
+              _notiArr.length != 0
+                  ? IconButton(
+                      icon: Icon(Icons.delete_forever_outlined),
+                      onPressed: () {
+                        showAnimatedDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext context) {
+                            return ClassicGeneralDialogWidget(
+                              actions: [
+                                Container(
+                                  width: 300,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () async {
+                                          await NotiController.markAllAsRead();
+                                          await _getData();
+                                        },
+                                        child: Container(
+                                          // color: Colors.black,
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                            'Đánh dấu tất cả là đã đọc',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () async {
-                                        await NotiController.deleteAllNotif();
-                                        await _getData();
-                                      },
-                                      child: Container(
-                                        // color: Colors.black,
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          'Xóa tất cả thông báo',
-                                          style: TextStyle(
-                                            color: Colors.red,
+                                      TextButton(
+                                        onPressed: () async {
+                                          await NotiController.deleteAllNotif();
+                                          await _getData();
+                                        },
+                                        child: Container(
+                                          // color: Colors.black,
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                            'Xóa tất cả thông báo',
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          );
-                        },
-                        animationType: DialogTransitionType.size,
-                        curve: Curves.fastOutSlowIn,
-                        duration: Duration(seconds: 1),
-                      );
-                    },
-                  )
-                : Container()
-          ],
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                          animationType: DialogTransitionType.size,
+                          curve: Curves.fastOutSlowIn,
+                          duration: Duration(seconds: 1),
+                        );
+                      },
+                    )
+                  : Container()
+            ],
+          ),
         ),
+        body: _buildList(),
       ),
-      body: _buildList(),
     );
   }
 }

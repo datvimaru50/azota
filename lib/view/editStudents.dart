@@ -166,7 +166,7 @@ class _EditStudentState extends State<EditStudent> {
                   ),
                   Container(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ElevatedButton(
                           onPressed: () {
@@ -192,7 +192,7 @@ class _EditStudentState extends State<EditStudent> {
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
+                            primary: Colors.yellow[800],
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -209,7 +209,7 @@ class _EditStudentState extends State<EditStudent> {
                           },
                           child: Text(
                             'HỦY',
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ],
