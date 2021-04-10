@@ -489,6 +489,7 @@ class _DetailClassState extends State<DetailClass> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => DetailExersice(
+                                            hashId: item['hashId'].toString(),
                                             deadline:
                                                 item["deadline"].toString(),
                                             exerciseId: item['id'].toString(),

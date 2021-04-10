@@ -5,6 +5,7 @@ import 'package:azt/view/detailClass_teacher.dart';
 import 'package:azt/view/editExersice.dart';
 import 'package:azt/view/listStudents.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
@@ -13,6 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:share/share.dart';
 
 enum SubmitStatus { notSubmitted, notMarked, marked }
 
@@ -27,6 +29,7 @@ class DetailExersice extends StatefulWidget {
     this.idClassroom,
     this.idExersice,
     this.deadline,
+    this.hashId,
   });
   final String homeworkId;
   final String exerciseId;
@@ -37,6 +40,7 @@ class DetailExersice extends StatefulWidget {
   final String idClassroom;
   final String idExersice;
   final String deadline;
+  final String hashId;
   @override
   _DetailExersiceState createState() => _DetailExersiceState();
 }
@@ -146,6 +150,12 @@ class _DetailExersiceState extends State<DetailExersice> {
     );
   }
 
+  // ignore: unused_element
+  Future<void> _copyToClipboard() async {
+    await Clipboard.setData(
+        ClipboardData(text: "https://azota.vn/en/bai-tap/" + widget.hashId));
+  }
+
   void markExercise() {}
 
   Widget build(BuildContext context) {
@@ -195,7 +205,16 @@ class _DetailExersiceState extends State<DetailExersice> {
                       // ignore: deprecated_member_use
                       RaisedButton.icon(
                         onPressed: () {
+                          _copyToClipboard();
                           print('Button Clicked.');
+                          Fluttertoast.showToast(
+                              msg: 'Sao chép thành công đường dẫn nộp bài',
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.TOP,
+                              timeInSecForIos: 1,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius:
@@ -211,8 +230,11 @@ class _DetailExersiceState extends State<DetailExersice> {
                       ),
                       // ignore: deprecated_member_use
                       RaisedButton.icon(
-                        onPressed: () {
+                        onPressed: () async {
                           print('Button Clicked.');
+
+                          Share.share(
+                              'check out my website https://example.com');
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius:
