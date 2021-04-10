@@ -84,8 +84,8 @@ class NotiController extends ControllerMVC {
     }
   }
 
-  static Future<String> markAsRead({@required int noticeId}) async {
-    final token = await Prefs.getPref(ACCESS_TOKEN);
+  static Future<String> markAsRead({@required int noticeId, String accType = 'teacher'}) async {
+    final token = accType == 'teacher' ? await Prefs.getPref(ACCESS_TOKEN) : await Prefs.getPref(ANONYMOUS_TOKEN);
 
     final response = await http.Client()
         .get(AZO_NOTIF_MARK_READ + '?id=' + noticeId.toString(), headers: {

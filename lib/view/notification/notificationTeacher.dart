@@ -6,6 +6,7 @@ import 'package:azt/controller/notification_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NotificationTeacherItem extends StatefulWidget {
   NotificationTeacherItem(
@@ -56,8 +57,8 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
                 _clickedStatus = true;
               });
               await NotiController.markAsRead(noticeId: widget.noticeId);
-              noti.readOne();
-              // launch(widget.webUrl);
+              await Provider.of<NotiModel>(context, listen: false).setTotal();
+              launch(widget.webUrl);
             } catch (err) {
               Fluttertoast.showToast(
                 msg: err.toString(),
