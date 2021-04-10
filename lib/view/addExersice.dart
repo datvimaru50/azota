@@ -129,10 +129,7 @@ class _AddExersiceState extends State<AddExersice> {
                     child: DateTimePicker(
                       controller: deadline,
                       decoration: InputDecoration(
-                          suffixIcon: Icon(
-                            Icons.event,
-                            color: Colors.white,
-                          ),
+                          suffixIcon: Icon(Icons.event, color: Colors.black54),
                           border: OutlineInputBorder(),
                           labelText: 'Chọn thời hạn nộp bài tập* ',
                           hintText: 'Chọn này sinh ',
