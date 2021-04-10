@@ -234,13 +234,13 @@ class _DetailExersiceState extends State<DetailExersice> {
                           print('Button Clicked.');
 
                           Share.share(
-                              'check out my website https://example.com');
+                              'https://azota.vn/bai-tap/' + widget.hashId);
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(5.0))),
                         label: Text(
-                          'GỬI ZALO',
+                          'CHIA SẺ',
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                         icon: Icon(Icons.share, color: Colors.white),
