@@ -1,9 +1,11 @@
 import 'package:azt/store/notification_store.dart';
 import 'package:azt/view/listClass_teacher.dart';
 import 'package:azt/view/notificationScreen.dart';
+import 'package:azt/controller/notification_controller.dart';
 import 'package:azt/view/userProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 
 class GroupScreenTeacher extends StatefulWidget {
   @override
@@ -12,13 +14,13 @@ class GroupScreenTeacher extends StatefulWidget {
 
 class _GroupScreenTeacherState extends State<GroupScreenTeacher> {
   int _selectedIndex = 0;
-  Future<String> notiData;
+  Future<ListNotification> notiData;
   List<Widget> _widgetOptions = <Widget>[
     ListClass(),
     NotificationScreen(role: 'teacher'),
-    Text(
-      'Index 2: School',
-    ),
+    Center(child: Text(
+      'Tính năng đang cập nhật!',
+    ),),
     UserProfile(),
   ];
 
@@ -55,7 +57,7 @@ class _GroupScreenTeacherState extends State<GroupScreenTeacher> {
                   Icons.notifications_none,
                   size: 30,
                 ),
-                FutureBuilder(
+                FutureBuilder<ListNotification>(
                     future: notiData,
                     builder: (context, snapshot){
                       if(snapshot.hasData){

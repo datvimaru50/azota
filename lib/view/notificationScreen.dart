@@ -5,9 +5,11 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:azt/view/notification/notificationStudent.dart';
 import 'package:azt/view/notification/notificationTeacher.dart';
 import 'package:azt/controller/notification_controller.dart';
+import 'package:azt/store/notification_store.dart';
 import 'package:azt/models/firebase_mo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
 import 'package:azt/config/global.dart';
 import 'package:azt/config/connect.dart';
 
@@ -33,9 +35,8 @@ class _NotificationScreenState extends State<NotificationScreen>
   AppLifecycleState _notification;
 
   void fetchNoti() async {
-    var result = widget.role == 'parent'
-        ? await NotiController.getNotiAnonymous(1)
-        : await NotiController.getNoti(1);
+    var result = await Provider.of<NotiModel>(context, listen: false).setTotal(accType: widget.role == 'parent'? 'parent':'teacher');
+
     setState(() {
       doneLoading = true;
       _notiArr = result.objs;
@@ -107,6 +108,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                           itemBuilder: (BuildContext context, int index) {
                             return widget.role == 'parent'
                                 ? NotificationStudentItem(
+                                    noticeId: _notiArr.elementAt(index)['id'],
                                     notiType: _notiArr.elementAt(index)['type'],
                                     className: _notiArr
                                         .elementAt(index)['classroomName'],
@@ -286,8 +288,10 @@ class _NotificationScreenState extends State<NotificationScreen>
                                   children: [
                                     TextButton(
                                       onPressed: () async {
+                                        Navigator.pop(context);
                                         await NotiController.markAllAsRead();
                                         await _getData();
+
                                       },
                                       child: Container(
                                         // color: Colors.black,
@@ -302,6 +306,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                     ),
                                     TextButton(
                                       onPressed: () async {
+                                        Navigator.pop(context);
                                         await NotiController.deleteAllNotif();
                                         await _getData();
                                       },

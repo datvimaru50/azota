@@ -2,12 +2,15 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
+import 'package:azt/controller/notification_controller.dart';
 import 'package:azt/view/submit_homeworks.dart';
+import 'package:provider/provider.dart';
+import 'package:azt/store/notification_store.dart';
 
 class NotificationStudentItem extends StatefulWidget {
   NotificationStudentItem(
       {this.notiType,
+      this.noticeId,
       this.className,
       this.deadline,
       this.score,
@@ -16,6 +19,7 @@ class NotificationStudentItem extends StatefulWidget {
       this.answerId,
       this.resendNote});
 
+  final int noticeId;
   final String resendNote;
   final String notiType;
   final String className;
@@ -70,16 +74,16 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
   Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
-        onTap: () {
+        onTap: () async{
           setState(() {
             _clickedStatus = true;
           });
+          await NotiController.markAsRead(noticeId: widget.noticeId, accType: 'parent');
+          await Provider.of<NotiModel>(context, listen: false).setTotal(accType: 'parent');
 
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => SubmitForm()),
               (Route<dynamic> route) => false);
-
-          // launch(_buildWebUrl(widget.notiType));
         },
         child: Container(
           child: Row(

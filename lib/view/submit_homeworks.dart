@@ -2,16 +2,17 @@ import 'dart:ui';
 import 'dart:io';
 import 'package:azt/models/core_mo.dart';
 import 'package:azt/controller/homework_controller.dart';
+import 'package:azt/controller/notification_controller.dart';
 import 'package:azt/view/submit_homeworks/graded_exersice.dart';
 import 'package:azt/view/submit_homeworks/history_submit.dart';
 import 'package:azt/view/submit_homeworks/submit_exersice.dart';
 import 'package:azt/view/submit_homeworks/submit_exersice_android.dart';
 import 'package:flutter/material.dart';
-
+import 'package:azt/store/notification_store.dart';
 import 'package:azt/config/global.dart';
 import 'package:azt/view/splash_screen.dart';
 import 'package:azt/view/notificationScreen.dart';
-
+import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class SubmitForm extends StatefulWidget {
@@ -20,6 +21,7 @@ class SubmitForm extends StatefulWidget {
 }
 
 class _SubmitFormState extends State<SubmitForm> {
+  Future<ListNotification> notiData;
   Future<HomeworkHashIdInfo> homeworkHashIdInfo;
   // ignore: unused_field
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -27,6 +29,7 @@ class _SubmitFormState extends State<SubmitForm> {
   @override
   void initState() {
     super.initState();
+    notiData = Provider.of<NotiModel>(context, listen: false).setTotal(accType: 'parent');
     homeworkHashIdInfo = HomeworkController.getHomeworkInfoAgain();
   }
 
@@ -94,27 +97,41 @@ class _SubmitFormState extends State<SubmitForm> {
                       color: Colors.white,
                       size: 30,
                     ),
-                    Container(
-                      width: 30,
-                      height: 30,
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        width: 14,
-                        height: 14,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xffc32c37),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(0.0),
-                          child: Center(
-                            child: Text(
-                              '1',
-                              style: TextStyle(fontSize: 10),
-                            ),
-                          ),
-                        ),
-                      ),
+                    FutureBuilder<ListNotification>(
+                        future: notiData,
+                        builder: (context, snapshot){
+                          if(snapshot.hasData){
+                            return Consumer<NotiModel>(
+                              builder: (context, noti, child){
+                                return noti.totalUnread == 0? Container(width: 0, height: 0,) : Container(
+                                  width: 30,
+                                  height: 30,
+                                  alignment: Alignment.topRight,
+                                  child: Container(
+                                    width: 16,
+                                    height: 16,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xffc32c37),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(0.0),
+                                      child: Center(
+                                        child: Text(
+                                          '${noti.totalUnread}',
+                                          style: TextStyle(fontSize: 10, color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          } else if(snapshot.hasError){
+                            return Container(width: 0, height: 0,);
+                          }
+                          return Container(width: 0, height: 0,);
+                        }
                     ),
                   ],
                 ),
