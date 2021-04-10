@@ -301,7 +301,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                         // color: Colors.black,
                                         alignment: Alignment.topLeft,
                                         child: Text(
-                                          'Đánh dấu tất cả là đã đọc',
+                                          'Đánh dấu tất cả là đã đọc.',
                                           style: TextStyle(
                                             color: Colors.black,
                                           ),
