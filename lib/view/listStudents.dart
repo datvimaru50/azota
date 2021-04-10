@@ -172,208 +172,146 @@ class _ListStudentsState extends State<ListStudents> {
                   future: classroomHashIdInfo,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Column(
-                        children: [
-                          ...snapshot.data.map(
-                            (dynamic item) => Container(
-                              child: Row(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    width: 60,
-                                    child: Text(
-                                      '${i++}',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Column(
+                      return snapshot.data.length.toString() == '0'
+                          ? Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.all(20),
+                              child: Text('Không có dữ liệu...'),
+                            )
+                          : Column(
+                              children: [
+                                ...snapshot.data.map(
+                                  (dynamic item) => Container(
+                                    child: Row(
                                       children: [
                                         Container(
-                                          alignment: Alignment.topLeft,
+                                          alignment: Alignment.center,
+                                          width: 60,
                                           child: Text(
-                                            item['fullName'],
+                                            '${i++}',
                                             style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
-                                        Container(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            // ignore: unrelated_type_equality_checks
-                                            item['gender'].toString() != '0'
-                                                ? 'Giới tính: Nữ'
-                                                : 'Giới tính: Nam',
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              fontStyle: FontStyle.italic,
-                                            ),
+                                        Expanded(
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  item['fullName'],
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  // ignore: unrelated_type_equality_checks
+                                                  item['gender'].toString() !=
+                                                          '0'
+                                                      ? 'Giới tính: Nữ'
+                                                      : 'Giới tính: Nam',
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  'Ngày sinh: ' +
+                                                      DateFormat.yMd().format(
+                                                        DateTime.parse(
+                                                          item['birthday'],
+                                                        ),
+                                                      ),
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         ),
                                         Container(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            'Ngày sinh: ' +
-                                                DateFormat.yMd().format(
-                                                  DateTime.parse(
-                                                    item['birthday'],
-                                                  ),
-                                                ),
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 40,
-                                    // ignore: missing_required_param
-                                    child: IconButton(
-                                      icon: Icon(Icons.more_vert),
-                                      onPressed: () {
-                                        showAnimatedDialog(
-                                          context: context,
-                                          barrierDismissible: true,
-                                          builder: (BuildContext context) {
-                                            return ClassicGeneralDialogWidget(
-                                              actions: [
-                                                Container(
-                                                  width: 300,
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder:
-                                                                  (context) =>
-                                                                      EditStudent(
-                                                                homeworkId: widget
-                                                                    .homeworkId,
-                                                                countStudents:
-                                                                    widget
-                                                                        .countStudents,
-                                                                checkGender: item[
-                                                                        'gender']
-                                                                    .toString(),
-                                                                idStudent: item[
-                                                                        'id']
-                                                                    .toString(),
-                                                                classRoomId:
-                                                                    widget.id,
-                                                                fullName: item[
-                                                                        'fullName']
-                                                                    .toString(),
-                                                                className: widget
-                                                                    .className,
-                                                                birthday: item[
-                                                                        'birthday']
-                                                                    .toString(),
+                                          width: 40,
+                                          // ignore: missing_required_param
+                                          child: IconButton(
+                                            icon: Icon(Icons.more_vert),
+                                            onPressed: () {
+                                              showAnimatedDialog(
+                                                context: context,
+                                                barrierDismissible: true,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return ClassicGeneralDialogWidget(
+                                                    actions: [
+                                                      Container(
+                                                        width: 300,
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            EditStudent(
+                                                                      homeworkId:
+                                                                          widget
+                                                                              .homeworkId,
+                                                                      countStudents:
+                                                                          widget
+                                                                              .countStudents,
+                                                                      checkGender:
+                                                                          item['gender']
+                                                                              .toString(),
+                                                                      idStudent:
+                                                                          item['id']
+                                                                              .toString(),
+                                                                      classRoomId:
+                                                                          widget
+                                                                              .id,
+                                                                      fullName:
+                                                                          item['fullName']
+                                                                              .toString(),
+                                                                      className:
+                                                                          widget
+                                                                              .className,
+                                                                      birthday:
+                                                                          item['birthday']
+                                                                              .toString(),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              },
+                                                              child: Container(
+                                                                // color: Colors.black,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .topLeft,
+                                                                child: Text(
+                                                                  'Sửa thông tin học sinh',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                  ),
+                                                                ),
                                                               ),
                                                             ),
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                          // color: Colors.black,
-                                                          alignment:
-                                                              Alignment.topLeft,
-                                                          child: Text(
-                                                            'Sửa thông tin học sinh',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          showAnimatedDialog(
-                                                            context: context,
-                                                            barrierDismissible:
-                                                                true,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return ClassicGeneralDialogWidget(
-                                                                titleText:
-                                                                    'Bạn có chắc chắn',
-                                                                actions: [
-                                                                  // ignore: deprecated_member_use
-                                                                  FlatButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
-                                                                        () {
-                                                                          deleteStudent =
-                                                                              ClassroomController.deleteStudent(
-                                                                            item['id'].toString(),
-                                                                            context,
-                                                                            item['classroomId'].toString(),
-                                                                            widget.className,
-                                                                            widget.countStudents,
-                                                                            widget.homeworkId,
-                                                                          );
-                                                                        },
-                                                                      );
-                                                                    },
-                                                                    child: Text(
-                                                                        'Xóa'),
-                                                                    color: Colors
-                                                                        .red,
-                                                                  ),
-                                                                  // ignore: deprecated_member_use
-                                                                  FlatButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    },
-                                                                    child: Text(
-                                                                        'Hủy'),
-                                                                    color: Colors
-                                                                        .black38,
-                                                                  )
-                                                                ],
-                                                              );
-                                                            },
-                                                            animationType:
-                                                                DialogTransitionType
-                                                                    .size,
-                                                            curve: Curves
-                                                                .fastOutSlowIn,
-                                                            duration: Duration(
-                                                                seconds: 1),
-                                                          );
-                                                        },
-                                                        child: Container(
-                                                          // color: Colors.black,
-                                                          alignment:
-                                                              Alignment.topLeft,
-                                                          child: Text(
-                                                            'Xóa học sinh',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      item['parentId'] == 0
-                                                          ? Container()
-                                                          : TextButton(
+                                                            TextButton(
                                                               onPressed: () {
                                                                 showAnimatedDialog(
                                                                   context:
@@ -391,15 +329,17 @@ class _ListStudentsState extends State<ListStudents> {
                                                                         FlatButton(
                                                                           onPressed:
                                                                               () {
-                                                                            ClassroomController.deleteParent(
-                                                                              idStudent: item['id'].toString(),
-                                                                              fullName: item['fullName'],
-                                                                              birthday: item['birthday'],
-                                                                              countStudents: widget.countStudents,
-                                                                              context: context,
-                                                                              className: widget.className,
-                                                                              homeworkId: widget.homeworkId,
-                                                                              id: widget.id,
+                                                                            setState(
+                                                                              () {
+                                                                                deleteStudent = ClassroomController.deleteStudent(
+                                                                                  item['id'].toString(),
+                                                                                  context,
+                                                                                  item['classroomId'].toString(),
+                                                                                  widget.className,
+                                                                                  widget.countStudents,
+                                                                                  widget.homeworkId,
+                                                                                );
+                                                                              },
                                                                             );
                                                                           },
                                                                           child:
@@ -438,7 +378,7 @@ class _ListStudentsState extends State<ListStudents> {
                                                                     Alignment
                                                                         .topLeft,
                                                                 child: Text(
-                                                                  'Xóa phụ huynh',
+                                                                  'Xóa học sinh',
                                                                   style:
                                                                       TextStyle(
                                                                     color: Colors
@@ -447,33 +387,105 @@ class _ListStudentsState extends State<ListStudents> {
                                                                 ),
                                                               ),
                                                             ),
+                                                            item['parentId'] ==
+                                                                    0
+                                                                ? Container()
+                                                                : TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      showAnimatedDialog(
+                                                                        context:
+                                                                            context,
+                                                                        barrierDismissible:
+                                                                            true,
+                                                                        builder:
+                                                                            (BuildContext
+                                                                                context) {
+                                                                          return ClassicGeneralDialogWidget(
+                                                                            titleText:
+                                                                                'Bạn có chắc chắn',
+                                                                            actions: [
+                                                                              // ignore: deprecated_member_use
+                                                                              FlatButton(
+                                                                                onPressed: () {
+                                                                                  ClassroomController.deleteParent(
+                                                                                    idStudent: item['id'].toString(),
+                                                                                    fullName: item['fullName'],
+                                                                                    birthday: item['birthday'],
+                                                                                    countStudents: widget.countStudents,
+                                                                                    context: context,
+                                                                                    className: widget.className,
+                                                                                    homeworkId: widget.homeworkId,
+                                                                                    id: widget.id,
+                                                                                  );
+                                                                                },
+                                                                                child: Text('Xóa'),
+                                                                                color: Colors.red,
+                                                                              ),
+                                                                              // ignore: deprecated_member_use
+                                                                              FlatButton(
+                                                                                onPressed: () {
+                                                                                  Navigator.of(context).pop();
+                                                                                },
+                                                                                child: Text('Hủy'),
+                                                                                color: Colors.black38,
+                                                                              )
+                                                                            ],
+                                                                          );
+                                                                        },
+                                                                        animationType:
+                                                                            DialogTransitionType.size,
+                                                                        curve: Curves
+                                                                            .fastOutSlowIn,
+                                                                        duration:
+                                                                            Duration(seconds: 1),
+                                                                      );
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      // color: Colors.black,
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .topLeft,
+                                                                      child:
+                                                                          Text(
+                                                                        'Xóa phụ huynh',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.black,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                          ],
+                                                        ),
+                                                      )
                                                     ],
-                                                  ),
-                                                )
-                                              ],
-                                            );
-                                          },
-                                          animationType:
-                                              DialogTransitionType.size,
-                                          curve: Curves.fastOutSlowIn,
-                                          duration: Duration(seconds: 1),
-                                        );
-                                      },
+                                                  );
+                                                },
+                                                animationType:
+                                                    DialogTransitionType.size,
+                                                curve: Curves.fastOutSlowIn,
+                                                duration: Duration(seconds: 1),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                            width: 2.0, color: Colors.black12),
+                                      ),
+                                    ),
+                                    padding:
+                                        EdgeInsets.only(top: 10, bottom: 10),
                                   ),
-                                ],
-                              ),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                      width: 2.0, color: Colors.black12),
                                 ),
-                              ),
-                              padding: EdgeInsets.only(top: 10, bottom: 10),
-                            ),
-                          ),
-                        ],
-                      );
+                              ],
+                            );
                     } else if (snapshot.hasError) {
                       return Container(
                         margin: EdgeInsets.all(20),

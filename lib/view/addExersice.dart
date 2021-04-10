@@ -120,16 +120,23 @@ class _AddExersiceState extends State<AddExersice> {
               child: Column(
                 children: [
                   Container(
+                    margin: EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      top: 15,
+                      bottom: 5,
+                    ),
                     child: DateTimePicker(
                       controller: deadline,
                       decoration: InputDecoration(
-                        suffixIcon: Icon(
-                          Icons.event,
-                        ),
-                        border: OutlineInputBorder(),
-                        labelText: 'Chọn thời hạn nộp bài tập* ',
-                        hintText: 'Chọn thời hạn nộp ',
-                      ),
+                          suffixIcon: Icon(
+                            Icons.event,
+                            color: Colors.white,
+                          ),
+                          border: OutlineInputBorder(),
+                          labelText: 'Chọn thời hạn nộp bài tập* ',
+                          hintText: 'Chọn này sinh ',
+                          counterStyle: TextStyle(color: Colors.black)),
                       dateMask: 'dd/MM/yyyy',
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100),
@@ -138,17 +145,11 @@ class _AddExersiceState extends State<AddExersice> {
                       onChanged: (value) => print(value),
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Vui lòng chọn thời hạn nộp bài tập';
+                          return 'Vui lòng chọn ngày sinh';
                         }
                         return null;
                       },
                       onSaved: (value) => print(value),
-                    ),
-                    margin: EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                      top: 15,
-                      bottom: 10,
                     ),
                   ),
                   Container(
@@ -176,49 +177,35 @@ class _AddExersiceState extends State<AddExersice> {
                       bottom: 15,
                     ),
                   ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        '+ Thêm file bài tập',
+                        style: TextStyle(color: Colors.blue, fontSize: 16),
+                      ),
+                      padding: EdgeInsets.only(left: 32, top: 10, bottom: 5),
+                    ),
+                  ),
+                  Container(
+                    child: Text(
+                        'Chụp ảnh bài tập hoặc chọn file word, pdf, audio, video có sẵn'),
+                    margin: EdgeInsets.only(left: 30, right: 30, bottom: 5),
+                  ),
                   Container(
                     alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              '+ Thêm file bài tập',
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom:
-                                    BorderSide(width: 1, color: Colors.black12),
-                              ),
-                            ),
-                            padding: EdgeInsets.all(10),
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            '636b279ea5d0578e0ec1.abc636b279ea5d0578e0ec1',
-                            maxLines: 1,
-                            style: TextStyle(color: Colors.black38),
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom:
-                                  BorderSide(width: 1, color: Colors.black12),
-                            ),
-                          ),
-                          margin: EdgeInsets.all(10),
-                          padding: EdgeInsets.all(8),
-                        ),
-                      ],
+                    child: Text(
+                      '636b279ea5d0578e0ec1.abc636b279ea5d0578e0ec1',
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.black38),
                     ),
                     decoration: BoxDecoration(
-                      border: Border.all(width: 1.5, color: Colors.black12),
+                      border: Border.all(width: 1, color: Colors.black12),
+                      color: Color(0xFFecf0f5),
                     ),
-                    margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                    margin: EdgeInsets.only(left: 30, right: 30, bottom: 6),
+                    padding: EdgeInsets.all(10),
                   ),
                   Container(
                     child: Row(
@@ -236,7 +223,7 @@ class _AddExersiceState extends State<AddExersice> {
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
+                            primary: Colors.yellow[800],
                           ),
                           onPressed: () {
                             Navigator.push(
@@ -252,8 +239,10 @@ class _AddExersiceState extends State<AddExersice> {
                               ),
                             );
                           },
-                          child: Text('HỦY',
-                              style: TextStyle(color: Colors.black)),
+                          child: Text(
+                            'HỦY',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     ),
@@ -275,6 +264,7 @@ class _AddExersiceState extends State<AddExersice> {
                 width: 1,
                 color: Color(0xff00a7d0),
               ),
+              color: Colors.white,
             ),
           ),
         ],
