@@ -1,3 +1,4 @@
+import 'package:azt/config/connect.dart';
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/controller/homework_controller.dart';
 import 'package:azt/models/core_mo.dart';
@@ -670,11 +671,13 @@ class _DetailExersiceState extends State<DetailExersice> {
                                                                     : checkSubmitStatus(item["id"]) ==
                                                                             SubmitStatus.notMarked
                                                                         ? () {
-                                                                            launch('https://azota.vn/vi/admin/mark-exercise/' +
+                                                                            launch(AZT_DOMAIN_NAME +
+                                                                                '/vi/admin/mark-exercise/' +
                                                                                 getAnswerId(item['id']).toString());
                                                                           }
                                                                         : () {
-                                                                            launch('https://azota.vn/vi/admin/mark-exercise/' +
+                                                                            launch(AZT_DOMAIN_NAME +
+                                                                                '/vi/admin/mark-exercise/' +
                                                                                 getAnswerId(item['id']).toString());
                                                                           },
                                                                 style: ElevatedButton
