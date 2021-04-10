@@ -110,6 +110,10 @@ class _NotificationScreenState extends State<NotificationScreen>
                                 ? NotificationStudentItem(
                                     noticeId: _notiArr.elementAt(index)['id'],
                                     notiType: _notiArr.elementAt(index)['type'],
+                                    read: _notiArr.elementAt(index)['readAt'] !=
+                                        null
+                                        ? true
+                                        : false,
                                     className: _notiArr
                                         .elementAt(index)['classroomName'],
                                     score: _notiArr
@@ -289,7 +293,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                     TextButton(
                                       onPressed: () async {
                                         Navigator.pop(context);
-                                        await NotiController.markAllAsRead();
+                                        await NotiController.markAllAsRead(accType: widget.role);
                                         await _getData();
 
                                       },
@@ -307,7 +311,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                     TextButton(
                                       onPressed: () async {
                                         Navigator.pop(context);
-                                        await NotiController.deleteAllNotif();
+                                        await NotiController.deleteAllNotif(accType: widget.role);
                                         await _getData();
                                       },
                                       child: Container(
