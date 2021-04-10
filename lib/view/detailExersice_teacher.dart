@@ -15,6 +15,7 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum SubmitStatus { notSubmitted, notMarked, marked }
 
@@ -155,8 +156,6 @@ class _DetailExersiceState extends State<DetailExersice> {
     await Clipboard.setData(
         ClipboardData(text: "https://azota.vn/en/bai-tap/" + widget.hashId));
   }
-
-  void markExercise() {}
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -670,8 +669,14 @@ class _DetailExersiceState extends State<DetailExersice> {
                                                                     ? null
                                                                     : checkSubmitStatus(item["id"]) ==
                                                                             SubmitStatus.notMarked
-                                                                        ? markExercise
-                                                                        : markExercise,
+                                                                        ? () {
+                                                                            launch('https://azota.vn/vi/admin/mark-exercise/' +
+                                                                                getAnswerId(item['id']).toString());
+                                                                          }
+                                                                        : () {
+                                                                            launch('https://azota.vn/vi/admin/mark-exercise/' +
+                                                                                getAnswerId(item['id']).toString());
+                                                                          },
                                                                 style: ElevatedButton
                                                                     .styleFrom(
                                                                   primary: checkSubmitStatus(item[

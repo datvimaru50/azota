@@ -52,11 +52,9 @@ class _DetailClassState extends State<DetailClass> {
 
   // ignore: missing_return
   Future<bool> _onBackPressed() {
-    Prefs.deletePref();
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
-    );
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
+        (Route<dynamic> route) => false);
   }
 
   @override
