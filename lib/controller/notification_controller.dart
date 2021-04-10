@@ -112,8 +112,8 @@ class NotiController extends ControllerMVC {
     }
   }
 
-  static Future<String> markAllAsRead() async {
-    final token = await Prefs.getPref(ACCESS_TOKEN);
+  static Future<String> markAllAsRead({String accType = 'teacher'}) async {
+    final token = accType == 'teacher' ? await Prefs.getPref(ACCESS_TOKEN) : await Prefs.getPref(ANONYMOUS_TOKEN);
 
     final response = await http.Client()
         .get(AZO_NOTIF_MARK_ALL_READ, headers: {
@@ -140,8 +140,8 @@ class NotiController extends ControllerMVC {
     }
   }
 
-  static Future<String> deleteNotif({@required int noticeId}) async {
-    final token = await Prefs.getPref(ACCESS_TOKEN);
+  static Future<String> deleteNotif({@required int noticeId, String accType = 'teacher'}) async {
+    final token = accType == 'teacher' ? await Prefs.getPref(ACCESS_TOKEN) : await Prefs.getPref(ANONYMOUS_TOKEN);
 
     final response = await http.Client()
         .get(AZO_DELETE_NOTIF + '?id=$noticeId', headers: {
@@ -168,8 +168,8 @@ class NotiController extends ControllerMVC {
     }
   }
 
-  static Future<String> deleteAllNotif() async {
-    final token = await Prefs.getPref(ACCESS_TOKEN);
+  static Future<String> deleteAllNotif({String accType = 'teacher'}) async {
+    final token = accType == 'teacher' ? await Prefs.getPref(ACCESS_TOKEN) : await Prefs.getPref(ANONYMOUS_TOKEN);
 
     final response = await http.Client()
         .get(AZO_DELETE_ALL_NOTIF, headers: {

@@ -11,6 +11,7 @@ class NotificationStudentItem extends StatefulWidget {
   NotificationStudentItem(
       {this.notiType,
       this.noticeId,
+      this.read,
       this.className,
       this.deadline,
       this.score,
@@ -20,6 +21,7 @@ class NotificationStudentItem extends StatefulWidget {
       this.resendNote});
 
   final int noticeId;
+  final bool read;
   final String resendNote;
   final String notiType;
   final String className;
@@ -195,7 +197,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
           ),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black12),
-            color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
+            color: _clickedStatus || widget.read ? Colors.black38 : Color(0xff00c0ef),
           ),
         ),
       ),
