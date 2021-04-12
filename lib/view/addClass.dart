@@ -72,7 +72,6 @@ class _AddClassState extends State<AddClass> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Tên lớp học* ',
-                          hintText: 'Nhập tên lớp học',
                         ),
                         validator: (value) {
                           if (value.isEmpty) {

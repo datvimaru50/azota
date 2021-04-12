@@ -102,11 +102,8 @@ class _DetailExersiceState extends State<DetailExersice>
                       TextFormField(
                         controller: noteText,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          hintText: 'Ghi chú',
-                          prefixIcon: Icon(Icons.phone_android_outlined),
+                          border: OutlineInputBorder(),
+                          labelText: 'Ghi chú* ',
                         ),
                         validator: (value) {
                           if (value.isEmpty) {
