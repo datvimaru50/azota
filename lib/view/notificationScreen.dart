@@ -36,7 +36,8 @@ class _NotificationScreenState extends State<NotificationScreen>
   AppLifecycleState _notification;
 
   void fetchNoti() async {
-    var result = await Provider.of<NotiModel>(context, listen: false).setTotal(accType: widget.role == 'parent'? 'parent':'teacher');
+    var result = await Provider.of<NotiModel>(context, listen: false)
+        .setTotal(accType: widget.role == 'parent' ? 'parent' : 'teacher');
 
     setState(() {
       doneLoading = true;
@@ -112,7 +113,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                     noticeId: _notiArr.elementAt(index)['id'],
                                     notiType: _notiArr.elementAt(index)['type'],
                                     read: _notiArr.elementAt(index)['readAt'] !=
-                                        null
+                                            null
                                         ? true
                                         : false,
                                     className: _notiArr
@@ -276,69 +277,71 @@ class _NotificationScreenState extends State<NotificationScreen>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onBackPressed,
-      child: 
- Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              widget.role == 'teacher' ? 'Thông báo' : 'Thông báo phụ huynh',
-              style: TextStyle(fontSize: 18),
-            ),
-            _notiArr.length != 0
-                ? IconButton(
-                    icon: Icon(Icons.delete_forever_outlined),
-                    onPressed: () {
-                      showAnimatedDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext context) {
-                          return ClassicGeneralDialogWidget(
-                            actions: [
-                              Container(
-                                width: 300,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () async {
-                                        Navigator.pop(context);
-                                        await NotiController.markAllAsRead(accType: widget.role);
-                                        await _getData();
-
-                                      },
-                                      child: Container(
-                                        // color: Colors.black,
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          'Đánh dấu tất cả là đã đọc.',
-                                          style: TextStyle(
-                                            color: Colors.black,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                widget.role == 'teacher' ? 'Thông báo' : 'Thông báo phụ huynh',
+                style: TextStyle(fontSize: 18),
+              ),
+              _notiArr.length != 0
+                  ? IconButton(
+                      icon: Icon(Icons.delete_forever_outlined),
+                      onPressed: () {
+                        showAnimatedDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext context) {
+                            return ClassicGeneralDialogWidget(
+                              actions: [
+                                Container(
+                                  width: 300,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                          await NotiController.markAllAsRead(
+                                              accType: widget.role);
+                                          await _getData();
+                                        },
+                                        child: Container(
+                                          // color: Colors.black,
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                            'Đánh dấu tất cả là đã đọc.',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () async {
-                                        Navigator.pop(context);
-                                        await NotiController.deleteAllNotif(accType: widget.role);
-                                        await _getData();
-                                      },
-                                      child: Container(
-                                        // color: Colors.black,
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          'Xóa tất cả thông báo',
-                                          style: TextStyle(
-                                            color: Colors.red,
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                          await NotiController.deleteAllNotif(
+                                              accType: widget.role);
+                                          await _getData();
+                                        },
+                                        child: Container(
+                                          // color: Colors.black,
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                            'Xóa tất cả thông báo',
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                      ],
-                                      ),
-                                      ),
-                        }
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
                           },
                           animationType: DialogTransitionType.size,
                           curve: Curves.fastOutSlowIn,

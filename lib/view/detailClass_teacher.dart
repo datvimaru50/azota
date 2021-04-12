@@ -1,4 +1,3 @@
-import 'package:azt/config/global.dart';
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:azt/view/addExersice.dart';

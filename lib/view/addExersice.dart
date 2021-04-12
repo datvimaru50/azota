@@ -132,7 +132,6 @@ class _AddExersiceState extends State<AddExersice> {
                           suffixIcon: Icon(Icons.event, color: Colors.black54),
                           border: OutlineInputBorder(),
                           labelText: 'Chọn thời hạn nộp bài tập* ',
-                          hintText: 'Chọn này sinh ',
                           counterStyle: TextStyle(color: Colors.black)),
                       dateMask: 'dd/MM/yyyy',
                       firstDate: DateTime(2000),
@@ -158,7 +157,6 @@ class _AddExersiceState extends State<AddExersice> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Nội dung bài tập* ',
-                        hintText: 'Nhập nội dung bài tập',
                       ),
                       validator: (value) {
                         if (value.isEmpty) {

@@ -1,4 +1,5 @@
 import 'package:azt/config/connect.dart';
+import 'package:azt/config/global.dart';
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/controller/homework_controller.dart';
 import 'package:azt/models/core_mo.dart';
@@ -47,11 +48,14 @@ class DetailExersice extends StatefulWidget {
   _DetailExersiceState createState() => _DetailExersiceState();
 }
 
-class _DetailExersiceState extends State<DetailExersice> {
+class _DetailExersiceState extends State<DetailExersice>
+    with WidgetsBindingObserver {
   final _formKey = GlobalKey<FormState>();
   final noteText = TextEditingController();
   bool status = false;
   bool isSubmitDateDecending = false;
+  var baseAccess;
+  var accessToken;
   Future<List<dynamic>> classroomHashIdInfo;
 
   Future<AnswerHashIdInfo> submitedStudents;
@@ -65,6 +69,17 @@ class _DetailExersiceState extends State<DetailExersice> {
 
     classroomHashIdInfo = ClassroomController.studentClassroom(
         id: widget.idClassroom); // list all student
+    setBaseAccess();
+  }
+
+  void setBaseAccess() async {
+    var token = await Prefs.getPref(ACCESS_TOKEN);
+    setState(() {
+      accessToken = token;
+      baseAccess =
+          '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
+    });
+    print('accesstoken::: ' + token);
   }
 
   Future<void> _showMyDialog(int studentId) {
@@ -651,14 +666,39 @@ class _DetailExersiceState extends State<DetailExersice> {
                                                                   MainAxisAlignment
                                                                       .spaceBetween,
                                                               children: [
-                                                                Container(
+                                                                Expanded(
                                                                   child: Column(
                                                                     children: [
-                                                                      Container(
-                                                                        alignment:
-                                                                            Alignment.topLeft,
-                                                                        child: Text(
-                                                                            item['fullName']),
+                                                                      Row(
+                                                                        children: [
+                                                                          Container(
+                                                                            alignment:
+                                                                                Alignment.topLeft,
+                                                                            child:
+                                                                                Text(item['fullName']),
+                                                                          ),
+                                                                          checkSubmitStatus(item["id"]) != SubmitStatus.marked
+                                                                              ? Container()
+                                                                              : Container(
+                                                                                  alignment: Alignment.center,
+                                                                                  height: 32,
+                                                                                  width: 32,
+                                                                                  child: Text(
+                                                                                    getAnswerPoint(item["id"]).toString().replaceAll(".0", ""),
+                                                                                    style: TextStyle(
+                                                                                      color: Colors.white,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                      fontSize: 16,
+                                                                                    ),
+                                                                                  ),
+                                                                                  margin: EdgeInsets.only(left: 7),
+                                                                                  decoration: BoxDecoration(
+                                                                                    borderRadius: BorderRadius.circular(50),
+                                                                                    border: Border.all(color: Colors.black12),
+                                                                                    color: Colors.red,
+                                                                                  ),
+                                                                                ),
+                                                                        ],
                                                                       ),
                                                                       checkSubmitStatus(item["id"]) ==
                                                                               SubmitStatus.notSubmitted
@@ -672,8 +712,7 @@ class _DetailExersiceState extends State<DetailExersice> {
                                                                                 ),
                                                                               ),
                                                                               margin: EdgeInsets.only(
-                                                                                top: 3,
-                                                                                bottom: 3,
+                                                                                bottom: 5,
                                                                               ),
                                                                             ),
                                                                       getAnswerId(item["id"]) ==
@@ -691,49 +730,11 @@ class _DetailExersiceState extends State<DetailExersice> {
                                                                                     color: Colors.blue,
                                                                                   ),
                                                                                 ),
-                                                                              ))
+                                                                              ),
+                                                                            ),
                                                                     ],
                                                                   ),
-                                                                  width: 120,
                                                                 ),
-                                                                checkSubmitStatus(item[
-                                                                            "id"]) !=
-                                                                        SubmitStatus
-                                                                            .marked
-                                                                    ? Container()
-                                                                    : Container(
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        height:
-                                                                            30,
-                                                                        width:
-                                                                            30,
-                                                                        child:
-                                                                            Text(
-                                                                          getAnswerPoint(item["id"])
-                                                                              .toString(),
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                            fontSize:
-                                                                                16,
-                                                                          ),
-                                                                        ),
-                                                                        margin:
-                                                                            EdgeInsets.all(5),
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(50),
-                                                                          border:
-                                                                              Border.all(color: Colors.black12),
-                                                                          color:
-                                                                              Colors.red,
-                                                                        ),
-                                                                      ),
                                                                 ElevatedButton(
                                                                   child: Text(checkSubmitStatus(item[
                                                                               "id"]) ==
@@ -752,10 +753,10 @@ class _DetailExersiceState extends State<DetailExersice> {
                                                                       : checkSubmitStatus(item["id"]) ==
                                                                               SubmitStatus.notMarked
                                                                           ? () {
-                                                                              launch(AZT_DOMAIN_NAME + '/vi/admin/mark-exercise/' + getAnswerId(item['id']).toString());
+                                                                              launch('$baseAccess/en/admin/mark-exercise/' + getAnswerId(item['id']).toString());
                                                                             }
                                                                           : () {
-                                                                              launch(AZT_DOMAIN_NAME + '/vi/admin/mark-exercise/' + getAnswerId(item['id']).toString());
+                                                                              launch('$baseAccess/en/admin/mark-exercise/' + getAnswerId(item['id']).toString());
                                                                             },
                                                                   style: ElevatedButton
                                                                       .styleFrom(
