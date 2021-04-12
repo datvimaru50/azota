@@ -369,6 +369,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  get_time_ago:
+    dependency: "direct main"
+    description:
+      name: get_time_ago
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.7"
   glob:
     dependency: transitive
     description:
