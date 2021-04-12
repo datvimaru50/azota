@@ -694,7 +694,6 @@ class _DetailExersiceState extends State<DetailExersice>
                                                                                   margin: EdgeInsets.only(left: 7),
                                                                                   decoration: BoxDecoration(
                                                                                     borderRadius: BorderRadius.circular(50),
-                                                                                    border: Border.all(color: Colors.black12),
                                                                                     color: Colors.red,
                                                                                   ),
                                                                                 ),
@@ -763,9 +762,8 @@ class _DetailExersiceState extends State<DetailExersice>
                                                                     primary: checkSubmitStatus(item["id"]) ==
                                                                             SubmitStatus
                                                                                 .marked
-                                                                        ? Colors
-                                                                            .blueGrey
-                                                                            .shade800
+                                                                        ? Color(
+                                                                            0xff17a2b8)
                                                                         : Colors
                                                                             .yellow
                                                                             .shade800,
