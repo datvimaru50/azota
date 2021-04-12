@@ -76,12 +76,14 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
   Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
-        onTap: () async{
+        onTap: () async {
           setState(() {
             _clickedStatus = true;
           });
-          await NotiController.markAsRead(noticeId: widget.noticeId, accType: 'parent');
-          await Provider.of<NotiModel>(context, listen: false).setTotal(accType: 'parent');
+          await NotiController.markAsRead(
+              noticeId: widget.noticeId, accType: 'parent');
+          await Provider.of<NotiModel>(context, listen: false)
+              .setTotal(accType: 'parent');
 
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => SubmitForm()),
@@ -152,11 +154,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                               padding: EdgeInsets.only(
                                   left: 10, top: 10, bottom: 10),
                               child: Text(
-                                DateTimeFormat.relative(
-                                  DateTime.parse(widget.submitTime),
-                                  levelOfPrecision: 1,
-                                  // appendIfAfter: 'ago',
-                                ),
+                                TimeAgo.timeAgoSinceDate(widget.submitTime),
                               ),
                             ),
                           ],
@@ -179,7 +177,6 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                               margin: EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(50),
-                                border: Border.all(color: Colors.black12),
                                 color: Colors.red,
                               ),
                             ),
@@ -197,10 +194,43 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
           ),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black12),
-            color: _clickedStatus || widget.read ? Colors.black38 : Color(0xff00c0ef),
+            color: _clickedStatus || widget.read
+                ? Colors.black38
+                : Color(0xff00c0ef),
           ),
         ),
       ),
     );
+  }
+}
+
+class TimeAgo {
+  static String timeAgoSinceDate(String dateString,
+      {bool numericDates = true}) {
+    DateTime notificationDate = DateTime.parse(dateString);
+    final date2 = DateTime.now();
+    final difference = date2.difference(notificationDate);
+
+    if (difference.inDays > 8) {
+      return 'nộp ngày' + DateFormat.yMd().format(DateTime.parse(dateString));
+    } else if ((difference.inDays / 7).floor() >= 1) {
+      return (numericDates) ? '1 tuần trước' : '1 tuần trước';
+    } else if (difference.inDays >= 2) {
+      return '${difference.inDays} ngày trước';
+    } else if (difference.inDays >= 1) {
+      return (numericDates) ? '1 ngày trước' : '1 ngày trước';
+    } else if (difference.inHours >= 2) {
+      return '${difference.inHours} giờ trước';
+    } else if (difference.inHours >= 1) {
+      return (numericDates) ? '1 giờ trước' : '1 giờ trước';
+    } else if (difference.inMinutes >= 2) {
+      return '${difference.inMinutes} phút trước';
+    } else if (difference.inMinutes >= 1) {
+      return (numericDates) ? '1 phút trước' : '1 phút trước';
+    } else if (difference.inSeconds >= 3) {
+      return '${difference.inSeconds} giây trước';
+    } else {
+      return 'vừa xong';
+    }
   }
 }

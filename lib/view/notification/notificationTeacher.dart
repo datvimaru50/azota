@@ -145,12 +145,7 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
                               padding: EdgeInsets.only(
                                   left: 10, top: 10, bottom: 10),
                               child: Text(
-                                  DateTimeFormat.relative(
-                                      DateTime.parse(widget.submitTime),
-                                      relativeTo: DateTime.now(),
-                                      levelOfPrecision: 1,
-                                      appendIfAfter: ' ago',
-                                      abbr: true),
+                                  TimeAgo.timeAgoSinceDate(widget.submitTime),
                                   style: TextStyle(
                                       // color: _clickedStatus ? Colors.black38 : Color(0xff00c0ef),
                                       )),
@@ -180,5 +175,36 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
         ),
       );
     });
+  }
+}
+
+class TimeAgo {
+  static String timeAgoSinceDate(String dateString,
+      {bool numericDates = true}) {
+    DateTime notificationDate = DateTime.parse(dateString);
+    final date2 = DateTime.now();
+    final difference = date2.difference(notificationDate);
+
+    if (difference.inDays > 8) {
+      return 'nộp ngày' + DateFormat.yMd().format(DateTime.parse(dateString));
+    } else if ((difference.inDays / 7).floor() >= 1) {
+      return (numericDates) ? '1 tuần trước' : '1 tuần trước';
+    } else if (difference.inDays >= 2) {
+      return '${difference.inDays} ngày trước';
+    } else if (difference.inDays >= 1) {
+      return (numericDates) ? '1 ngày trước' : '1 ngày trước';
+    } else if (difference.inHours >= 2) {
+      return '${difference.inHours} giờ trước';
+    } else if (difference.inHours >= 1) {
+      return (numericDates) ? '1 giờ trước' : '1 giờ trước';
+    } else if (difference.inMinutes >= 2) {
+      return '${difference.inMinutes} phút trước';
+    } else if (difference.inMinutes >= 1) {
+      return (numericDates) ? '1 phút trước' : '1 phút trước';
+    } else if (difference.inSeconds >= 3) {
+      return '${difference.inSeconds} giây trước';
+    } else {
+      return 'vừa xong';
+    }
   }
 }
