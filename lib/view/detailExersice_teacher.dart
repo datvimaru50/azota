@@ -105,12 +105,6 @@ class _DetailExersiceState extends State<DetailExersice>
                           border: OutlineInputBorder(),
                           labelText: 'Ghi chú* ',
                         ),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Vui lòng nêu lý do yêu cầu nộp lại';
-                          }
-                          return null;
-                        },
                       ),
                     ],
                   ),
