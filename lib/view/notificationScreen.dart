@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'dart:io';
-import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:azt/view/notification/notificationStudent.dart';
