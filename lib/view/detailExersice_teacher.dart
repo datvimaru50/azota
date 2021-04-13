@@ -728,15 +728,21 @@ class _DetailExersiceState extends State<DetailExersice>
                                                                   ),
                                                                 ),
                                                                 ElevatedButton(
-                                                                  child: Text(checkSubmitStatus(item[
-                                                                              "id"]) ==
-                                                                          SubmitStatus
-                                                                              .notSubmitted
-                                                                      ? 'Chưa nộp'
-                                                                      : checkSubmitStatus(item["id"]) ==
-                                                                              SubmitStatus.marked
-                                                                          ? 'Chấm lại'
-                                                                          : 'Chấm bài'),
+                                                                  child:
+                                                                      Container(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(checkSubmitStatus(item["id"]) ==
+                                                                            SubmitStatus
+                                                                                .notSubmitted
+                                                                        ? 'Chưa nộp'
+                                                                        : checkSubmitStatus(item["id"]) ==
+                                                                                SubmitStatus.marked
+                                                                            ? 'Chấm lại'
+                                                                            : 'Chấm bài'),
+                                                                    width: 63,
+                                                                  ),
                                                                   onPressed: checkSubmitStatus(item[
                                                                               "id"]) ==
                                                                           SubmitStatus
