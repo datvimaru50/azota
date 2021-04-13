@@ -1,12 +1,6 @@
-import 'dart:io';
-import 'dart:async';
-import 'dart:convert';
-import 'package:azt/config/global.dart';
+import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/view/listStudents.dart';
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
-import 'package:azt/config/connect.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -35,55 +29,6 @@ class _AddStudentState extends State<AddStudent> {
   TextEditingController fullName = new TextEditingController();
   TextEditingController birthday = new TextEditingController();
   // TextEditingController birthday = new TextEditingController();
-  Future addStudentRoom() async {
-    final token = await Prefs.getPref(ACCESS_TOKEN);
-    Map mapdata = <String, dynamic>{
-      "fullName": fullName.text,
-      "gender": gender == null ? '0' : gender,
-      "birthday": birthday.text,
-      "classroomId": widget.classRoomId,
-    };
-    //log data in form
-    // ignore: unnecessary_brace_in_string_interps
-    print("JSON DATA : ${mapdata}");
-    final reponse = await http.Client()
-        .post(AZO_STUDENT_SAVE, body: jsonEncode(mapdata), headers: {
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-      HttpHeaders.authorizationHeader: "Bearer $token",
-    });
-
-    var data = jsonDecode(reponse.body);
-    if (data['success'] == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ListStudents(
-            id: widget.classRoomId,
-            className: widget.className,
-            countStudents: widget.countStudents,
-            homeworkId: widget.homeworkId,
-          ),
-        ),
-      );
-      return Fluttertoast.showToast(
-          msg: 'Thêm học sinh thành công ',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    } else {
-      return Fluttertoast.showToast(
-          msg: 'Thêm học sinh không thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
-  }
 
   void initState() {
     super.initState();
@@ -137,7 +82,6 @@ class _AddStudentState extends State<AddStudent> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Họ tên học sinh*',
-                        hintText: 'Nhập vào họ tên học sinh',
                       ),
                       autofocus: false,
                       validator: (value) {
@@ -158,7 +102,6 @@ class _AddStudentState extends State<AddStudent> {
                           suffixIcon: Icon(Icons.event),
                           border: OutlineInputBorder(),
                           labelText: 'Ngày sinh*',
-                          hintText: 'Chọn này sinh ',
                         ),
                         dateMask: 'dd/MM/yyyy',
                         firstDate: DateTime(2000),
@@ -230,7 +173,16 @@ class _AddStudentState extends State<AddStudent> {
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState.validate()) {
-                              addStudentRoom();
+                              ClassroomController.addStudentRoom(
+                                classRoomId: widget.classRoomId,
+                                className: widget.className,
+                                countStudents: widget.countStudents,
+                                homeworkId: widget.homeworkId,
+                                context: context,
+                                fullName: fullName.text,
+                                gender: gender,
+                                birthday: birthday.text,
+                              );
                             }
                           },
                           child: Text(

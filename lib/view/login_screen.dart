@@ -62,7 +62,7 @@ class _LoginFormState extends State<LoginForm> {
     return Fluttertoast.showToast(
         msg: errMsg,
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
+        gravity: ToastGravity.CENTER,
         timeInSecForIos: 1,
         backgroundColor: Colors.red,
         textColor: Colors.white,

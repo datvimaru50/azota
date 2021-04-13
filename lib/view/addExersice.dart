@@ -1,14 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'package:azt/config/connect.dart';
-import 'package:azt/config/global.dart';
+import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/view/detailClass_teacher.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(AddExersice());
@@ -35,59 +29,6 @@ class _AddExersiceState extends State<AddExersice> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController deadline = new TextEditingController();
   TextEditingController content = new TextEditingController();
-
-  Future addExersice() async {
-    final token = await Prefs.getPref(ACCESS_TOKEN);
-    Map mapdata = <String, String>{
-      "name": "Bài Tập ",
-      "content": content.text,
-      "classroomId": widget.id,
-      "deadline": deadline.text,
-    };
-    //log data in form
-    // ignore: unnecessary_brace_in_string_interps
-    print("JSON DATA : ${mapdata}");
-    final reponse = await http.Client().post(
-      AZO_HOMEWORK_SAVE,
-      body: jsonEncode(mapdata),
-      headers: {
-        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-        HttpHeaders.authorizationHeader: "Bearer " + token,
-      },
-    );
-    var data = jsonDecode(reponse.body);
-    if (data['success'] == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DetailClass(
-            idClassroom: widget.id,
-            countStudents: widget.countStudents,
-            className: widget.className,
-            homeworks: widget.homeworks,
-            homeworkId: widget.homeworkId,
-          ),
-        ),
-      );
-      return Fluttertoast.showToast(
-          msg: 'Tạo bài tập thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    } else {
-      return Fluttertoast.showToast(
-          msg: 'Tạo bài tập không thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +150,16 @@ class _AddExersiceState extends State<AddExersice> {
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState.validate()) {
-                              addExersice();
+                              ClassroomController.addExersice(
+                                idClassroom: widget.id,
+                                countStudents: widget.countStudents,
+                                className: widget.className,
+                                homeworks: widget.homeworks,
+                                homeworkId: widget.homeworkId,
+                                context: context,
+                                deadline: deadline.text,
+                                content: content.text,
+                              );
                             }
                           },
                           child: Text(

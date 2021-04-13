@@ -94,7 +94,6 @@ class _RegisterScreen extends State<RegisterScreen> {
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText: 'Họ tên*',
-                                    hintText: 'Nhập họ tên',
                                     prefixIcon: Icon(Icons.account_circle),
                                   ),
                                   validator: (value) {
@@ -119,7 +118,6 @@ class _RegisterScreen extends State<RegisterScreen> {
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText: 'Số điện thoại*',
-                                    hintText: 'Nhập số điện thoại',
                                     prefixIcon:
                                         Icon(Icons.phone_android_outlined),
                                   ),
