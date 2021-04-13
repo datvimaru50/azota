@@ -270,145 +270,148 @@ class _DetailExersiceState extends State<DetailExersice>
                           splashColor: Colors.red,
                           color: Colors.lightBlueAccent,
                         ),
-                        Container(
-                          child: IconButton(
-                            icon: Icon(Icons.more_vert_outlined),
-                            onPressed: () {
-                              showAnimatedDialog(
-                                context: context,
-                                barrierDismissible: true,
-                                builder: (BuildContext context) {
-                                  return ClassicGeneralDialogWidget(
-                                    actions: [
-                                      Container(
-                                        width: 300,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) {
-                                                      var editExersice =
-                                                          EditExersice(
-                                                        deadline:
-                                                            widget.deadline,
-                                                        exerciseId:
-                                                            widget.exerciseId,
-                                                        content: widget.content,
-                                                        countStudents: widget
-                                                            .countStudents,
-                                                        className:
-                                                            widget.className,
-                                                        homeworkId:
-                                                            widget.homeworkId,
-                                                        homeworks:
-                                                            widget.homeworks,
-                                                        idClassroom:
-                                                            widget.idClassroom,
-                                                        idExersice:
-                                                            widget.idExersice,
-                                                      );
-                                                      return editExersice;
-                                                    },
-                                                  ),
-                                                );
-                                              },
-                                              child: Container(
-                                                // color: Colors.black,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  'Sửa',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                showAnimatedDialog(
-                                                  context: context,
-                                                  barrierDismissible: true,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return ClassicGeneralDialogWidget(
-                                                      titleText:
-                                                          'Bạn có chắc chắn',
-                                                      actions: [
-                                                        // ignore: deprecated_member_use
-                                                        FlatButton(
-                                                          onPressed: () {
-                                                            setState(
-                                                              () {
-                                                                ClassroomController
-                                                                    .deleteExersice(
-                                                                  widget
-                                                                      .countStudents,
-                                                                  widget
-                                                                      .className,
-                                                                  widget
-                                                                      .homeworkId,
-                                                                  widget
-                                                                      .homeworks,
-                                                                  widget
-                                                                      .idClassroom,
-                                                                  idExersice: widget
-                                                                      .idExersice,
-                                                                  context:
-                                                                      context,
-                                                                );
-                                                              },
-                                                            );
-                                                          },
-                                                          child: Text('Xóa'),
-                                                          color: Colors.red,
-                                                        ),
-                                                        // ignore: deprecated_member_use
-                                                        FlatButton(
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child: Text('Hủy'),
-                                                          color: Colors.black38,
-                                                        )
-                                                      ],
+
+                        GestureDetector(
+                          onTap: () {
+                            showAnimatedDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (BuildContext context) {
+                                return ClassicGeneralDialogWidget(
+                                  actions: [
+                                    Container(
+                                      width: 300,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    var editExersice =
+                                                        EditExersice(
+                                                      deadline: widget.deadline,
+                                                      exerciseId:
+                                                          widget.exerciseId,
+                                                      content: widget.content,
+                                                      countStudents:
+                                                          widget.countStudents,
+                                                      className:
+                                                          widget.className,
+                                                      homeworkId:
+                                                          widget.homeworkId,
+                                                      homeworks:
+                                                          widget.homeworks,
+                                                      idClassroom:
+                                                          widget.idClassroom,
+                                                      idExersice:
+                                                          widget.idExersice,
                                                     );
+                                                    return editExersice;
                                                   },
-                                                  animationType:
-                                                      DialogTransitionType.size,
-                                                  curve: Curves.fastOutSlowIn,
-                                                  duration:
-                                                      Duration(seconds: 1),
-                                                );
-                                              },
-                                              child: Container(
-                                                // color: Colors.black,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  'Xóa',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              // color: Colors.black,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                'Sửa',
+                                                style: TextStyle(
+                                                  color: Colors.black,
                                                 ),
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                },
-                                animationType: DialogTransitionType.size,
-                                curve: Curves.fastOutSlowIn,
-                                duration: Duration(seconds: 1),
-                              );
-                            },
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              showAnimatedDialog(
+                                                context: context,
+                                                barrierDismissible: true,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return ClassicGeneralDialogWidget(
+                                                    titleText:
+                                                        'Bạn có chắc chắn',
+                                                    actions: [
+                                                      // ignore: deprecated_member_use
+                                                      FlatButton(
+                                                        onPressed: () {
+                                                          setState(
+                                                            () {
+                                                              ClassroomController
+                                                                  .deleteExersice(
+                                                                widget
+                                                                    .countStudents,
+                                                                widget
+                                                                    .className,
+                                                                widget
+                                                                    .homeworkId,
+                                                                widget
+                                                                    .homeworks,
+                                                                widget
+                                                                    .idClassroom,
+                                                                idExersice: widget
+                                                                    .idExersice,
+                                                                context:
+                                                                    context,
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        child: Text('Xóa'),
+                                                        color: Colors.red,
+                                                      ),
+                                                      // ignore: deprecated_member_use
+                                                      FlatButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: Text('Hủy'),
+                                                        color: Colors.black38,
+                                                      )
+                                                    ],
+                                                  );
+                                                },
+                                                animationType:
+                                                    DialogTransitionType.size,
+                                                curve: Curves.fastOutSlowIn,
+                                                duration: Duration(seconds: 1),
+                                              );
+                                            },
+                                            child: Container(
+                                              // color: Colors.black,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                'Xóa',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                );
+                              },
+                              animationType: DialogTransitionType.size,
+                              curve: Curves.fastOutSlowIn,
+                              duration: Duration(seconds: 1),
+                            );
+                          },
+                          child: Container(
+                            child: Icon(Icons.more_vert_outlined),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.0),
+                              color: Colors.white,
+                            ),
+                            padding: EdgeInsets.all(5),
                           ),
                         ),
                       ],
