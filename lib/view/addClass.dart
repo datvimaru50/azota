@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'dart:async';
+import 'dart:io';
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:file_picker/file_picker.dart';
@@ -22,15 +22,23 @@ class _AddClassState extends State<AddClass> {
   // ignore: unused_field
   File _image;
 
+  String getFlieExcel;
+
+  PlatformFile files;
   Future getFile() async {
-    FilePickerResult getFile = await FilePicker.platform.pickFiles();
+    FilePickerResult getFile = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['xls', 'xlsx', 'xlsm'],
+    );
 
     setState(
       () {
         if (getFile != null) {
           PlatformFile file = getFile.files.first;
-
-          _image = File(file.path);
+          files = file;
+          _image = File(getFile.files.single.path);
+          getFlieExcel = file.name;
         }
       },
     );
@@ -102,38 +110,85 @@ class _AddClassState extends State<AddClass> {
                           strokeWidth: 1,
                           child: TextButton(
                             onPressed: getFile,
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.cloud_upload,
-                                  color: Colors.blue,
-                                ),
-                                Text(
-                                  'Chưa có file được chọn',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.black,
+                            child: getFlieExcel != null
+                                ? Column(
+                                    children: [
+                                      Icon(
+                                        Icons.cloud_upload,
+                                        color: Colors.blue,
+                                      ),
+                                      Container(
+                                        child: DottedBorder(
+                                          color: Colors.blue,
+                                          strokeWidth: 1,
+                                          child: Column(
+                                            children: [
+                                              Image.network(
+                                                'https://azota.vn/assets/images/excel.png',
+                                                width: 120,
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.all(5),
+                                                child: Text(
+                                                  getFlieExcel.toString(),
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                              // ignore: deprecated_member_use
+                                              FlatButton(
+                                                color: Colors.red,
+                                                onPressed: () {
+                                                  setState(() {
+                                                    getFlieExcel = null;
+                                                  });
+                                                },
+                                                child: Text(
+                                                  'Xóa',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        color: Color(0xFFecf0f5),
+                                        margin: EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            bottom: 20,
+                                            top: 10),
+                                      )
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      Icon(
+                                        Icons.cloud_upload,
+                                        color: Colors.blue,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            top: 10, left: 20, right: 20),
+                                        child: Text(
+                                          'Chưa có file được chọn\n' +
+                                              'Click để chọn File',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      top: 15, left: 20, right: 20),
-                                  child: Text(
-                                    'Kéo thả file Excel hoặc Click để chọn File',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
                           ),
                         ),
                         color: Color.fromRGBO(27, 171, 161, .05),
                         // margin: EdgeInsets.all(10),
                       ),
-                      padding: EdgeInsets.only(top: 15, left: 30, right: 30),
+                      margin: EdgeInsets.only(left: 30, right: 30),
                     ),
                     GestureDetector(
                         child: Row(
@@ -159,7 +214,8 @@ class _AddClassState extends State<AddClass> {
                           ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
-                                ClassroomController.addClassRoom(name, context);
+                                ClassroomController.addClassRoom(name, context,
+                                    getFile: _image);
                               }
                             },
                             child: Text(
@@ -191,7 +247,8 @@ class _AddClassState extends State<AddClass> {
                   ],
                 ),
               ),
-              margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 15),
+              margin: const EdgeInsets.only(
+                  left: 20.0, right: 20.0, top: 15, bottom: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.0),
                 border: Border.all(

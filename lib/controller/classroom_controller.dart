@@ -411,16 +411,13 @@ class ClassroomController extends ControllerMVC {
     }
   }
 
-  static Future addClassRoom(name, context) async {
+  static Future addClassRoom(name, context, {File getFile}) async {
     final token = await Prefs.getPref(ACCESS_TOKEN);
-    final reponse = await http.Client().post(
-      AZO_ADDCLASS_INFO,
-      headers: {
-        HttpHeaders.authorizationHeader: "Bearer $token",
-      },
-      body: {"name": name.text},
-    );
-
+    final reponse = await http.Client().post(AZO_ADDCLASS_INFO, headers: {
+      HttpHeaders.authorizationHeader: "Bearer $token",
+    }, body: {
+      "name": name.text
+    });
     var data = jsonDecode(reponse.body);
     final dataClass = data['data'];
     if (data['success'] == 1) {
