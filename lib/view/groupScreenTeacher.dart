@@ -6,41 +6,61 @@ import 'package:azt/view/userProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class GroupScreenTeacher extends StatefulWidget {
   @override
   _GroupScreenTeacherState createState() => _GroupScreenTeacherState();
 }
 
 class _GroupScreenTeacherState extends State<GroupScreenTeacher> {
-  int _selectedIndex = 0;
   Future<ListNotification> notiData;
-  List<Widget> _widgetOptions = <Widget>[
-    ListClass(),
-    NotificationScreen(role: 'teacher'),
-    Center(child: Text(
-      'Tính năng đang cập nhật!',
-    ),),
-    UserProfile(),
-  ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  PageController _pageController;
+  int _page = 0;
 
   @override
   void initState() {
     super.initState();
+    _pageController = new PageController();
     notiData = Provider.of<NotiModel>(context, listen: false).setTotal();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
+  void navigationTapped(int page) {
+    // Animating to the page.
+    // You can use whatever duration and curve you like
+    _pageController.animateToPage(page,
+        duration: const Duration(milliseconds: 300), curve: Curves.ease);
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      this._page = page;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     // use noti data from store provider
     return Scaffold(
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: new PageView(
+        children: [
+          ListClass(),
+          NotificationScreen(role: 'teacher'),
+          Center(
+            child: Text(
+              'Tính năng đang cập nhật!',
+            ),
+          ),
+          UserProfile(),
+        ],
+        onPageChanged: onPageChanged,
+        controller: _pageController,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -123,8 +143,8 @@ class _GroupScreenTeacherState extends State<GroupScreenTeacher> {
         backgroundColor: Color(0xff17A2B8),
         selectedItemColor: Colors.white,
         unselectedItemColor: Color(0xff6cdbed),
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        onTap: navigationTapped,
+        currentIndex: _page,
       ),
     );
   }
