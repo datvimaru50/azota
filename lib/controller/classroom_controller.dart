@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:azt/view/detailClass_teacher.dart';
 import 'package:azt/view/detailExersice_teacher.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
@@ -13,6 +14,7 @@ import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:azt/models/core_mo.dart';
+import 'package:azt/models/classroom_mo.dart';
 
 class ClassroomController extends ControllerMVC {
   factory ClassroomController() {
@@ -411,46 +413,42 @@ class ClassroomController extends ControllerMVC {
     }
   }
 
-  static Future addClassRoom(name, context, {File getFile}) async {
+  static Future addClassRoom({@required String className, filePath}) async {
     final token = await Prefs.getPref(ACCESS_TOKEN);
-    final reponse = await http.Client().post(AZO_ADDCLASS_INFO, headers: {
-      HttpHeaders.authorizationHeader: "Bearer $token",
-    }, body: {
-      "name": name.text
-    });
-    var data = jsonDecode(reponse.body);
-    final dataClass = data['data'];
-    if (data['success'] == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DetailClass(
-            idClassroom: dataClass['id'].toString(),
-            countStudents: dataClass['countStudents'].toString(),
-            className: dataClass['name'].toString(),
-            homeworks: dataClass['homeworks'].toString(),
-          ),
-        ),
-      );
-      return Fluttertoast.showToast(
-          msg: 'Tạo lớp học thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    } else {
-      // ignore: unnecessary_brace_in_string_interps
-      return Fluttertoast.showToast(
-          msg: 'Tạo lớp học không thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
+
+
+    var uri = Uri.parse(AZO_ADDCLASS_INFO);
+    var request = http.MultipartRequest('POST', uri)
+      ..fields['Name'] = className
+      ..files.add(await http.MultipartFile.fromPath('File', filePath))
+      ..headers["Authorization"] = "Bearer $token";
+
+    var response = await request.send();
+    var respStr = await response.stream.bytesToString();
+
+    if (response.statusCode == 200) print(respStr);
+
+    // switch (response.statusCode) {
+    //   case 200:
+    //     final Map<String, dynamic> resBody = json.decode(response.body);
+    //
+    //     if (resBody['success'] == 1) {
+    //
+    //       var classData = resBody['data'];
+    //       return ClassroomInfo.fromJson(classData);
+    //     } else {
+    //       throw "Tạo lớp không thành công";
+    //     }
+    //     break;
+    //
+    //   case 400:
+    //     throw ERR_BAD_REQUEST;
+    //     break;
+    //
+    //   default:
+    //     throw ERR_SERVER_CONNECT;
+    // }
+    print('finish');
   }
 
   static Future deleteExersice(

@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AddClass extends StatefulWidget {
@@ -15,33 +16,19 @@ class AddClass extends StatefulWidget {
 
 class _AddClassState extends State<AddClass> {
   final _formKey = GlobalKey<FormState>();
-
   TextEditingController name = new TextEditingController();
+  String filePath;
 
-  //upload file
-  // ignore: unused_field
-  File _image;
-
-  String getFlieExcel;
-
-  PlatformFile files;
   Future getFile() async {
     FilePickerResult getFile = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
       type: FileType.custom,
       allowedExtensions: ['xls', 'xlsx', 'xlsm'],
     );
-
-    setState(
-      () {
-        if (getFile != null) {
-          PlatformFile file = getFile.files.first;
-          files = file;
-          _image = File(getFile.files.single.path);
-          getFlieExcel = file.name;
-        }
-      },
-    );
+    if (getFile != null) {
+      setState(() {
+        filePath = getFile.paths.first;
+      });
+    }
   }
 
   // ignore: missing_return
@@ -110,7 +97,7 @@ class _AddClassState extends State<AddClass> {
                           strokeWidth: 1,
                           child: TextButton(
                             onPressed: getFile,
-                            child: getFlieExcel != null
+                            child: filePath != null
                                 ? Column(
                                     children: [
                                       Icon(
@@ -130,7 +117,7 @@ class _AddClassState extends State<AddClass> {
                                               Container(
                                                 margin: EdgeInsets.all(5),
                                                 child: Text(
-                                                  getFlieExcel.toString(),
+                                                  filePath.split('/').last,
                                                   maxLines: 1,
                                                   style: TextStyle(
                                                     color: Colors.black,
@@ -142,7 +129,7 @@ class _AddClassState extends State<AddClass> {
                                                 color: Colors.red,
                                                 onPressed: () {
                                                   setState(() {
-                                                    getFlieExcel = null;
+                                                    filePath = null;
                                                   });
                                                 },
                                                 child: Text(
@@ -212,10 +199,22 @@ class _AddClassState extends State<AddClass> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState.validate()) {
-                                ClassroomController.addClassRoom(name, context,
-                                    getFile: _image);
+                                try{
+                                  // Đọc file
+                                  // var binary = await File(filePath).readAsBytes();
+                                  // int totalByteLength = File(filePath).lengthSync();
+                                  //
+                                  // print('fileBytes length:::: $totalByteLength');
+
+                                  await ClassroomController.addClassRoom(className: name.text, filePath: filePath);
+                                  // Fluttertoast.showToast(msg: "Tạo lớp thành công", backgroundColor: Colors.green);
+                                }catch(err){
+                                  print(err.toString());
+                                  Fluttertoast.showToast(msg: err.toString(), backgroundColor: Colors.green);
+                                }
+
                               }
                             },
                             child: Text(
