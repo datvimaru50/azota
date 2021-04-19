@@ -411,18 +411,19 @@ class ClassroomController extends ControllerMVC {
     }
   }
 
-  static Future<String> addClassRoom({@required String className, filePath}) async {
+  static Future<String> addClassRoom(
+      {@required String className, filePath}) async {
     final token = await Prefs.getPref(ACCESS_TOKEN);
 
     var uri = Uri.parse(AZO_ADDCLASS_INFO);
     var request;
 
-    if(filePath != null){
+    if (filePath != null) {
       request = http.MultipartRequest('POST', uri)
         ..fields['Name'] = className
         ..files.add(await http.MultipartFile.fromPath('File', filePath))
         ..headers["Authorization"] = "Bearer $token";
-    } else{
+    } else {
       request = http.MultipartRequest('POST', uri)
         ..fields['Name'] = className
         ..headers["Authorization"] = "Bearer $token";
@@ -437,6 +438,39 @@ class ClassroomController extends ControllerMVC {
           return "Tạo lớp thành công";
         } else {
           throw "Tạo lớp không thành công";
+        }
+        break;
+
+      case 400:
+        throw ERR_BAD_REQUEST;
+        break;
+
+      default:
+        throw ERR_SERVER_CONNECT;
+    }
+  }
+
+  static Future<String> updateClassRoom(
+      {@required String filePath, className, idClassRoom}) async {
+    final token = await Prefs.getPref(ACCESS_TOKEN);
+    var uri = Uri.parse(AZO_CLASSROOM_UPDATE);
+    var request;
+    request = http.MultipartRequest('POST', uri)
+      ..fields['id'] = idClassRoom
+      ..fields['Name'] = className
+      ..files.add(await http.MultipartFile.fromPath('File', filePath))
+      ..headers["Authorization"] = "Bearer $token";
+
+    var response = await request.send();
+    var respStr = await response.stream.bytesToString();
+
+    switch (response.statusCode) {
+      case 200:
+        var responseJson = jsonDecode(respStr);
+        if (responseJson['success'] == 1) {
+          return "Thêm học sinh thành công";
+        } else {
+          throw "Thêm học sinh không thành công";
         }
         break;
 
