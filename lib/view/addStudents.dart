@@ -1,8 +1,12 @@
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/view/listStudents.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(AddStudent());
@@ -164,8 +168,16 @@ class _AddStudentState extends State<AddStudent> {
                             primary: Colors.purple[900],
                           ),
                           onPressed: () {
-                            // Validate will return true if the form is valid, or false if
-                            // the form is invalid.
+                            showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return MyDialog(
+                                    classRoomId: widget.classRoomId,
+                                    className: widget.className,
+                                    countStudents: widget.countStudents,
+                                    homeworkId: widget.homeworkId,
+                                  );
+                                });
                           },
                           child: Text('FILE EXCEL',
                               style: TextStyle(color: Colors.white)),
@@ -221,13 +233,227 @@ class _AddStudentState extends State<AddStudent> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
               border: Border.all(
-                width: 2,
+                width: 1,
                 color: Color(0xff00a7d0),
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class MyDialog extends StatefulWidget {
+  MyDialog({
+    this.classRoomId,
+    this.className,
+    this.countStudents,
+    this.homeworkId,
+  });
+  final String countStudents;
+  final String homeworkId;
+  final String classRoomId;
+  final String className;
+  @override
+  @override
+  _MyDialogState createState() => new _MyDialogState();
+}
+
+class _MyDialogState extends State<MyDialog> {
+  final _formKey = GlobalKey<FormState>();
+  String filePath;
+  // ignore: unused_field
+  bool _creatingClass = false;
+  Future getFile() async {
+    FilePickerResult getFile = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['xls', 'xlsx', 'xlsm'],
+    );
+    if (getFile != null) {
+      setState(() {
+        filePath = getFile.paths.first;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      actions: <Widget>[
+        Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Container(
+                child: Container(
+                  child: DottedBorder(
+                    color: Colors.blue,
+                    strokeWidth: 1,
+                    child: TextButton(
+                      onPressed: getFile,
+                      child: filePath != null
+                          ? Column(
+                              children: [
+                                Icon(
+                                  Icons.cloud_upload,
+                                  color: Colors.blue,
+                                ),
+                                Container(
+                                  child: DottedBorder(
+                                    color: Colors.blue,
+                                    strokeWidth: 1,
+                                    child: Column(
+                                      children: [
+                                        Image.network(
+                                          'https://azota.vn/assets/images/excel.png',
+                                          width: 120,
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Text(
+                                            filePath.split('/').last,
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                        // ignore: deprecated_member_use
+                                        FlatButton(
+                                          color: Colors.red,
+                                          onPressed: () {
+                                            setState(() {
+                                              filePath = null;
+                                            });
+                                          },
+                                          child: Text(
+                                            'Xóa',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  color: Color(0xFFecf0f5),
+                                  margin: EdgeInsets.only(
+                                      left: 10, right: 10, bottom: 15, top: 10),
+                                )
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                Icon(
+                                  Icons.cloud_upload,
+                                  color: Colors.blue,
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Chưa có file được chọn\n' +
+                                        'Click để chọn File',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                  color: Color.fromRGBO(27, 171, 161, .05),
+                  // margin: EdgeInsets.all(10),
+                ),
+                width: 300,
+                margin: EdgeInsets.only(left: 20, right: 20),
+              ),
+              GestureDetector(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      launch(
+                          'https://azota.vn/assets/medias/excel_add_students_exp.xlsx');
+                    },
+                    child: Text(
+                      'Tải file biểu mẫu',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                  Icon(Icons.save_alt),
+                ],
+              )),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          try {
+                            setState(() {
+                              _creatingClass = true;
+                            });
+                            if (filePath != null) {
+                              await ClassroomController.updateClassRoom(
+                                filePath: filePath,
+                                className: widget.className,
+                                idClassRoom: widget.classRoomId,
+                              );
+                            }
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                  builder: (context) => ListStudents(
+                                    id: widget.classRoomId,
+                                    className: widget.className,
+                                    countStudents: widget.countStudents,
+                                    homeworkId: widget.homeworkId,
+                                  ),
+                                ),
+                                (Route<dynamic> route) => false);
+                          } catch (err) {
+                            setState(() {
+                              _creatingClass = false;
+                            });
+                            Fluttertoast.showToast(
+                                msg: err.toString(),
+                                backgroundColor: Colors.red);
+                          }
+                        }
+                      },
+                      child: Text(
+                        'LƯU',
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.yellow[800],
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'HỦY',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+                padding:
+                    EdgeInsets.only(left: 35, top: 10, bottom: 10, right: 35),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(width: 1.5, color: Colors.black12),
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }
