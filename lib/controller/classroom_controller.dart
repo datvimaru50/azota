@@ -413,42 +413,42 @@ class ClassroomController extends ControllerMVC {
     }
   }
 
-  static Future addClassRoom({@required String className, filePath}) async {
+  static Future<String> addClassRoom({@required String className, filePath}) async {
     final token = await Prefs.getPref(ACCESS_TOKEN);
 
-
     var uri = Uri.parse(AZO_ADDCLASS_INFO);
-    var request = http.MultipartRequest('POST', uri)
-      ..fields['Name'] = className
-      ..files.add(await http.MultipartFile.fromPath('File', filePath))
-      ..headers["Authorization"] = "Bearer $token";
+    var request;
 
+    if(filePath != null){
+      request = http.MultipartRequest('POST', uri)
+        ..fields['Name'] = className
+        ..files.add(await http.MultipartFile.fromPath('File', filePath))
+        ..headers["Authorization"] = "Bearer $token";
+    } else{
+      request = http.MultipartRequest('POST', uri)
+        ..fields['Name'] = className
+        ..headers["Authorization"] = "Bearer $token";
+    }
     var response = await request.send();
     var respStr = await response.stream.bytesToString();
 
-    if (response.statusCode == 200) print(respStr);
+    switch (response.statusCode) {
+      case 200:
+        var responseJson = jsonDecode(respStr);
+        if (responseJson['success'] == 1) {
+          return "Tạo lớp thành công";
+        } else {
+          throw "Tạo lớp không thành công";
+        }
+        break;
 
-    // switch (response.statusCode) {
-    //   case 200:
-    //     final Map<String, dynamic> resBody = json.decode(response.body);
-    //
-    //     if (resBody['success'] == 1) {
-    //
-    //       var classData = resBody['data'];
-    //       return ClassroomInfo.fromJson(classData);
-    //     } else {
-    //       throw "Tạo lớp không thành công";
-    //     }
-    //     break;
-    //
-    //   case 400:
-    //     throw ERR_BAD_REQUEST;
-    //     break;
-    //
-    //   default:
-    //     throw ERR_SERVER_CONNECT;
-    // }
-    print('finish');
+      case 400:
+        throw ERR_BAD_REQUEST;
+        break;
+
+      default:
+        throw ERR_SERVER_CONNECT;
+    }
   }
 
   static Future deleteExersice(

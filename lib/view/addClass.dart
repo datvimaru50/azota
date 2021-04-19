@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:azt/controller/classroom_controller.dart';
+import 'package:azt/view/listClass_teacher.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -18,7 +19,7 @@ class _AddClassState extends State<AddClass> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController name = new TextEditingController();
   String filePath;
-
+  bool _creatingClass = false;
   Future getFile() async {
     FilePickerResult getFile = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -199,19 +200,24 @@ class _AddClassState extends State<AddClass> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           ElevatedButton(
-                            onPressed: () async {
+                            onPressed: _creatingClass ? null : () async {
                               if (_formKey.currentState.validate()) {
                                 try{
-                                  // Đọc file
-                                  // var binary = await File(filePath).readAsBytes();
-                                  // int totalByteLength = File(filePath).lengthSync();
-                                  //
-                                  // print('fileBytes length:::: $totalByteLength');
-
-                                  await ClassroomController.addClassRoom(className: name.text, filePath: filePath);
-                                  // Fluttertoast.showToast(msg: "Tạo lớp thành công", backgroundColor: Colors.green);
+                                  setState(() {
+                                    _creatingClass = true;
+                                  });
+                                  if (filePath != null){
+                                    await ClassroomController.addClassRoom(className: name.text, filePath: filePath);
+                                  } else {
+                                    await ClassroomController.addClassRoom(className: name.text);
+                                  }
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
+                                          (Route<dynamic> route) => false);
                                 }catch(err){
-                                  print(err.toString());
+                                  setState(() {
+                                    _creatingClass = false;
+                                  });
                                   Fluttertoast.showToast(msg: err.toString(), backgroundColor: Colors.green);
                                 }
 
