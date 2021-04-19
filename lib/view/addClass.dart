@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:azt/controller/classroom_controller.dart';
-import 'package:azt/view/listClass_teacher.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -200,29 +198,42 @@ class _AddClassState extends State<AddClass> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           ElevatedButton(
-                            onPressed: _creatingClass ? null : () async {
-                              if (_formKey.currentState.validate()) {
-                                try{
-                                  setState(() {
-                                    _creatingClass = true;
-                                  });
-                                  if (filePath != null){
-                                    await ClassroomController.addClassRoom(className: name.text, filePath: filePath);
-                                  } else {
-                                    await ClassroomController.addClassRoom(className: name.text);
-                                  }
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
-                                          (Route<dynamic> route) => false);
-                                }catch(err){
-                                  setState(() {
-                                    _creatingClass = false;
-                                  });
-                                  Fluttertoast.showToast(msg: err.toString(), backgroundColor: Colors.green);
-                                }
-
-                              }
-                            },
+                            onPressed: _creatingClass
+                                ? null
+                                : () async {
+                                    if (_formKey.currentState.validate()) {
+                                      try {
+                                        setState(() {
+                                          _creatingClass = true;
+                                        });
+                                        if (filePath != null) {
+                                          await ClassroomController
+                                              .addClassRoom(
+                                                  className: name.text,
+                                                  filePath: filePath);
+                                        } else {
+                                          await ClassroomController
+                                              .addClassRoom(
+                                                  className: name.text);
+                                        }
+                                        Navigator.of(
+                                                context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        GroupScreenTeacher()),
+                                                (Route<dynamic> route) =>
+                                                    false);
+                                      } catch (err) {
+                                        setState(() {
+                                          _creatingClass = false;
+                                        });
+                                        Fluttertoast.showToast(
+                                            msg: err.toString(),
+                                            backgroundColor: Colors.red);
+                                      }
+                                    }
+                                  },
                             child: Text(
                               'TẠO LỚP',
                             ),
