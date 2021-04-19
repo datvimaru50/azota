@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:file_picker/file_picker.dart';
@@ -201,20 +200,22 @@ class _AddClassState extends State<AddClass> {
                           ElevatedButton(
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
-                                try{
+                                try {
                                   // Đọc file
                                   // var binary = await File(filePath).readAsBytes();
                                   // int totalByteLength = File(filePath).lengthSync();
                                   //
                                   // print('fileBytes length:::: $totalByteLength');
 
-                                  await ClassroomController.addClassRoom(className: name.text, filePath: filePath);
+                                  await ClassroomController.addClassRoom(
+                                      className: name.text, filePath: filePath);
                                   // Fluttertoast.showToast(msg: "Tạo lớp thành công", backgroundColor: Colors.green);
-                                }catch(err){
+                                } catch (err) {
                                   print(err.toString());
-                                  Fluttertoast.showToast(msg: err.toString(), backgroundColor: Colors.green);
+                                  Fluttertoast.showToast(
+                                      msg: err.toString(),
+                                      backgroundColor: Colors.green);
                                 }
-
                               }
                             },
                             child: Text(
