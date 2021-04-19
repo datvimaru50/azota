@@ -629,65 +629,35 @@ class ClassroomController extends ControllerMVC {
     }
   }
 
-  static Future addExersice({
-    String idClassroom,
-    String countStudents,
-    String className,
-    String homeworks,
-    String homeworkId,
-    BuildContext context,
-    String deadline,
-    String content,
-  }) async {
+  static Future<String> addExersice(Map<String, dynamic> params) async {
+
     final token = await Prefs.getPref(ACCESS_TOKEN);
-    Map mapdata = <String, String>{
-      "name": "Bài Tập ",
-      "content": content,
-      "classroomId": idClassroom,
-      "deadline": deadline,
-    };
-    //log data in form
-    // ignore: unnecessary_brace_in_string_interps
-    print("JSON DATA : ${mapdata}");
-    final reponse = await http.Client().post(
-      AZO_HOMEWORK_SAVE,
-      body: jsonEncode(mapdata),
+
+    final response = await http.Client().post(AZO_HOMEWORK_SAVE,
+      body: jsonEncode(params),
       headers: {
-        HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-        HttpHeaders.authorizationHeader: "Bearer " + token,
+        HttpHeaders.contentTypeHeader: "application/json",
+        HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    var data = jsonDecode(reponse.body);
-    if (data['success'] == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DetailClass(
-            idClassroom: idClassroom,
-            countStudents: countStudents,
-            className: className,
-            homeworks: homeworks,
-            homeworkId: homeworkId,
-          ),
-        ),
-      );
-      return Fluttertoast.showToast(
-          msg: 'Tạo bài tập thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    } else {
-      return Fluttertoast.showToast(
-          msg: 'Tạo bài tập không thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+
+    switch (response.statusCode) {
+      case 200:
+        final Map<String, dynamic> resBody = json.decode(response.body);
+
+        if (resBody['success'] == 1) {
+          return 'Thêm bài tập thành công';
+        } else {
+          throw "Thêm bài tập không thành công";
+        }
+        break;
+
+      case 400:
+        throw ERR_BAD_REQUEST;
+        break;
+
+      default:
+        throw ERR_SERVER_CONNECT;
     }
   }
 }
