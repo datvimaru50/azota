@@ -287,6 +287,7 @@ class _MyDialogState extends State<MyDialog> {
             children: [
               Container(
                 child: Container(
+                  alignment: Alignment.center,
                   child: DottedBorder(
                     color: Colors.blue,
                     strokeWidth: 1,
@@ -300,6 +301,7 @@ class _MyDialogState extends State<MyDialog> {
                                   color: Colors.blue,
                                 ),
                                 Container(
+                                  alignment: Alignment.center,
                                   child: DottedBorder(
                                     color: Colors.blue,
                                     strokeWidth: 1,
