@@ -47,7 +47,19 @@ class _AddExersiceState extends State<AddExersice> {
     FilePickerResult result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: FileType.custom,
-      allowedExtensions: ['mp3', 'mp4', 'mov', 'jpg', 'png', 'jpeg', 'doc', 'docx', 'xls', 'xlsx', 'pdf'],
+      allowedExtensions: [
+        'mp3',
+        'mp4',
+        'mov',
+        'jpg',
+        'png',
+        'jpeg',
+        'doc',
+        'docx',
+        'xls',
+        'xlsx',
+        'pdf'
+      ],
     );
 
     if (result != null) {
@@ -92,7 +104,8 @@ class _AddExersiceState extends State<AddExersice> {
     return httpClient;
   }
 
-  Future uploadSingleFile(String filePath, OnUploadProgressCallback onUploadProgress) async {
+  Future uploadSingleFile(
+      String filePath, OnUploadProgressCallback onUploadProgress) async {
     var fileStream = File(filePath).openRead();
     var fileName = filePath.split('/').last;
     int totalByteLength = File(filePath).lengthSync();
@@ -164,7 +177,7 @@ class _AddExersiceState extends State<AddExersice> {
 
       filePaths != null ? await uploadAllFile() : print('No file selected');
 
-      if(filePaths != null) {
+      if (filePaths != null) {
         await ClassroomController.addExersice({
           "files": jsonEncode(imgUploadedFiles),
           "classroomId": widget.id,
@@ -172,7 +185,7 @@ class _AddExersiceState extends State<AddExersice> {
           "deadline": deadline.text,
           "name": "Bài tập"
         });
-      } else{
+      } else {
         await ClassroomController.addExersice({
           "classroomId": widget.id,
           "content": content.text,
@@ -195,14 +208,14 @@ class _AddExersiceState extends State<AddExersice> {
       });
 
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => DetailClass(
-            idClassroom: widget.id,
-            countStudents: widget.countStudents,
-            className: widget.className,
-            homeworks: widget.homeworks,
-          )),
-              (Route<dynamic> route) => false);
-
+          MaterialPageRoute(
+              builder: (context) => DetailClass(
+                    idClassroom: widget.id,
+                    countStudents: widget.countStudents,
+                    className: widget.className,
+                    homeworks: widget.homeworks,
+                  )),
+          (Route<dynamic> route) => false);
     } catch (err) {
       Fluttertoast.showToast(
           msg: "Tạo bài tập thành công",
@@ -343,11 +356,13 @@ class _AddExersiceState extends State<AddExersice> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ElevatedButton(
-                          onPressed: submitStatus == SubmitStatus.submitting ? null : () {
-                            if (_formKey.currentState.validate()) {
-                              handleSubmit();
-                            }
-                          },
+                          onPressed: submitStatus == SubmitStatus.submitting
+                              ? null
+                              : () {
+                                  if (_formKey.currentState.validate()) {
+                                    handleSubmit();
+                                  }
+                                },
                           child: Text(
                             'THÊM BÀI TẬP',
                           ),

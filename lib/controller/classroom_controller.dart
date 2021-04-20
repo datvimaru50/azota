@@ -664,10 +664,10 @@ class ClassroomController extends ControllerMVC {
   }
 
   static Future<String> addExersice(Map<String, dynamic> params) async {
-
     final token = await Prefs.getPref(ACCESS_TOKEN);
 
-    final response = await http.Client().post(AZO_HOMEWORK_SAVE,
+    final response = await http.Client().post(
+      AZO_HOMEWORK_SAVE,
       body: jsonEncode(params),
       headers: {
         HttpHeaders.contentTypeHeader: "application/json",
