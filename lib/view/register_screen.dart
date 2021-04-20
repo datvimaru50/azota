@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'package:azt/view/notificationScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/view/login_screen.dart';
 import 'package:azt/controller/login_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'groupScreenTeacher.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -43,10 +44,7 @@ class _RegisterScreen extends State<RegisterScreen> {
 
   void _enterNotificationScreenTeacher() {
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) => NotificationScreen(
-                  role: 'teacher',
-                )),
+        MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
         (Route<dynamic> route) => false);
   }
 
