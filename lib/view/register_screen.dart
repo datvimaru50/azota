@@ -177,9 +177,25 @@ class _RegisterScreen extends State<RegisterScreen> {
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(),
                                         labelText: 'Mật khẩu*',
-                                        hintText: 'Nhập mật Khẩu',
                                         prefixIcon: Icon(Icons.lock),
-                                        // suffixIcon: Icon(Icons.remove_red_eye),
+                                        suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _showPass = !_showPass;
+                                            });
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.only(
+                                                top: 14, left: 16),
+                                            child: FaIcon(
+                                              _showPass
+                                                  ? FontAwesomeIcons.solidEye
+                                                  : FontAwesomeIcons
+                                                      .solidEyeSlash,
+                                              size: 20,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                       validator: (value) {
                                         if (value.isEmpty) {
@@ -190,21 +206,6 @@ class _RegisterScreen extends State<RegisterScreen> {
                                         }
                                         return null;
                                       },
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          _showPass = !_showPass;
-                                        });
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.only(right: 5),
-                                        child: FaIcon(
-                                          _showPass
-                                              ? Icons.remove_red_eye_rounded
-                                              : FontAwesomeIcons.lowVision,
-                                        ),
-                                      ),
                                     ),
                                   ],
                                 ),

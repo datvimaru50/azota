@@ -222,26 +222,29 @@ class _LoginFormState extends State<LoginForm> {
                                     obscureText: _showPass,
                                     decoration: InputDecoration(
                                       prefixIcon: Icon(Icons.lock),
+                                      suffixIcon: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _showPass = !_showPass;
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              top: 14, left: 16),
+                                          child: FaIcon(
+                                            _showPass
+                                                ? FontAwesomeIcons.solidEye
+                                                : FontAwesomeIcons
+                                                    .solidEyeSlash,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ),
                                       border: OutlineInputBorder(),
                                       labelText: 'Mật khẩu*',
                                     ),
                                     validator: (value) =>
                                         validatePassword(value),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _showPass = !_showPass;
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsets.only(right: 5),
-                                      child: FaIcon(
-                                        _showPass
-                                            ? Icons.remove_red_eye_rounded
-                                            : FontAwesomeIcons.lowVision,
-                                      ),
-                                    ),
                                   ),
                                 ],
                               ),
