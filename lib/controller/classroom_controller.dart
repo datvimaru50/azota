@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:azt/view/detailClass_teacher.dart';
-import 'package:azt/view/detailExersice_teacher.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:azt/view/listStudents.dart';
 import 'package:flutter/cupertino.dart';
@@ -547,13 +546,15 @@ class ClassroomController extends ControllerMVC {
       String className,
       String homeworkId,
       String homeworks,
-      String idClassroom}) async {
+      String idClassroom,
+      String files}) async {
     final token = await Prefs.getPref(ACCESS_TOKEN);
     Map mapdata = <String, String>{
       "id": idExersice,
       "name": "Bài Tập",
       "content": content,
       "deadline": deadline,
+      "files": files,
     };
     //log data in form
     // ignore: unnecessary_brace_in_string_interps
@@ -568,40 +569,9 @@ class ClassroomController extends ControllerMVC {
     );
     var data = jsonDecode(reponse.body);
     if (data['success'] == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DetailExersice(
-            deadline: deadline,
-            exerciseId: exerciseId,
-            content: content,
-            countStudents: countStudents,
-            className: className,
-            homeworkId: homeworkId,
-            homeworks: homeworks,
-            idClassroom: idClassroom,
-            idExersice: idExersice,
-          ),
-        ),
-      );
-
-      return Fluttertoast.showToast(
-          msg: 'Sửa bài tập thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      return 'sửa bài tập thành công';
     } else {
-      return Fluttertoast.showToast(
-          msg: 'Sửa bài tập không thành công',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      return 'sửa bài tập không thành công';
     }
   }
 

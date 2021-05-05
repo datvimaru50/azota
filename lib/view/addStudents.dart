@@ -206,17 +206,11 @@ class _AddStudentState extends State<AddStudent> {
                             primary: Colors.white,
                           ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ListStudents(
-                                  id: widget.classRoomId,
-                                  className: widget.className,
-                                  countStudents: widget.countStudents,
-                                  homeworkId: widget.homeworkId,
-                                ),
-                              ),
-                            );
+                            setState(() {
+                              Navigator.pop(
+                                context,
+                              );
+                            });
                           },
                           child: Text('HỦY',
                               style: TextStyle(color: Colors.black)),

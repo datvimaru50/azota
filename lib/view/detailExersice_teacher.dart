@@ -3,9 +3,9 @@ import 'package:azt/config/global.dart';
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/controller/homework_controller.dart';
 import 'package:azt/models/core_mo.dart';
+import 'package:azt/view/addStudents.dart';
 import 'package:azt/view/detailClass_teacher.dart';
 import 'package:azt/view/editExersice.dart';
-import 'package:azt/view/listStudents.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
@@ -184,6 +184,7 @@ class _DetailExersiceState extends State<DetailExersice>
       child: Scaffold(
         backgroundColor: Color(0xFFecf0f5),
         appBar: AppBar(
+          title: Text('Chi tiết bài tập', style: TextStyle(fontSize: 18)),
           leading: IconButton(
             icon: Icon(Icons.keyboard_arrow_left),
             onPressed: () {
@@ -623,8 +624,8 @@ class _DetailExersiceState extends State<DetailExersice>
                                                         context,
                                                         MaterialPageRoute(
                                                           builder: (context) =>
-                                                              ListStudents(
-                                                            id: widget
+                                                              AddStudent(
+                                                            classRoomId: widget
                                                                 .idClassroom,
                                                             className: widget
                                                                 .className,
