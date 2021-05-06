@@ -293,7 +293,7 @@ class _ListStudentsState extends State<ListStudents> {
                                                                         countStudents:
                                                                             widget.countStudents,
                                                                         checkGender:
-                                                                            item['gender'].toString(),
+                                                                            item['gender'],
                                                                         idStudent:
                                                                             item['id'].toString(),
                                                                         classRoomId:

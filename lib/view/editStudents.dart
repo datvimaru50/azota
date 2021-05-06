@@ -21,7 +21,7 @@ class EditStudent extends StatefulWidget {
     this.homeworkId,
   });
   final String countStudents;
-  final String checkGender;
+  final int checkGender;
   final String idStudent;
   final String fullName;
   final String classRoomId;
@@ -34,16 +34,16 @@ class EditStudent extends StatefulWidget {
 
 class _EditStudentState extends State<EditStudent> {
   final _formKey = GlobalKey<FormState>();
-  String gender;
-  TextEditingController fullName;
-  TextEditingController birthday;
+  int gender;
+  TextEditingController fullName = new TextEditingController();
+  TextEditingController birthday = new TextEditingController();
 
   void initState() {
     super.initState();
     gender = widget.checkGender;
   }
 
-  setgender(String val) {
+  setgender(int val) {
     setState(
       () {
         gender = val;
@@ -137,7 +137,7 @@ class _EditStudentState extends State<EditStudent> {
                       alignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Radio(
-                          value: '0',
+                          value: 0,
                           groupValue: gender,
                           activeColor: Colors.green,
                           onChanged: (val) {
@@ -147,7 +147,7 @@ class _EditStudentState extends State<EditStudent> {
                         ),
                         Text('Nam'),
                         Radio(
-                          value: '1',
+                          value: 1,
                           groupValue: gender,
                           activeColor: Colors.blue,
                           onChanged: (val) {
