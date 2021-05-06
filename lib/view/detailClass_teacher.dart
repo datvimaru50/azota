@@ -604,7 +604,7 @@ class _DetailClassState extends State<DetailClass> {
                                                 },
                                               ),
                                               padding: EdgeInsets.only(left: 9),
-                                            )
+                                            ),
                                           ],
                                         ),
                                         margin: EdgeInsets.only(
@@ -630,6 +630,7 @@ class _DetailClassState extends State<DetailClass> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   EditExersice(
+                                                getFiles: item["files"],
                                                 deadline:
                                                     item["deadline"].toString(),
                                                 exerciseId:

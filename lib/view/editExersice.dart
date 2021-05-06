@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/controller/upload_controller.dart';
 import 'package:azt/view/detailClass_teacher.dart';
-import 'package:azt/view/detailExersice_teacher.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,7 +30,9 @@ class EditExersice extends StatefulWidget {
     this.exerciseId,
     this.idExersice,
     this.content,
+    this.getFiles,
   });
+  final dynamic getFiles;
   final String idClassroom;
   final String countStudents;
   final String className;
@@ -51,6 +52,7 @@ class _EditExersiceState extends State<EditExersice> {
   TextEditingController deadline;
   List<String> filePaths;
   List<dynamic> imgUploadedFiles = [];
+  List<dynamic> imgUpdate = [];
   SubmitStatus submitStatus = SubmitStatus.notSubmitted;
 
   Future<void> loadFiles() async {
@@ -85,28 +87,50 @@ class _EditExersiceState extends State<EditExersice> {
   Widget buildGridViewFiles() {
     if (filePaths != null)
       return Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-          child: Column(
-            children: List.generate(filePaths.length, (index) {
-              return Container(
-                alignment: Alignment.center,
-                child: Text(
-                  filePaths.elementAt(index).split('/').last,
-                  maxLines: 1,
-                  style: TextStyle(color: Colors.black38),
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.black12),
-                  color: Color(0xFFecf0f5),
-                ),
-                margin: EdgeInsets.only(left: 30, right: 30, bottom: 6),
-                padding: EdgeInsets.all(10),
-              );
-            }),
-          ));
+        alignment: Alignment.centerLeft,
+        child: Column(
+          children: List.generate(filePaths.length, (index) {
+            return Container(
+              alignment: Alignment.center,
+              child: Text(
+                filePaths.elementAt(index).split('/').last,
+                maxLines: 1,
+                style: TextStyle(color: Colors.black38),
+              ),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: Colors.black12),
+                color: Color(0xFFecf0f5),
+              ),
+              margin: EdgeInsets.only(left: 30, right: 30, bottom: 6),
+              padding: EdgeInsets.all(10),
+            );
+          }),
+        ),
+      );
+    else if (jsonEncode(widget.getFiles) == 'null')
+      return Container();
     else
-      return Container(color: Colors.white);
+      return Column(
+        children: List.generate(
+          jsonDecode(widget.getFiles).length,
+          (numberFiles) {
+            return Container(
+              alignment: Alignment.center,
+              child: Text(
+                jsonDecode(widget.getFiles)[numberFiles]['name'],
+                maxLines: 1,
+                style: TextStyle(color: Colors.black38),
+              ),
+              decoration: BoxDecoration(
+                border: Border.all(width: 1, color: Colors.black12),
+                color: Color(0xFFecf0f5),
+              ),
+              margin: EdgeInsets.only(left: 30, right: 30, bottom: 6),
+              padding: EdgeInsets.all(10),
+            );
+          },
+        ),
+      );
   }
 
   static HttpClient getHttpClient() {
@@ -199,6 +223,7 @@ class _EditExersiceState extends State<EditExersice> {
         );
       } else {
         await ClassroomController.editExersice(
+          files: jsonEncode(imgUpdate),
           context: context,
           idExersice: widget.idExersice,
           content: content.text,
@@ -271,6 +296,24 @@ class _EditExersiceState extends State<EditExersice> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (jsonEncode(widget.getFiles) != 'null') {
+      for (var i = 0; i < jsonDecode(widget.getFiles).length; i++) {
+        imgUpdate.add({
+          "name": jsonDecode(widget.getFiles)[i]['name'].toString(),
+          "mines": jsonDecode(widget.getFiles)[i]['mimes'].toString(),
+          "path": jsonDecode(widget.getFiles)[i]['path'].toString(),
+          "extension": jsonDecode(widget.getFiles)[i]['extension'].toString(),
+          "size": jsonDecode(widget.getFiles)[i]['size'].toString(),
+          "url": jsonDecode(widget.getFiles)[i]['url'].toString(),
+          "upload_url": jsonDecode(widget.getFiles)[i]['upload_url'].toString()
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFecf0f5),
@@ -279,23 +322,26 @@ class _EditExersiceState extends State<EditExersice> {
         leading: IconButton(
           icon: Icon(Icons.keyboard_arrow_left),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DetailExersice(
-                  deadline: widget.deadline,
-                  exerciseId: widget.exerciseId,
-                  content: widget.content,
-                  countStudents: widget.countStudents,
-                  className: widget.className,
-                  homeworkId: widget.homeworkId,
-                  homeworks: widget.homeworks,
-                  idClassroom: widget.idClassroom,
-                  idExersice: widget.idExersice,
-                ),
-              ),
-            );
+            Navigator.of(context).pop();
           },
+          // onPressed: () {
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => DetailExersice(
+          //         deadline: widget.deadline,
+          //         exerciseId: widget.exerciseId,
+          //         content: widget.content,
+          //         countStudents: widget.countStudents,
+          //         className: widget.className,
+          //         homeworkId: widget.homeworkId,
+          //         homeworks: widget.homeworks,
+          //         idClassroom: widget.idClassroom,
+          //         idExersice: widget.idExersice,
+          //       ),
+          //     ),
+          //   );
+          // },
         ),
       ),
       body: submitStatus == SubmitStatus.submitting
