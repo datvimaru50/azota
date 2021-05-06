@@ -220,7 +220,7 @@ class _AddExersiceState extends State<AddExersice> {
           (Route<dynamic> route) => false);
     } catch (err) {
       Fluttertoast.showToast(
-          msg: "Tạo bài tập thành công",
+          msg: "Tạo bài tập không thành công",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
