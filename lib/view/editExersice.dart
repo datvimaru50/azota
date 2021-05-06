@@ -205,6 +205,9 @@ class _EditExersiceState extends State<EditExersice> {
 
   Future<void> handleSubmit() async {
     try {
+      setState(() {
+        submitStatus = SubmitStatus.submitting;
+      });
       filePaths != null ? await uploadAllFile() : print('No file selected');
 
       if (filePaths != null) {
