@@ -66,12 +66,7 @@ class _DetailClassState extends State<DetailClass> {
           title: Text('Bài tập', style: TextStyle(fontSize: 18)),
           leading: IconButton(
             icon: Icon(Icons.keyboard_arrow_left),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
-              );
-            },
+            onPressed: _onBackPressed,
           ),
           actions: [
             Row(
