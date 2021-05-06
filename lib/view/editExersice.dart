@@ -92,41 +92,78 @@ class _EditExersiceState extends State<EditExersice> {
           children: List.generate(filePaths.length, (index) {
             return Container(
               alignment: Alignment.center,
-              child: Text(
-                filePaths.elementAt(index).split('/').last,
-                maxLines: 1,
-                style: TextStyle(color: Colors.black38),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      filePaths.elementAt(index).split('/').last,
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.black38),
+                    ),
+                  ),
+                  GestureDetector(
+                    child: Icon(Icons.clear),
+                    onTap: () {
+                      setState(() {
+                        filePaths.remove(filePaths[index]);
+                      });
+                    },
+                  )
+                ],
               ),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.black12),
                 color: Color(0xFFecf0f5),
               ),
               margin: EdgeInsets.only(left: 30, right: 30, bottom: 6),
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.only(top: 7, bottom: 7, left: 10, right: 5),
             );
           }),
         ),
       );
-    else if (jsonEncode(widget.getFiles) == 'null')
+    else
+      return Container();
+  }
+
+  Widget getFiles() {
+    if (jsonEncode(widget.getFiles) == 'null')
       return Container();
     else
       return Column(
         children: List.generate(
-          jsonDecode(widget.getFiles).length,
+          imgUpdate.length,
           (numberFiles) {
             return Container(
               alignment: Alignment.center,
-              child: Text(
-                jsonDecode(widget.getFiles)[numberFiles]['name'],
-                maxLines: 1,
-                style: TextStyle(color: Colors.black38),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      imgUpdate[numberFiles]['name'],
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.black38),
+                    ),
+                  ),
+                  GestureDetector(
+                    child: Icon(Icons.clear),
+                    onTap: () {
+                      setState(
+                        () {
+                          imgUpdate.removeAt(numberFiles);
+                        },
+                      );
+                    },
+                  )
+                ],
               ),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.black12),
                 color: Color(0xFFecf0f5),
               ),
               margin: EdgeInsets.only(left: 30, right: 30, bottom: 6),
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.only(top: 7, bottom: 7, left: 10, right: 5),
             );
           },
         ),
@@ -204,6 +241,19 @@ class _EditExersiceState extends State<EditExersice> {
   }
 
   Future<void> handleSubmit() async {
+    setState(() {
+      for (var i = 0; i < imgUpdate.length; i++) {
+        imgUploadedFiles.add({
+          "name": imgUpdate[i]['name'].toString(),
+          "mines": imgUpdate[i]['mimes'].toString(),
+          "path": imgUpdate[i]['path'].toString(),
+          "extension": imgUpdate[i]['extension'].toString(),
+          "size": imgUpdate[i]['size'].toString(),
+          "url": imgUpdate[i]['url'].toString(),
+          "upload_url": imgUpdate[i]['upload_url'].toString()
+        });
+      }
+    });
     try {
       setState(() {
         submitStatus = SubmitStatus.submitting;
@@ -226,7 +276,7 @@ class _EditExersiceState extends State<EditExersice> {
         );
       } else {
         await ClassroomController.editExersice(
-          files: jsonEncode(imgUpdate),
+          files: jsonEncode(imgUploadedFiles),
           context: context,
           idExersice: widget.idExersice,
           content: content.text,
@@ -301,18 +351,16 @@ class _EditExersiceState extends State<EditExersice> {
   @override
   void initState() {
     super.initState();
-    if (jsonEncode(widget.getFiles) != 'null') {
-      for (var i = 0; i < jsonDecode(widget.getFiles).length; i++) {
-        imgUpdate.add({
-          "name": jsonDecode(widget.getFiles)[i]['name'].toString(),
-          "mines": jsonDecode(widget.getFiles)[i]['mimes'].toString(),
-          "path": jsonDecode(widget.getFiles)[i]['path'].toString(),
-          "extension": jsonDecode(widget.getFiles)[i]['extension'].toString(),
-          "size": jsonDecode(widget.getFiles)[i]['size'].toString(),
-          "url": jsonDecode(widget.getFiles)[i]['url'].toString(),
-          "upload_url": jsonDecode(widget.getFiles)[i]['upload_url'].toString()
-        });
-      }
+    for (var i = 0; i < jsonDecode(widget.getFiles).length; i++) {
+      imgUpdate.add({
+        "name": jsonDecode(widget.getFiles)[i]['name'].toString(),
+        "mines": jsonDecode(widget.getFiles)[i]['mimes'].toString(),
+        "path": jsonDecode(widget.getFiles)[i]['path'].toString(),
+        "extension": jsonDecode(widget.getFiles)[i]['extension'].toString(),
+        "size": jsonDecode(widget.getFiles)[i]['size'].toString(),
+        "url": jsonDecode(widget.getFiles)[i]['url'].toString(),
+        "upload_url": jsonDecode(widget.getFiles)[i]['upload_url'].toString()
+      });
     }
   }
 
@@ -442,6 +490,7 @@ class _EditExersiceState extends State<EditExersice> {
                           margin:
                               EdgeInsets.only(left: 30, right: 30, bottom: 5),
                         ),
+                        getFiles(),
                         buildGridViewFiles(),
                         Container(
                           child: Row(

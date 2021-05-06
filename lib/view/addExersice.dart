@@ -77,22 +77,35 @@ class _AddExersiceState extends State<AddExersice> {
     if (filePaths != null)
       return Container(
         alignment: Alignment.centerLeft,
-        padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
         child: Column(
           children: List.generate(filePaths.length, (index) {
             return Container(
               alignment: Alignment.center,
-              child: Text(
-                filePaths.elementAt(index).split('/').last,
-                maxLines: 1,
-                style: TextStyle(color: Colors.black38),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      filePaths.elementAt(index).split('/').last,
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.black38),
+                    ),
+                  ),
+                  IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        setState(() {
+                          filePaths.remove(filePaths[index]);
+                        });
+                      })
+                ],
               ),
               decoration: BoxDecoration(
                 border: Border.all(width: 1, color: Colors.black12),
                 color: Color(0xFFecf0f5),
               ),
               margin: EdgeInsets.only(left: 30, right: 30, bottom: 6),
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.only(left: 10),
             );
           }),
         ),
