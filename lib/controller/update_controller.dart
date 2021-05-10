@@ -1,15 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:azt/config/connect.dart';
+import 'package:azt/config/global.dart';
+import 'package:azt/controller/homework_controller.dart';
+import 'package:azt/view/submit_homeworks.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:mvc_pattern/mvc_pattern.dart';
 
-class NewVersionInfo{
+class NewVersionInfo {
   String name;
   String version;
   String build;
   String description;
-
 
   NewVersionInfo({
     this.version,
@@ -19,12 +25,11 @@ class NewVersionInfo{
   });
 
   factory NewVersionInfo.fromJson(Map<String, dynamic> json) => NewVersionInfo(
-    name: json["name"],
-    version: json["version"],
-    build: json["build"],
-    description: json["description"],
-  );
-
+        name: json["name"],
+        version: json["version"],
+        build: json["build"],
+        description: json["description"],
+      );
 }
 
 class UpdateController extends ControllerMVC {
@@ -54,4 +59,84 @@ class UpdateController extends ControllerMVC {
     }
   }
 
+  static Future updateChangeShowAddStudent(
+      {int changeShowAdd, String idClassroom}) async {
+    final token = await Prefs.getPref(ACCESS_TOKEN);
+    print(idClassroom + changeShowAdd.toString() + "tesst");
+    Map mapdata = <String, dynamic>{
+      "id": idClassroom,
+      "showAddStudent": changeShowAdd
+    };
+    // ignore: unnecessary_brace_in_string_interps
+    print("JSON DATA : ${mapdata}");
+    final reponse = await http.Client().get(
+        AZO_CHANGESHOW_ADD_STUDENT +
+            '?id=$idClassroom' +
+            '&status=$changeShowAdd',
+        headers: {
+          HttpHeaders.authorizationHeader: "Bearer $token",
+        });
+
+    var data = jsonDecode(reponse.body);
+    if (data['success'] == 1) {
+      return 'Cap nhat thanh cong';
+    } else {
+      return 'Cap nhat khong thanh cong';
+    }
+  }
+
+  static Future saveNewStudent(
+    String hashId,
+    String fullName,
+    String birthday,
+    BuildContext context,
+  ) async {
+    final token = await Prefs.getPref(ANONYMOUS_TOKEN);
+    print(birthday.toString() +
+        fullName.toString() +
+        hashId.toString() +
+        "tesst");
+    Map mapdata = <String, dynamic>{
+      "birthday": birthday,
+      "fullName": fullName,
+      "homeworkHashId": hashId
+    };
+    final reponse = await http.Client().post(AZO_SAVE_NEW_PARENT,
+        headers: {
+          HttpHeaders.authorizationHeader: "Bearer $token",
+          HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+        },
+        body: jsonEncode(mapdata));
+
+    var data = jsonDecode(reponse.body);
+    print('::::::::::::test' + data['data']['id'].toString());
+
+    if (data['success'] == 1) {
+      try {
+        await Prefs.savePrefs(HASH_ID, hashId);
+        var stdID = data['data']['id'];
+
+        await HomeworkController.updateParent(stdID.toString());
+
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) =>
+                    // ignore: missing_required_param
+                    SubmitForm()),
+            (Route<dynamic> route) => false);
+      } catch (err) {
+        Fluttertoast.showToast(
+            msg: err,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+      return 'Cap nhat thanh cong';
+    } else {
+      return 'Cap nhat khong thanh cong';
+    }
+  }
 }

@@ -50,6 +50,50 @@ class ClassroomController extends ControllerMVC {
     }
   }
 
+  static Future<GetShowAddNew> getClassroomById(BuildContext context,
+      {String countStudents,
+      String className,
+      String homeworkId,
+      String idClassroom}) async {
+    final token = await Prefs.getPref(ACCESS_TOKEN);
+
+    final response = await http.Client()
+        .get(AZO_CLASSROOM_BY_ID + '?id=$idClassroom', headers: {
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.authorizationHeader: "Bearer " + token
+    });
+
+    switch (response.statusCode) {
+      case 200:
+        final resBody = jsonDecode(response.body);
+        if (resBody['success'] == 1) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DetailClass(
+                showAddStudent: resBody['data']['showAddStudent'],
+                idClassroom: idClassroom,
+                countStudents: countStudents,
+                className: className,
+                homeworkId: homeworkId,
+              ),
+            ),
+          );
+          return null;
+        } else {
+          throw ERR_INVALID_LOGIN_INFO;
+        }
+        break;
+
+      case 400:
+        throw ERR_BAD_REQUEST;
+        break;
+
+      default:
+        throw ERR_SERVER_CONNECT;
+    }
+  }
+
   static Future deleteClassroom(String id, context) async {
     final token = await Prefs.getPref(ACCESS_TOKEN);
     final response = await http.Client()

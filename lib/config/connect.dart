@@ -22,11 +22,13 @@ const AZO_HOMEWORK_INFO = "$AZT_DEV_SERVER/FrontHomework/GetObj";
 const AZO_LOGIN_ANONYMOUS = "$AZT_DEV_SERVER/Auth/LoginAnonymous";
 
 const AZO_UPDATE_PARENT = "$AZT_DEV_SERVER/FrontStudent/UpdateParent";
+const AZO_SAVE_NEW_PARENT = "$AZT_DEV_SERVER/FrontStudent/SaveObj";
 
 const AZO_ANSWER_SAVE = "$AZT_DEV_SERVER/FrontAnswer/SaveObj";
 const AZO_S3SPACE_SAVE = "$AZT_DEV_SERVER/S3space/get_public_upload_url";
 
 const AZO_CLASSROOM_INFO = "$AZT_DEV_SERVER/Classroom/GetObjs";
+const AZO_CLASSROOM_BY_ID = "$AZT_DEV_SERVER/Classroom/GetObj";
 const AZO_DELETECLASSROOM_INFO = "$AZT_DEV_SERVER/Classroom/DeleteObj";
 const AZO_DELETEEXERSICE_INFO = "$AZT_DEV_SERVER/Homework/DeleteObj";
 const AZO_RESEND_ANSWER = "$AZT_DEV_SERVER/Answer/ResendAnswer";
@@ -41,6 +43,8 @@ const AZO_STUDENT_UPDATE = "$AZT_DEV_SERVER/Student/UpdateObj";
 
 const AZO_ADDCLASS_INFO = "$AZT_DEV_SERVER/Classroom/SaveObj";
 const AZO_UPDATEEXERSICE_INFO = "$AZT_DEV_SERVER/Homework/UpdateObj";
+const AZO_CHANGESHOW_ADD_STUDENT =
+    "$AZT_DEV_SERVER/Classroom/ChangeShowAddStudent";
 
 /* ERROR MESSAGE */
 const ERR_INVALID_LOGIN_INFO = "Sai tên đăng nhập hoặc mật khẩu!";

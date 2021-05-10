@@ -126,10 +126,9 @@ class _EditExersiceState extends State<EditExersice> {
       return Container();
   }
 
+  // ignore: missing_return
   Widget getFiles() {
-    if (jsonEncode(widget.getFiles) == 'null')
-      return Container();
-    else
+    if (jsonEncode(widget.getFiles) != 'null') {
       return Column(
         children: List.generate(
           imgUpdate.length,
@@ -168,6 +167,9 @@ class _EditExersiceState extends State<EditExersice> {
           },
         ),
       );
+    } else {
+      return Container();
+    }
   }
 
   static HttpClient getHttpClient() {
@@ -351,16 +353,18 @@ class _EditExersiceState extends State<EditExersice> {
   @override
   void initState() {
     super.initState();
-    for (var i = 0; i < jsonDecode(widget.getFiles).length; i++) {
-      imgUpdate.add({
-        "name": jsonDecode(widget.getFiles)[i]['name'].toString(),
-        "mines": jsonDecode(widget.getFiles)[i]['mimes'].toString(),
-        "path": jsonDecode(widget.getFiles)[i]['path'].toString(),
-        "extension": jsonDecode(widget.getFiles)[i]['extension'].toString(),
-        "size": jsonDecode(widget.getFiles)[i]['size'].toString(),
-        "url": jsonDecode(widget.getFiles)[i]['url'].toString(),
-        "upload_url": jsonDecode(widget.getFiles)[i]['upload_url'].toString()
-      });
+    if (jsonEncode(widget.getFiles) != 'null') {
+      for (var i = 0; i < jsonDecode(widget.getFiles).length; i++) {
+        imgUpdate.add({
+          "name": jsonDecode(widget.getFiles)[i]['name'].toString(),
+          "mines": jsonDecode(widget.getFiles)[i]['mimes'].toString(),
+          "path": jsonDecode(widget.getFiles)[i]['path'].toString(),
+          "extension": jsonDecode(widget.getFiles)[i]['extension'].toString(),
+          "size": jsonDecode(widget.getFiles)[i]['size'].toString(),
+          "url": jsonDecode(widget.getFiles)[i]['url'].toString(),
+          "upload_url": jsonDecode(widget.getFiles)[i]['upload_url'].toString()
+        });
+      }
     }
   }
 
@@ -375,24 +379,6 @@ class _EditExersiceState extends State<EditExersice> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          // onPressed: () {
-          //   Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => DetailExersice(
-          //         deadline: widget.deadline,
-          //         exerciseId: widget.exerciseId,
-          //         content: widget.content,
-          //         countStudents: widget.countStudents,
-          //         className: widget.className,
-          //         homeworkId: widget.homeworkId,
-          //         homeworks: widget.homeworks,
-          //         idClassroom: widget.idClassroom,
-          //         idExersice: widget.idExersice,
-          //       ),
-          //     ),
-          //   );
-          // },
         ),
       ),
       body: submitStatus == SubmitStatus.submitting

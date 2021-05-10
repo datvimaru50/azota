@@ -126,22 +126,18 @@ class _ListClassState extends State<ListClass> {
                                             );
                                           },
                                           onTap: () {
-                                            Navigator.push(
+                                            ClassroomController
+                                                .getClassroomById(
                                               context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DetailClass(
-                                                  idClassroom:
-                                                      item['id'].toString(),
-                                                  countStudents:
-                                                      item['countStudents']
-                                                          .toString(),
-                                                  className:
-                                                      item['name'].toString(),
-                                                  homeworkId: item['homeworkId']
+                                              idClassroom:
+                                                  item['id'].toString(),
+                                              countStudents:
+                                                  item['countStudents']
                                                       .toString(),
-                                                ),
-                                              ),
+                                              className:
+                                                  item['name'].toString(),
+                                              homeworkId:
+                                                  item['homeworkId'].toString(),
                                             );
                                           },
                                           child: Container(

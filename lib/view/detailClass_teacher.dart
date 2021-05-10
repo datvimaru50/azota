@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:azt/controller/classroom_controller.dart';
+import 'package:azt/controller/update_controller.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:azt/view/addExersice.dart';
 import 'package:azt/view/detailExersice_teacher.dart';
@@ -25,8 +28,12 @@ class DetailClass extends StatefulWidget {
     this.className,
     this.homeworkId,
     this.homeworks,
+    this.aaa,
+    this.showAddStudent,
   });
   final String idClassroom;
+  final int showAddStudent;
+  final int aaa;
   final String countStudents;
   final String className;
   final String homeworkId;
@@ -37,16 +44,20 @@ class DetailClass extends StatefulWidget {
 
 class _DetailClassState extends State<DetailClass> {
   final _formKey = GlobalKey<FormState>();
-  bool status = false;
   TextEditingController name;
-
   Future<ClassroomHashIdInfo> classroomHashIdInfo;
+  Future<GetShowAddNew> getClassroomById;
   Future<ClassroomHashIdInfo> deleteClassroom;
+  bool status;
+  String a1;
+
   @override
   void initState() {
     super.initState();
     classroomHashIdInfo =
         ClassroomController.getExersiceInfoAgain(widget.idClassroom);
+    status = widget.showAddStudent == 1 ? true : false;
+    print(status);
   }
 
   // ignore: missing_return
@@ -405,25 +416,36 @@ class _DetailClassState extends State<DetailClass> {
                     children: [
                       Container(
                         child: FlutterSwitch(
-                          width: 47.0,
-                          height: 22.0,
-                          valueFontSize: 13.0,
-                          toggleSize: 13.0,
-                          value: status,
-                          borderRadius: 30.0,
-                          padding: 4.0,
-                          showOnOff: true,
-                          onToggle: (val) {
-                            setState(() {
-                              status = val;
-                            });
-                          },
-                        ),
+                            width: 47.0,
+                            height: 22.0,
+                            valueFontSize: 13.0,
+                            toggleSize: 13.0,
+                            value: status,
+                            borderRadius: 30.0,
+                            padding: 4.0,
+                            showOnOff: true,
+                            onToggle: (val) {
+                              UpdateController.updateChangeShowAddStudent(
+                                changeShowAdd: status == true ? 0 : 1,
+                                idClassroom: widget.idClassroom,
+                              );
+                              setState(() {
+                                status = val;
+                              });
+                            }),
                       ),
-                      Text(status ? '(cho phép)' : '(Không cho phép)'),
+                      Text(status.toString() == '1'
+                          ? '(cho phép)'
+                          : '(Không cho phép)'),
                     ],
                   ),
                 ),
+                //     } else if (snapshot.hasError) {
+                //       return Container();
+                //     }
+                //     return Container();
+                //   },
+                // ),
                 Container(
                   alignment: Alignment.topLeft,
                   padding: EdgeInsets.only(top: 10, left: 25, right: 25),
@@ -710,7 +732,11 @@ class _DetailClassState extends State<DetailClass> {
                         ],
                       );
                     } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
+                      return Center(
+                        child: Container(
+                          child: Text('Kiểm tra lại kết nối'),
+                        ),
+                      );
                     }
                     return Container(
                       margin: EdgeInsets.all(20),

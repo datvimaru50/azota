@@ -147,3 +147,17 @@ class AnswerHashIdInfo {
     );
   }
 }
+
+class GetShowAddNew {
+  dynamic data;
+
+  GetShowAddNew({
+    this.data,
+  });
+
+  factory GetShowAddNew.fromJson(Map<String, dynamic> json) {
+    return GetShowAddNew(
+      data: json['data'],
+    );
+  }
+}
