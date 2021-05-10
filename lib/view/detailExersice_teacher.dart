@@ -851,7 +851,7 @@ class TimeAgo {
     final difference = date2.difference(notificationDate);
 
     if (difference.inDays > 8) {
-      return 'nộp ngày' + DateFormat.yMd().format(DateTime.parse(dateString));
+      return 'nộp ngày ' + DateFormat.yMd().format(DateTime.parse(dateString));
     } else if ((difference.inDays / 7).floor() >= 1) {
       return (numericDates) ? '1 tuần trước' : '1 tuần trước';
     } else if (difference.inDays >= 2) {

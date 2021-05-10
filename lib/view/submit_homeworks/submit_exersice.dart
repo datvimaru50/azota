@@ -414,7 +414,8 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: EdgeInsets.all(15),
+                            padding: EdgeInsets.only(
+                                left: 15, right: 10, top: 15, bottom: 15),
                             child: Text(
                               'Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(widget.homeworkObj["deadline"]))}',
                               style: TextStyle(
@@ -422,15 +423,19 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(15),
-                            child: Text(
-                              widget.studentObj["fullName"],
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                          Flexible(
+                            child: Container(
+                              alignment: Alignment.topRight,
+                              padding: EdgeInsets.only(
+                                  right: 10, top: 10, bottom: 10),
+                              child: Text(
+                                widget.studentObj["fullName"],
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
+                          )
                         ],
                       ),
                       color: Color(0xff00a7d0),
