@@ -29,7 +29,8 @@ class _SubmitFormState extends State<SubmitForm> {
   @override
   void initState() {
     super.initState();
-    notiData = Provider.of<NotiModel>(context, listen: false).setTotal(accType: 'parent');
+    notiData = Provider.of<NotiModel>(context, listen: false)
+        .setTotal(accType: 'parent');
     homeworkHashIdInfo = HomeworkController.getHomeworkInfoAgain();
   }
 
@@ -99,40 +100,52 @@ class _SubmitFormState extends State<SubmitForm> {
                     ),
                     FutureBuilder<ListNotification>(
                         future: notiData,
-                        builder: (context, snapshot){
-                          if(snapshot.hasData){
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
                             return Consumer<NotiModel>(
-                              builder: (context, noti, child){
-                                return noti.totalUnread == 0? Container(width: 0, height: 0,) : Container(
-                                  width: 30,
-                                  height: 30,
-                                  alignment: Alignment.topRight,
-                                  child: Container(
-                                    width: 16,
-                                    height: 16,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xffc32c37),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(0.0),
-                                      child: Center(
-                                        child: Text(
-                                          '${noti.totalUnread}',
-                                          style: TextStyle(fontSize: 10, color: Colors.white),
+                              builder: (context, noti, child) {
+                                return noti.totalUnread == 0
+                                    ? Container(
+                                        width: 0,
+                                        height: 0,
+                                      )
+                                    : Container(
+                                        width: 30,
+                                        height: 30,
+                                        alignment: Alignment.topRight,
+                                        child: Container(
+                                          width: 16,
+                                          height: 16,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Color(0xffc32c37),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(0.0),
+                                            child: Center(
+                                              child: Text(
+                                                '${noti.totalUnread}',
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                );
+                                      );
                               },
                             );
-                          } else if(snapshot.hasError){
-                            return Container(width: 0, height: 0,);
+                          } else if (snapshot.hasError) {
+                            return Container(
+                              width: 0,
+                              height: 0,
+                            );
                           }
-                          return Container(width: 0, height: 0,);
-                        }
-                    ),
+                          return Container(
+                            width: 0,
+                            height: 0,
+                          );
+                        }),
                   ],
                 ),
               ),
@@ -157,21 +170,62 @@ class _SubmitFormState extends State<SubmitForm> {
             return Center(
               child: ListView(
                 children: <Widget>[
-                  // Text(snapshot.data.answerHistoryObjs.toString()),
-                  Platform.isIOS ? SubmitExersice(
-                      homeworkObj: snapshot.data.homeworkObj,
-                      studentObj: snapshot.data.studentObj,
-                      classroomObj: snapshot.data.classroomObj,
-                      answerObj: snapshot.data
-                          .answerObj // Dùng để check trạng thái giáo viên đã chấm bài hay chưa
-                  ) :
-                  SubmitExersiceAndroid(
-                      homeworkObj: snapshot.data.homeworkObj,
-                      studentObj: snapshot.data.studentObj,
-                      classroomObj: snapshot.data.classroomObj,
-                      answerObj: snapshot.data
-                          .answerObj // Dùng để check trạng thái giáo viên đã chấm bài hay chưa
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Lớp: ' + snapshot.data.classroomObj['name'].toString(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
                       ),
+                    ),
+                    padding: EdgeInsets.only(top: 10),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Mã bài tập:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                          TextSpan(
+                            text:
+                                snapshot.data.homeworkObj['hashId'].toString(),
+                            style: TextStyle(color: Colors.blue),
+                          ),
+                        ],
+                      ),
+                    ),
+                    padding: EdgeInsets.only(top: 4, bottom: 10),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Xem danh sách bài tập',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                  Platform.isIOS
+                      ? SubmitExersice(
+                          homeworkObj: snapshot.data.homeworkObj,
+                          studentObj: snapshot.data.studentObj,
+                          classroomObj: snapshot.data.classroomObj,
+                          answerObj: snapshot.data
+                              .answerObj // Dùng để check trạng thái giáo viên đã chấm bài hay chưa
+                          )
+                      : SubmitExersiceAndroid(
+                          homeworkObj: snapshot.data.homeworkObj,
+                          studentObj: snapshot.data.studentObj,
+                          classroomObj: snapshot.data.classroomObj,
+                          answerObj: snapshot.data
+                              .answerObj // Dùng để check trạng thái giáo viên đã chấm bài hay chưa
+                          ),
                   GradedExersice(
                     answerObj: snapshot.data.answerObj,
                     homeworkObj: snapshot.data.homeworkObj,

@@ -582,7 +582,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                           ),
                   ],
                 ),
-                margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+                margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
                 padding: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),

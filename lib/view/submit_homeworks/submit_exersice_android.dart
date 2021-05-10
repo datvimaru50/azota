@@ -294,37 +294,6 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
         ? Column(
             children: [
               Container(
-                child: Text(
-                  'Lớp: ${widget.classroomObj["name"]}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
-                padding: EdgeInsets.only(top: 10),
-              ),
-              Container(
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(color: Colors.black),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: 'Mã bài tập:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' ${widget.homeworkObj["hashId"]}',
-                        style: TextStyle(fontSize: 13, color: Colors.blue),
-                      ),
-                    ],
-                  ),
-                ),
-                padding: EdgeInsets.only(top: 10),
-              ),
-              Container(
                 child: Column(
                   children: [
                     Container(
@@ -500,7 +469,7 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
                           ),
                   ],
                 ),
-                margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+                margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
                 padding: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),
