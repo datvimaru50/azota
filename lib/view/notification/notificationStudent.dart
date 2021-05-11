@@ -1,8 +1,8 @@
+import 'package:azt/view/groupScreenStudent.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:azt/controller/notification_controller.dart';
-import 'package:azt/view/submit_homeworks.dart';
 import 'package:provider/provider.dart';
 import 'package:azt/store/notification_store.dart';
 
@@ -85,7 +85,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
               .setTotal(accType: 'parent');
 
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => SubmitForm()),
+              MaterialPageRoute(builder: (context) => GroupScreenStudent()),
               (Route<dynamic> route) => false);
         },
         child: Container(

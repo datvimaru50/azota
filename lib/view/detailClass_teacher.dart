@@ -432,18 +432,10 @@ class _DetailClassState extends State<DetailClass> {
                               });
                             }),
                       ),
-                      Text(status.toString() == '1'
-                          ? '(cho phép)'
-                          : '(Không cho phép)'),
+                      Text(status == true ? '(cho phép)' : '(Không cho phép)'),
                     ],
                   ),
                 ),
-                //     } else if (snapshot.hasError) {
-                //       return Container();
-                //     }
-                //     return Container();
-                //   },
-                // ),
                 Container(
                   alignment: Alignment.topLeft,
                   padding: EdgeInsets.only(top: 10, left: 25, right: 25),

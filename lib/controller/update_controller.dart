@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
 import 'package:azt/controller/homework_controller.dart';
-import 'package:azt/view/submit_homeworks.dart';
+import 'package:azt/view/groupScreenStudent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -122,7 +122,7 @@ class UpdateController extends ControllerMVC {
             MaterialPageRoute(
                 builder: (context) =>
                     // ignore: missing_required_param
-                    SubmitForm()),
+                    GroupScreenStudent()),
             (Route<dynamic> route) => false);
       } catch (err) {
         Fluttertoast.showToast(

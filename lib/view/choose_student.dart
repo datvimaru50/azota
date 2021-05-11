@@ -2,13 +2,12 @@ import 'dart:async';
 import 'package:azt/config/global.dart';
 import 'package:azt/controller/homework_controller.dart';
 import 'package:azt/controller/update_controller.dart';
+import 'package:azt/view/groupScreenStudent.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/models/core_mo.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import 'package:azt/view/submit_homeworks.dart';
 
 class ChooseStudent extends StatefulWidget {
   ChooseStudent({Key key, @required this.hashId}) : super(key: key);
@@ -201,7 +200,7 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                                       MaterialPageRoute(
                                                           builder: (context) =>
                                                               // ignore: missing_required_param
-                                                              SubmitForm()),
+                                                              GroupScreenStudent()),
                                                       (Route<dynamic> route) =>
                                                           false);
                                             } catch (err) {
@@ -353,9 +352,35 @@ class _ChooseStudentState extends State<ChooseStudent> {
                   ),
                 );
               } else if (snapshot.hasError) {
-                return Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: Text('Kiểm tra lại kết nối'),
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsets.only(bottom: 10, left: 30, right: 30),
+                        child: Text(
+                          'Mã bài tập không tồn tại, vui lòng kiểm tra lại.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      // ignore: deprecated_member_use
+                      FlatButton.icon(
+                        color: Colors.blue,
+                        onPressed: () {
+                          Prefs.deletePref();
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.arrow_back),
+                        label: Text(
+                          'Thử Lại',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               }
               return Center(
