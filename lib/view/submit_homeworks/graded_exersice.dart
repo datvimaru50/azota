@@ -58,6 +58,7 @@ class _GradedExersiceState extends State<GradedExersice> {
                 child: Column(
                   children: [
                     Container(
+                      alignment: Alignment.topLeft,
                       padding: EdgeInsets.all(15),
                       child: Text(
                         'Bài tập ngày ${DateFormat.yMd().format(DateTime.parse(widget.homeworkObj["createdAt"]))}'

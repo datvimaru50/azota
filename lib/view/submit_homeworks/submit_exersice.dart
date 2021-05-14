@@ -122,6 +122,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
       return Container(
           padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
           child: GridView.count(
+            physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             crossAxisCount: 3,
             mainAxisSpacing: 3,
@@ -376,48 +377,59 @@ class _SubmitExersiceState extends State<SubmitExersice> {
         ? Column(
             children: [
               Container(
+                alignment: Alignment.center,
+                child: Text(
+                  'Lớp: ' + widget.classroomObj['name'].toString(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+                padding: EdgeInsets.only(top: 10),
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: Colors.black),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Mã bài tập:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                      TextSpan(
+                        text: widget.homeworkObj['hashId'].toString(),
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                ),
+                padding: EdgeInsets.only(top: 4, bottom: 10),
+              ),
+              Container(
                 child: Column(
                   children: [
                     Container(
                       alignment: Alignment.center,
-                      child: Text(
-                        'Lớp: ' + widget.classroomObj['name'].toString(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                      padding: EdgeInsets.only(top: 10),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      child: RichText(
-                        text: TextSpan(
-                          style: TextStyle(color: Colors.black),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'Mã bài tập:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                              ),
-                            ),
-                            TextSpan(
-                              text: widget.homeworkObj['hashId'].toString(),
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                          ],
-                        ),
-                      ),
-                      padding: EdgeInsets.only(top: 4, bottom: 10),
-                    ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                      child: Column(
                         children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 15, right: 10, top: 15, bottom: 15),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Bài tập ngày: ${DateFormat.yMd().format(DateTime.parse(widget.homeworkObj['createdAt']))}',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.only(top: 2, bottom: 8),
                             child: Text(
                               'Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(widget.homeworkObj["deadline"]))}',
                               style: TextStyle(
@@ -425,19 +437,15 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          Flexible(
-                            child: Container(
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.only(
-                                  right: 10, top: 10, bottom: 10),
-                              child: Text(
-                                widget.studentObj["fullName"],
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Tên học sinh: ' + widget.studentObj["fullName"],
+                              style: TextStyle(
+                                color: Colors.white,
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                       color: Color(0xff00a7d0),
