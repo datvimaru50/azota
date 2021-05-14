@@ -230,7 +230,8 @@ class _HistorySubmitState extends State<HistorySubmit> {
                 )
               ],
             ),
-      margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20),
+      margin:
+          const EdgeInsets.only(left: 20.0, right: 20.0, top: 20, bottom: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
         border: Border.all(

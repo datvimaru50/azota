@@ -36,7 +36,10 @@ class _SubmitFormState extends State<SubmitForm> {
     return Scaffold(
       backgroundColor: Color(0xFFecf0f5),
       appBar: AppBar(
-        title: Text('Nộp bài'),
+        title: Text(
+          'Nộp bài',
+          style: TextStyle(fontSize: 18),
+        ),
       ),
       body: FutureBuilder<HomeworkHashIdInfo>(
         future: homeworkHashIdInfo,
@@ -45,40 +48,6 @@ class _SubmitFormState extends State<SubmitForm> {
             return Center(
               child: ListView(
                 children: <Widget>[
-                  Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Lớp: ' + snapshot.data.classroomObj['name'].toString(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                    padding: EdgeInsets.only(top: 10),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    child: RichText(
-                      text: TextSpan(
-                        style: TextStyle(color: Colors.black),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: 'Mã bài tập:',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13,
-                            ),
-                          ),
-                          TextSpan(
-                            text:
-                                snapshot.data.homeworkObj['hashId'].toString(),
-                            style: TextStyle(color: Colors.blue),
-                          ),
-                        ],
-                      ),
-                    ),
-                    padding: EdgeInsets.only(top: 4, bottom: 10),
-                  ),
                   Platform.isIOS
                       ? SubmitExersice(
                           homeworkObj: snapshot.data.homeworkObj,

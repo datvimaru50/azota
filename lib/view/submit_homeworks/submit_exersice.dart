@@ -376,39 +376,41 @@ class _SubmitExersiceState extends State<SubmitExersice> {
         ? Column(
             children: [
               Container(
-                child: Text(
-                  'Lớp: ${widget.classroomObj["name"]}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
-                padding: EdgeInsets.only(top: 10),
-              ),
-              Container(
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(color: Colors.black),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: 'Mã bài tập:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' ${widget.homeworkObj["hashId"]}',
-                        style: TextStyle(fontSize: 13, color: Colors.blue),
-                      ),
-                    ],
-                  ),
-                ),
-                padding: EdgeInsets.only(top: 10),
-              ),
-              Container(
                 child: Column(
                   children: [
+                    Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Lớp: ' + widget.classroomObj['name'].toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      padding: EdgeInsets.only(top: 10),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: RichText(
+                        text: TextSpan(
+                          style: TextStyle(color: Colors.black),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'Mã bài tập:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                            TextSpan(
+                              text: widget.homeworkObj['hashId'].toString(),
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                      ),
+                      padding: EdgeInsets.only(top: 4, bottom: 10),
+                    ),
                     Container(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -425,7 +427,7 @@ class _SubmitExersiceState extends State<SubmitExersice> {
                           ),
                           Flexible(
                             child: Container(
-                              alignment: Alignment.topRight,
+                              alignment: Alignment.center,
                               padding: EdgeInsets.only(
                                   right: 10, top: 10, bottom: 10),
                               child: Text(

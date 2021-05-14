@@ -28,6 +28,7 @@ class GradedExersice extends StatefulWidget {
 }
 
 class _GradedExersiceState extends State<GradedExersice> {
+  final f = new DateFormat('yyyy-MM-dd hh:mm');
   Future<String> _buildWebUrl(String answerId) async {
     final token = await Prefs.getPref(ANONYMOUS_TOKEN);
     final baseAccess =
@@ -57,21 +58,14 @@ class _GradedExersiceState extends State<GradedExersice> {
                 child: Column(
                   children: [
                     Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(15),
-                            child: Text(
-                              'Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(widget.homeworkObj["deadline"]))}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
+                      padding: EdgeInsets.all(15),
+                      child: Text(
+                        'Bài tập ngày ${DateFormat.yMd().format(DateTime.parse(widget.homeworkObj["createdAt"]))}'
+                        ' (Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(widget.homeworkObj["deadline"]))})',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
                       ),
                       color: Color(0xff00a7d0),
                     ),
@@ -89,42 +83,67 @@ class _GradedExersiceState extends State<GradedExersice> {
                         color: Color(0xfff2f2f2),
                       ),
                     ),
-                    // Container(
-                    //   alignment: Alignment.topLeft,
-                    //   child: RichText(
-                    //     text: TextSpan(
-                    //       style: TextStyle(color: Colors.black),
-                    //       children: <TextSpan>[
-                    //         TextSpan(
-                    //           text: 'Bài làm',
-                    //           style: TextStyle(
-                    //             fontWeight: FontWeight.bold,
-                    //             fontSize: 13,
-                    //           ),
-                    //         ),
-                    //         TextSpan(
-                    //           text:
-                    //               '(Đã nộp bài lúc: ${DateFormat.yMd().format(DateTime.parse(widget.answerObj["createdAt"]))})',
-                    //           style: TextStyle(fontSize: 13),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    //   padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                    // ),
-                    // Container(
-                    //   alignment: Alignment.center,
-                    //   child: Text(widget.answerObj["files"]),
-                    //   padding: EdgeInsets.all(15),
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(5.0),
-                    //     border: Border.all(
-                    //       color: Colors.black12,
-                    //     ),
-                    //     color: Colors.white,
-                    //   ),
-                    //   margin: EdgeInsets.only(left: 20, right: 20),
-                    // ),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      child: RichText(
+                        text: TextSpan(
+                          style: TextStyle(color: Colors.black),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'Bài làm',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                            TextSpan(
+                              text:
+                                  '(Đã nộp bài lúc: ${f.format(DateTime.parse(widget.answerObj["createdAt"]))} )',
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                      padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                    ),
+                    Container(
+                      child: GridView.count(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        childAspectRatio: 4,
+                        crossAxisCount: 2,
+                        children: [
+                          ...jsonDecode(widget.answerObj['files']).map(
+                            (dynamic item) => Container(
+                              padding:
+                                  EdgeInsets.only(top: 6, left: 3, right: 3),
+                              child: Text(
+                                item['name'],
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                                maxLines: 1,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                border: Border.all(
+                                  color: Colors.black12,
+                                ),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          color: Colors.black12,
+                        ),
+                      ),
+                      margin: EdgeInsets.only(left: 20, right: 20),
+                      padding: EdgeInsets.all(5),
+                    ),
                     Padding(
                         padding: EdgeInsets.all(10),
                         child: GestureDetector(

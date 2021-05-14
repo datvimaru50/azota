@@ -50,6 +50,34 @@ class HomeworkController extends ControllerMVC {
     }
   }
 
+  static Future<GetAnswersOfParent> getAnswers() async {
+    final token = await Prefs.getPref(ANONYMOUS_TOKEN);
+    final response = await http.Client().get(AZO_GET_ANSWERS, headers: {
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+    print(token.toString());
+    switch (response.statusCode) {
+      case 200:
+        final resBod = jsonDecode(response.body);
+        if (resBod['success'] == 1) {
+          print('1');
+          return GetAnswersOfParent.fromJson(resBod);
+        } else {
+          print('2');
+          throw ERR_INVALID_LOGIN_INFO;
+        }
+        break;
+
+      case 400:
+        throw ERR_BAD_REQUEST;
+        break;
+
+      default:
+        throw ERR_SERVER_CONNECT;
+    }
+  }
+
   /* **********************************
   Get homework info from hashId
   <after update parent>
@@ -92,7 +120,7 @@ class HomeworkController extends ControllerMVC {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
-
+    print(token.toString());
     switch (response.statusCode) {
       case 200:
         final Map<String, dynamic> resBody = json.decode(response.body);

@@ -111,6 +111,7 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
       return Container(
           padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
           child: GridView.count(
+            physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             crossAxisCount: 3,
             mainAxisSpacing: 3,
@@ -297,12 +298,23 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
                 child: Column(
                   children: [
                     Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                      child: Column(
                         children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 15, right: 10, top: 15, bottom: 15),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Bài tập ngày: ${DateFormat.yMd().format(DateTime.parse(widget.homeworkObj['createdAt']))}',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.only(top: 2, bottom: 8),
                             child: Text(
                               'Hạn nộp: ${DateFormat.yMd().format(DateTime.parse(widget.homeworkObj["deadline"]))}',
                               style: TextStyle(
@@ -310,19 +322,15 @@ class _SubmitExersiceState extends State<SubmitExersiceAndroid> {
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          Flexible(
-                            child: Container(
-                              alignment: Alignment.topRight,
-                              padding: EdgeInsets.only(
-                                  right: 10, top: 10, bottom: 10),
-                              child: Text(
-                                widget.studentObj["fullName"],
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
+                          Container(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Tên học sinh: ' + widget.studentObj["fullName"],
+                              style: TextStyle(
+                                color: Colors.white,
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                       color: Color(0xff00a7d0),

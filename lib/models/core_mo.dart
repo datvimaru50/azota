@@ -161,3 +161,28 @@ class GetShowAddNew {
     );
   }
 }
+
+class GetAnswersOfParent {
+  // Iterable answerObjs;
+  // dynamic homeworkObjs;
+  // dynamic classroomObj;
+  // dynamic studentObj;
+  dynamic data;
+
+  GetAnswersOfParent({
+    // this.homeworkObjs,
+    // this.answerObjs,
+    // this.studentObj,
+    // this.classroomObj,
+    this.data,
+  });
+
+  factory GetAnswersOfParent.fromJson(Map<String, dynamic> json) =>
+      GetAnswersOfParent(
+        // homeworkObjs: json["homeworkObjs"],
+        // answerObjs: json["answerObjs"],
+        // studentObj: json["studentObj"],
+        // classroomObj: json["classroomObj"],
+        data: json['data'],
+      );
+}

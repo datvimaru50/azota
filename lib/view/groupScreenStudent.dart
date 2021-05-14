@@ -1,4 +1,5 @@
 import 'package:azt/store/notification_store.dart';
+import 'package:azt/view/listExersiceStudent_screen.dart';
 import 'package:azt/view/notificationScreen.dart';
 import 'package:azt/controller/notification_controller.dart';
 import 'package:azt/view/submit_homeworks.dart';
@@ -53,11 +54,7 @@ class _GroupScreenStudentState extends State<GroupScreenStudent> {
           NotificationScreen(
             role: 'parent',
           ),
-          Center(
-            child: Text(
-              'Tính năng đang cập nhật!',
-            ),
-          ),
+          ListExersiceStudent(),
           UserProfileStudent(),
         ],
         onPageChanged: onPageChanged,
@@ -66,7 +63,7 @@ class _GroupScreenStudentState extends State<GroupScreenStudent> {
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.room_preferences_outlined),
+            icon: Icon(Icons.send),
             label: 'Nộp bài',
             backgroundColor: Color(0xff17A2B8),
           ),
