@@ -75,5 +75,11 @@
 	<string>2252284608446108140</string>
 	<key>ZaloAppKey</key>
 	<string>8CEsOGn8XInSHBg5Il0n</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Explain why your app uses music</string>
+	<key>UISupportsDocumentBrowser</key>
+	<bool>true</bool>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<bool>true</bool>
 </dict>
 </plist>
