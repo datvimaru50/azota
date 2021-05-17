@@ -90,7 +90,7 @@ class HomeworkController extends ControllerMVC {
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
-
+    print(':::::::::::::::::::::::::::::::::;' + token);
     switch (response.statusCode) {
       case 200:
         final Map<String, dynamic> resBody = json.decode(response.body);

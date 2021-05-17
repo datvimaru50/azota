@@ -6,6 +6,9 @@ const AZT_DEV_SERVER = "https://azota.vn/api";
 const AZO_REGISTER = "$AZT_DEV_SERVER/auth/register";
 const AZO_LOGIN = "$AZT_DEV_SERVER/auth/login";
 
+const AZO_REGISTER_STUDENT = "$AZT_DEV_SERVER/Auth/ReRegister";
+const AZO_LOGIN_STUDENT = "$AZT_DEV_SERVER/auth/login";
+
 const AZO_AUTH_INFO = "$AZT_DEV_SERVER/auth/info";
 const AZO_AUTH_ZALO = "$AZT_DEV_SERVER/auth/AuhenByZalo";
 const AZO_AUTH_APPLE = "$AZT_DEV_SERVER/auth/RegisterByAppleId";

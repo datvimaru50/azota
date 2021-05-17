@@ -525,10 +525,12 @@ class _ListExersiceStudentState extends State<ListExersiceStudent> {
                     ],
                   );
                 } else if (snapshot.hasError) {
-                  return Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.all(20),
-                    child: Text('Kiểm tra lại kết nối'),
+                  return Center(
+                    child: Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.all(20),
+                      child: Text('Bạn chưa có bài tập nào được giao!'),
+                    ),
                   );
                 }
                 return Container(
