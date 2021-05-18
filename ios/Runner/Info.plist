@@ -75,11 +75,5 @@
 	<string>2252284608446108140</string>
 	<key>ZaloAppKey</key>
 	<string>8CEsOGn8XInSHBg5Il0n</string>
-	<key>NSAppleMusicUsageDescription</key>
-    <string>Music!</string>
-    <key>kTCCServiceMediaLibrary</key>
-    <string>media</string>
-	<key>NSRemindersUsageDescription</key>
-    <string>reminders</string>
 </dict>
 </plist>

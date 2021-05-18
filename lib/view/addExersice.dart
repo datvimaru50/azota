@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/view/detailClass_teacher.dart';
 import 'package:date_time_picker/date_time_picker.dart';
@@ -11,7 +12,6 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:mime/mime.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:azt/controller/upload_controller.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 typedef void OnDownloadProgressCallback(int receivedBytes, int totalBytes);
 typedef void OnUploadProgressCallback(int sentBytes, int totalBytes);
@@ -46,32 +46,30 @@ class _AddExersiceState extends State<AddExersice> {
   List<dynamic> imgUploadedFiles = [];
 
   Future<void> loadFiles() async {
-    if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-      FilePickerResult result = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-        type: FileType.custom,
-        allowedExtensions: [
-          'mp3',
-          'mp4',
-          'mov',
-          'jpg',
-          'png',
-          'jpeg',
-          'doc',
-          'docx',
-          'xls',
-          'xlsx',
-          'pdf'
-        ],
-      );
-      if (result != null) {
-        setState(() {
-          filePaths = result.paths.map((path) => path).toList();
-        });
-      } else {
-        print('User không chọn file!');
-      }
-      openAppSettings();
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: [
+        'mp3',
+        'mp4',
+        'mov',
+        'jpg',
+        'png',
+        'jpeg',
+        'doc',
+        'docx',
+        'xls',
+        'xlsx',
+        'pdf'
+      ],
+    );
+
+    if (result != null) {
+      setState(() {
+        filePaths = result.paths.map((path) => path).toList();
+      });
+    } else {
+      print('User không chọn file!');
     }
   }
 
@@ -364,7 +362,22 @@ class _AddExersiceState extends State<AddExersice> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: loadFiles,
+                          onTap: () {
+                            showAdaptiveActionSheet(
+                              context: context,
+                              actions: <BottomSheetAction>[
+                                BottomSheetAction(
+                                    title: Text('Thư viện ảnh'),
+                                    onPressed: () {}),
+                                BottomSheetAction(
+                                    title: Text('Tài liệu'),
+                                    onPressed: loadFiles),
+                              ],
+                              cancelAction: CancelAction(
+                                title: Text('Cancel'),
+                              ), // onPressed parameter is optional by default will dismiss the ActionSheet
+                            );
+                          },
                           child: Container(
                             alignment: Alignment.topLeft,
                             child: Text(
