@@ -76,10 +76,10 @@
 	<key>ZaloAppKey</key>
 	<string>8CEsOGn8XInSHBg5Il0n</string>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>Explain why your app uses music</string>
-	<key>UISupportsDocumentBrowser</key>
-	<bool>true</bool>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<bool>true</bool>
+    <string>Music!</string>
+    <key>kTCCServiceMediaLibrary</key>
+    <string>media</string>
+	<key>NSRemindersUsageDescription</key>
+    <string>reminders</string>
 </dict>
 </plist>
