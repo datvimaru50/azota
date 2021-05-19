@@ -362,22 +362,25 @@ class _AddExersiceState extends State<AddExersice> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                            showAdaptiveActionSheet(
-                              context: context,
-                              actions: <BottomSheetAction>[
-                                BottomSheetAction(
-                                    title: Text('Thư viện ảnh'),
-                                    onPressed: () {}),
-                                BottomSheetAction(
-                                    title: Text('Tài liệu'),
-                                    onPressed: loadFiles),
-                              ],
-                              cancelAction: CancelAction(
-                                title: Text('Cancel'),
-                              ), // onPressed parameter is optional by default will dismiss the ActionSheet
-                            );
-                          },
+                          onTap: Platform.isIOS
+                              ? () {
+                                  showAdaptiveActionSheet(
+                                    context: context,
+                                    actions: <BottomSheetAction>[
+                                      BottomSheetAction(
+                                        title: Text('Thư viện ảnh'),
+                                        onPressed: () {},
+                                      ),
+                                      BottomSheetAction(
+                                          title: Text('Tài liệu'),
+                                          onPressed: loadFiles),
+                                    ],
+                                    cancelAction: CancelAction(
+                                      title: Text('Cancel'),
+                                    ),
+                                  );
+                                }
+                              : loadFiles,
                           child: Container(
                             alignment: Alignment.topLeft,
                             child: Text(
