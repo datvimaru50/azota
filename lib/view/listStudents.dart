@@ -242,19 +242,24 @@ class _ListStudentsState extends State<ListStudents> {
                                                 ),
                                                 Container(
                                                   alignment: Alignment.topLeft,
-                                                  child: Text(
-                                                    'Ngày sinh: ' +
-                                                        DateFormat.yMd().format(
-                                                          DateTime.parse(
-                                                            item['birthday'],
+                                                  child: item['birthday'] ==
+                                                          null
+                                                      ? Text('')
+                                                      : Text(
+                                                          'Ngày sinh: ' +
+                                                              DateFormat.yMd()
+                                                                  .format(
+                                                                DateTime.parse(
+                                                                  item[
+                                                                      'birthday'],
+                                                                ),
+                                                              ),
+                                                          style: TextStyle(
+                                                            fontSize: 13,
+                                                            fontStyle: FontStyle
+                                                                .italic,
                                                           ),
                                                         ),
-                                                    style: TextStyle(
-                                                      fontSize: 13,
-                                                      fontStyle:
-                                                          FontStyle.italic,
-                                                    ),
-                                                  ),
                                                 )
                                               ],
                                             ),

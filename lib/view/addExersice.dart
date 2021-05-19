@@ -46,30 +46,28 @@ class _AddExersiceState extends State<AddExersice> {
   List<dynamic> imgUploadedFiles = [];
 
   Future<void> loadFiles(String getFile) async {
-    print(getFile);
-
     FilePickerResult result = getFile == "fileDoccuments"
         ? await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.custom,
-      allowedExtensions: [
-        'mp3',
-        'mp4',
-        'mov',
-        'jpg',
-        'png',
-        'jpeg',
-        'doc',
-        'docx',
-        'xls',
-        'xlsx',
-        'pdf'
-      ],
-    )
+            allowMultiple: true,
+            type: FileType.custom,
+            allowedExtensions: [
+              'mp3',
+              'mp4',
+              'mov',
+              'jpg',
+              'png',
+              'jpeg',
+              'doc',
+              'docx',
+              'xls',
+              'xlsx',
+              'pdf'
+            ],
+          )
         : await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.image,
-    );
+            allowMultiple: true,
+            type: FileType.image,
+          );
 
     if (result != null) {
       setState(() {
@@ -233,12 +231,12 @@ class _AddExersiceState extends State<AddExersice> {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (context) => DetailClass(
-                idClassroom: widget.id,
-                countStudents: widget.countStudents,
-                className: widget.className,
-                homeworks: widget.homeworks,
-              )),
-              (Route<dynamic> route) => false);
+                    idClassroom: widget.id,
+                    countStudents: widget.countStudents,
+                    className: widget.className,
+                    homeworks: widget.homeworks,
+                  )),
+          (Route<dynamic> route) => false);
     } catch (err) {
       Fluttertoast.showToast(
           msg: "Tạo bài tập không thành công",
@@ -299,186 +297,186 @@ class _AddExersiceState extends State<AddExersice> {
       ),
       body: submitStatus == SubmitStatus.submitting
           ? Center(
-        child: Container(
-          width: 150,
-          child: LoadingIndicator(
-            indicatorType: Indicator.ballClipRotatePulse,
-            color: Color(0xff00c0ef),
-          ),
-        ),
-      )
+              child: Container(
+                width: 150,
+                child: LoadingIndicator(
+                  indicatorType: Indicator.ballClipRotatePulse,
+                  color: Color(0xff00c0ef),
+                ),
+              ),
+            )
           : ListView(
-        children: [
-          Container(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                      top: 15,
-                      bottom: 5,
-                    ),
-                    child: DateTimePicker(
-                      controller: deadline,
-                      decoration: InputDecoration(
-                          suffixIcon:
-                          Icon(Icons.event, color: Colors.black54),
-                          border: OutlineInputBorder(),
-                          labelText: 'Chọn thời hạn nộp bài tập* ',
-                          counterStyle: TextStyle(color: Colors.black)),
-                      dateMask: 'dd/MM/yyyy',
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                      icon: Icon(Icons.event),
-                      dateLabelText: 'Ngày',
-                      onChanged: (value) => print(value),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Vui lòng chọn ngày sinh';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) => print(value),
-                    ),
-                  ),
-                  Container(
-                    child: TextFormField(
-                      controller: content,
-                      minLines: 6,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 10,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Nội dung bài tập* ',
-                      ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Vui lòng điền nội dung bài tập';
-                        }
-                        return null;
-                      },
-                    ),
-                    margin: EdgeInsets.only(
-                      top: 20,
-                      left: 20,
-                      right: 20,
-                      bottom: 15,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: Platform.isIOS
-                        ? () async {
-                      showAdaptiveActionSheet(
-                        context: context,
-                        actions: <BottomSheetAction>[
-                          BottomSheetAction(
-                            title: Text('Thư viện ảnh'),
-                            onPressed: () {
-                              loadFiles("fileAlbumImages");
-                            },
-                          ),
-                          BottomSheetAction(
-                            title: Text('Tài liệu'),
-                            onPressed: () {
-                              loadFiles("fileDoccuments");
-                            },
-                          ),
-                        ],
-                        cancelAction: CancelAction(
-                          title: Text('Cancel'),
-                        ),
-                      );
-                    }
-                        : () {
-                      loadFiles("fileDoccuments");
-                    },
-                    child: Container(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        '+ Thêm file bài tập',
-                        style:
-                        TextStyle(color: Colors.blue, fontSize: 16),
-                      ),
-                      padding:
-                      EdgeInsets.only(left: 32, top: 10, bottom: 5),
-                    ),
-                  ),
-                  Container(
-                    child: Text(
-                        'Chụp ảnh bài tập hoặc chọn file word, pdf, audio, video có sẵn'),
-                    margin:
-                    EdgeInsets.only(left: 30, right: 30, bottom: 5),
-                  ),
-                  buildGridViewFiles(),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
                       children: [
-                        ElevatedButton(
-                          onPressed: submitStatus ==
-                              SubmitStatus.submitting
-                              ? null
-                              : () {
-                            if (_formKey.currentState.validate()) {
-                              handleSubmit();
-                            }
-                          },
-                          child: Text(
-                            'THÊM BÀI TẬP',
+                        Container(
+                          margin: EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                            top: 15,
+                            bottom: 5,
+                          ),
+                          child: DateTimePicker(
+                            controller: deadline,
+                            decoration: InputDecoration(
+                                suffixIcon:
+                                    Icon(Icons.event, color: Colors.black54),
+                                border: OutlineInputBorder(),
+                                labelText: 'Chọn thời hạn nộp bài tập* ',
+                                counterStyle: TextStyle(color: Colors.black)),
+                            dateMask: 'dd/MM/yyyy',
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                            icon: Icon(Icons.event),
+                            dateLabelText: 'Ngày',
+                            onChanged: (value) => print(value),
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Vui lòng chọn ngày sinh';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) => print(value),
                           ),
                         ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.yellow[800],
+                        Container(
+                          child: TextFormField(
+                            controller: content,
+                            minLines: 6,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 10,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Nội dung bài tập* ',
+                            ),
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Vui lòng điền nội dung bài tập';
+                              }
+                              return null;
+                            },
                           ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailClass(
-                                  idClassroom: widget.id,
-                                  countStudents: widget.countStudents,
-                                  className: widget.className,
-                                  homeworks: widget.homeworks,
-                                  homeworkId: widget.homeworkId,
+                          margin: EdgeInsets.only(
+                            top: 20,
+                            left: 20,
+                            right: 20,
+                            bottom: 15,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: Platform.isIOS
+                              ? () async {
+                                  showAdaptiveActionSheet(
+                                    context: context,
+                                    actions: <BottomSheetAction>[
+                                      BottomSheetAction(
+                                        title: Text('Thư viện ảnh'),
+                                        onPressed: () {
+                                          loadFiles("fileAlbumImages");
+                                        },
+                                      ),
+                                      BottomSheetAction(
+                                        title: Text('Tài liệu'),
+                                        onPressed: () {
+                                          loadFiles("fileDoccuments");
+                                        },
+                                      ),
+                                    ],
+                                    cancelAction: CancelAction(
+                                      title: Text('Cancel'),
+                                    ),
+                                  );
+                                }
+                              : () {
+                                  loadFiles("fileDoccuments");
+                                },
+                          child: Container(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              '+ Thêm file bài tập',
+                              style:
+                                  TextStyle(color: Colors.blue, fontSize: 16),
+                            ),
+                            padding:
+                                EdgeInsets.only(left: 32, top: 10, bottom: 5),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                              'Chụp ảnh bài tập hoặc chọn file word, pdf, audio, video có sẵn'),
+                          margin:
+                              EdgeInsets.only(left: 30, right: 30, bottom: 5),
+                        ),
+                        buildGridViewFiles(),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton(
+                                onPressed: submitStatus ==
+                                        SubmitStatus.submitting
+                                    ? null
+                                    : () {
+                                        if (_formKey.currentState.validate()) {
+                                          handleSubmit();
+                                        }
+                                      },
+                                child: Text(
+                                  'THÊM BÀI TẬP',
                                 ),
                               ),
-                            );
-                          },
-                          child: Text(
-                            'HỦY',
-                            style: TextStyle(color: Colors.white),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.yellow[800],
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailClass(
+                                        idClassroom: widget.id,
+                                        countStudents: widget.countStudents,
+                                        className: widget.className,
+                                        homeworks: widget.homeworks,
+                                        homeworkId: widget.homeworkId,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'HỦY',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
+                          padding: EdgeInsets.only(
+                              left: 35, top: 10, bottom: 10, right: 35),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(width: 2, color: Colors.black12),
+                            ),
+                          ),
+                        )
                       ],
                     ),
-                    padding: EdgeInsets.only(
-                        left: 35, top: 10, bottom: 10, right: 35),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        top: BorderSide(width: 2, color: Colors.black12),
-                      ),
+                  ),
+                  margin:
+                      const EdgeInsets.only(left: 20.0, right: 20.0, top: 15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    border: Border.all(
+                      width: 1,
+                      color: Color(0xff00a7d0),
                     ),
-                  )
-                ],
-              ),
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
-            margin:
-            const EdgeInsets.only(left: 20.0, right: 20.0, top: 15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              border: Border.all(
-                width: 1,
-                color: Color(0xff00a7d0),
-              ),
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

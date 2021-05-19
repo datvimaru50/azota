@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:azt/view/login_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:azt/config/global.dart';
 import 'package:azt/config/connect.dart';
@@ -51,6 +52,9 @@ class LoginController extends ControllerMVC {
               loginType == 'ANONYMOUS' ? ANONYMOUS_TOKEN : ACCESS_TOKEN,
               authUser.rememberToken);
           Prefs.savePrefs(UPLOAD_TOKEN, authUser.uploadToken);
+          var usqqqqerData =
+              userData['roles'] == {"PARENT": 1} ? 'phụ huynh' : 'giáo viên';
+
           return authUser;
         } else {
           throw ERR_INVALID_LOGIN_INFO;

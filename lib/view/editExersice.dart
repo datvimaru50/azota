@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:azt/controller/classroom_controller.dart';
 import 'package:azt/controller/upload_controller.dart';
 import 'package:azt/view/detailClass_teacher.dart';
@@ -55,24 +56,29 @@ class _EditExersiceState extends State<EditExersice> {
   List<dynamic> imgUpdate = [];
   SubmitStatus submitStatus = SubmitStatus.notSubmitted;
 
-  Future<void> loadFiles() async {
-    FilePickerResult result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.custom,
-      allowedExtensions: [
-        'mp3',
-        'mp4',
-        'mov',
-        'jpg',
-        'png',
-        'jpeg',
-        'doc',
-        'docx',
-        'xls',
-        'xlsx',
-        'pdf'
-      ],
-    );
+  Future<void> loadFiles(String getFile) async {
+    FilePickerResult result = getFile == "fileDoccuments"
+        ? await FilePicker.platform.pickFiles(
+            allowMultiple: true,
+            type: FileType.custom,
+            allowedExtensions: [
+              'mp3',
+              'mp4',
+              'mov',
+              'jpg',
+              'png',
+              'jpeg',
+              'doc',
+              'docx',
+              'xls',
+              'xlsx',
+              'pdf'
+            ],
+          )
+        : await FilePicker.platform.pickFiles(
+            allowMultiple: true,
+            type: FileType.image,
+          );
 
     if (result != null) {
       setState(() {
@@ -458,7 +464,32 @@ class _EditExersiceState extends State<EditExersice> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: loadFiles,
+                          onTap: Platform.isIOS
+                              ? () async {
+                                  showAdaptiveActionSheet(
+                                    context: context,
+                                    actions: <BottomSheetAction>[
+                                      BottomSheetAction(
+                                        title: Text('Thư viện ảnh'),
+                                        onPressed: () {
+                                          loadFiles("fileAlbumImages");
+                                        },
+                                      ),
+                                      BottomSheetAction(
+                                        title: Text('Tài liệu'),
+                                        onPressed: () {
+                                          loadFiles("fileDoccuments");
+                                        },
+                                      ),
+                                    ],
+                                    cancelAction: CancelAction(
+                                      title: Text('Cancel'),
+                                    ),
+                                  );
+                                }
+                              : () {
+                                  loadFiles("fileDoccuments");
+                                },
                           child: Container(
                             alignment: Alignment.topLeft,
                             child: Text(
