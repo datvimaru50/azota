@@ -45,24 +45,31 @@ class _AddExersiceState extends State<AddExersice> {
 
   List<dynamic> imgUploadedFiles = [];
 
-  Future<void> loadFiles() async {
-    FilePickerResult result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.custom,
-      allowedExtensions: [
-        'mp3',
-        'mp4',
-        'mov',
-        'jpg',
-        'png',
-        'jpeg',
-        'doc',
-        'docx',
-        'xls',
-        'xlsx',
-        'pdf'
-      ],
-    );
+  Future<void> loadFiles(String getFile) async {
+    print(getFile);
+
+    FilePickerResult result = getFile == "fileDoccuments"
+        ? await FilePicker.platform.pickFiles(
+            allowMultiple: true,
+            type: FileType.custom,
+            allowedExtensions: [
+              'mp3',
+              'mp4',
+              'mov',
+              'jpg',
+              'png',
+              'jpeg',
+              'doc',
+              'docx',
+              'xls',
+              'xlsx',
+              'pdf'
+            ],
+          )
+        : await FilePicker.platform.pickFiles(
+            allowMultiple: true,
+            type: FileType.image,
+          );
 
     if (result != null) {
       setState(() {
@@ -363,24 +370,31 @@ class _AddExersiceState extends State<AddExersice> {
                         ),
                         GestureDetector(
                           onTap: Platform.isIOS
-                              ? () {
+                              ? () async {
                                   showAdaptiveActionSheet(
                                     context: context,
                                     actions: <BottomSheetAction>[
                                       BottomSheetAction(
                                         title: Text('Thư viện ảnh'),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          loadFiles("fileAlbumImages");
+                                        },
                                       ),
                                       BottomSheetAction(
-                                          title: Text('Tài liệu'),
-                                          onPressed: loadFiles),
+                                        title: Text('Tài liệu'),
+                                        onPressed: () {
+                                          loadFiles("fileDoccuments");
+                                        },
+                                      ),
                                     ],
                                     cancelAction: CancelAction(
                                       title: Text('Cancel'),
                                     ),
                                   );
                                 }
-                              : loadFiles,
+                              : () {
+                                  loadFiles("fileDoccuments");
+                                },
                           child: Container(
                             alignment: Alignment.topLeft,
                             child: Text(
