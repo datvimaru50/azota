@@ -6,6 +6,7 @@ import 'package:azt/models/core_mo.dart';
 import 'package:azt/view/addStudents.dart';
 import 'package:azt/view/detailClass_teacher.dart';
 import 'package:azt/view/editExersice.dart';
+import 'package:azt/view/marking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
@@ -16,7 +17,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:share/share.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 enum SubmitStatus { notSubmitted, notMarked, marked }
 
@@ -68,17 +68,6 @@ class _DetailExersiceState extends State<DetailExersice>
 
     classroomHashIdInfo = ClassroomController.studentClassroom(
         id: widget.idClassroom); // list all student
-    setBaseAccess();
-  }
-
-  void setBaseAccess() async {
-    var token = await Prefs.getPref(ACCESS_TOKEN);
-    setState(() {
-      accessToken = token;
-      baseAccess =
-          '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
-    });
-    print('accesstoken::: ' + token);
   }
 
   Future<void> _showMyDialog(int studentId) {
@@ -746,10 +735,22 @@ class _DetailExersiceState extends State<DetailExersice>
                                                                       : checkSubmitStatus(item["id"]) ==
                                                                               SubmitStatus.notMarked
                                                                           ? () {
-                                                                              launch('$baseAccess/en/admin/mark-exercise/' + getAnswerId(item['id']).toString());
+                                                                              Navigator.push(
+                                                                                context,
+                                                                                MaterialPageRoute(
+                                                                                  builder: (context) => MarkingScreen(answerId: getAnswerId(item['id']).toString()),
+                                                                                ),
+                                                                              );
                                                                             }
                                                                           : () {
-                                                                              launch('$baseAccess/en/admin/mark-exercise/' + getAnswerId(item['id']).toString());
+                                                                              Navigator.push(
+                                                                                context,
+                                                                                MaterialPageRoute(
+                                                                                  builder: (context) => MarkingScreen(answerId: getAnswerId(item['id']).toString()),
+                                                                                ),
+                                                                              );
+
+                                                                              // launch('$baseAccess/en/admin/mark-exercise/' + getAnswerId(item['id']).toString());
                                                                             },
                                                                   style: ElevatedButton
                                                                       .styleFrom(
