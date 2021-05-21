@@ -738,7 +738,20 @@ class _DetailExersiceState extends State<DetailExersice>
                                                                               Navigator.push(
                                                                                 context,
                                                                                 MaterialPageRoute(
-                                                                                  builder: (context) => MarkingScreen(answerId: getAnswerId(item['id']).toString()),
+                                                                                  builder: (context) => MarkingScreen(
+                                                                                    answerId: getAnswerId(item['id']).toString(),
+                                                                                    fullName: item['fullName'],
+                                                                                    className: widget.className,
+                                                                                    hashId: widget.hashId,
+                                                                                    deadline: widget.deadline,
+                                                                                    exerciseId: widget.exerciseId,
+                                                                                    content: widget.content,
+                                                                                    countStudents: widget.countStudents,
+                                                                                    homeworkId: widget.homeworkId,
+                                                                                    homeworks: widget.homeworks,
+                                                                                    idClassroom: widget.idClassroom,
+                                                                                    idExersice: widget.idExersice,
+                                                                                  ),
                                                                                 ),
                                                                               );
                                                                             }
@@ -746,7 +759,20 @@ class _DetailExersiceState extends State<DetailExersice>
                                                                               Navigator.push(
                                                                                 context,
                                                                                 MaterialPageRoute(
-                                                                                  builder: (context) => MarkingScreen(answerId: getAnswerId(item['id']).toString()),
+                                                                                  builder: (context) => MarkingScreen(
+                                                                                    answerId: getAnswerId(item['id']).toString(),
+                                                                                    fullName: item['fullName'],
+                                                                                    className: widget.className,
+                                                                                    hashId: widget.hashId,
+                                                                                    deadline: widget.deadline,
+                                                                                    exerciseId: widget.exerciseId,
+                                                                                    content: widget.content,
+                                                                                    countStudents: widget.countStudents,
+                                                                                    homeworkId: widget.homeworkId,
+                                                                                    homeworks: widget.homeworks,
+                                                                                    idClassroom: widget.idClassroom,
+                                                                                    idExersice: widget.idExersice,
+                                                                                  ),
                                                                                 ),
                                                                               );
 
