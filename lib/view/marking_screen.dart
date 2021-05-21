@@ -114,7 +114,9 @@ class MarkingScreenState extends State<MarkingScreen> {
             Stack(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height / 1.1483871,
+                  height: Platform.isIOS
+                      ? MediaQuery.of(context).size.height / 1.148389
+                      : MediaQuery.of(context).size.height / 1.1483871,
                   child: WebView(
                     initialUrl: baseAccess +
                         '/en/admin/mark-exercise/' +
