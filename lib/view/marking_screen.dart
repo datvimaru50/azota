@@ -109,7 +109,7 @@ class MarkingScreenState extends State<MarkingScreen> {
             },
           ),
         ),
-        body: Column(
+        body: ListView(
           children: <Widget>[
             Stack(
               children: [
