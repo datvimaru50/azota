@@ -131,7 +131,7 @@ class MarkingScreenState extends State<MarkingScreen> {
                       ),
                       Container(
                         height: 40,
-                        color: Colors.white,
+                        color: Color(0xFF00a7d0),
                         alignment: Alignment.center,
                         child: Text(
                           widget.fullName + ', ' + widget.className,
