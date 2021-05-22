@@ -72,6 +72,8 @@ class _SubmitFormState extends State<SubmitForm> {
                   HistorySubmit(
                     homeworkObj: snapshot.data.homeworkObj,
                     answerHistoryObjs: snapshot.data.answerHistoryObjs,
+                    classroomObj: snapshot.data.classroomObj,
+                    studentObj: snapshot.data.studentObj,
                   ),
                 ],
               ),

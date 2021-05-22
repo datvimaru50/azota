@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:azt/config/global.dart';
 import 'package:azt/controller/homework_controller.dart';
 import 'package:azt/view/groupScreenStudent.dart';
+import 'package:azt/view/view_mark_student.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/models/core_mo.dart';
@@ -41,8 +42,12 @@ class _ListExersiceStudentState extends State<ListExersiceStudent> {
   }
 
   _showAnswer(
-      {int homeworkId, dynamic answerObjs, String content, String hashId}) {
-    // print(answerObjs.length.toString() + 'qq');
+      {int homeworkId,
+      dynamic answerObjs,
+      String content,
+      String hashId,
+      String fullName,
+      String className}) {
     for (var i2 = 0; i2 < answerObjs.length; i2++) {
       if (answerObjs[i2]['homeworkId'] == homeworkId) {
         return Column(
@@ -183,11 +188,17 @@ class _ListExersiceStudentState extends State<ListExersiceStudent> {
                       Padding(
                         padding: EdgeInsets.all(10),
                         child: GestureDetector(
-                          // onTap: () async {
-                          //   final String url =
-                          //       await _buildWebUrl(widget.answerObj["id"].toString());
-                          //   launch(url);
-                          // },
+                          onTap: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ViewMarking(
+                                    answerId: answerObjs[i2]['id'].toString(),
+                                    fullName: fullName,
+                                    className: className),
+                              ),
+                            );
+                          },
                           child: RichText(
                             text: TextSpan(
                               style: TextStyle(color: Colors.black),
@@ -211,8 +222,17 @@ class _ListExersiceStudentState extends State<ListExersiceStudent> {
                       ),
                       Container(
                         alignment: Alignment.center,
-                        child: Text('${answerObjs[i2]['point']}',
-                            style: TextStyle(fontSize: 70, color: Colors.red)),
+                        child:
+                            jsonDecode(answerObjs[i2]['result'])['hideMark'] !=
+                                    true
+                                ? Text(
+                                    '${answerObjs[i2]['point']}',
+                                    style: TextStyle(
+                                        fontSize: 70, color: Colors.red),
+                                  )
+                                : SizedBox(
+                                    height: 50,
+                                  ),
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5.0),
@@ -366,29 +386,30 @@ class _ListExersiceStudentState extends State<ListExersiceStudent> {
   }
 
   _showAnswerPoid({int homeworkId, dynamic answerObjs}) {
-    // print(answerObjs.length.toString() + 'qq');
     for (var i2 = 0; i2 < answerObjs.length; i2++) {
       if (answerObjs[i2]['homeworkId'] == homeworkId) {
-        return answerObjs[i2]['point'] == 0
+        return answerObjs[i2]['result'] == null
             ? Container()
-            : Container(
-                alignment: Alignment.center,
-                height: 32,
-                width: 32,
-                child: Text(
-                  answerObjs[i2]['point'].toString().replaceAll(".0", ""),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                margin: EdgeInsets.only(left: 7),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.red,
-                ),
-              );
+            : jsonDecode(answerObjs[i2]['result'])['hideMark'] == true
+                ? Container()
+                : Container(
+                    alignment: Alignment.center,
+                    height: 32,
+                    width: 32,
+                    child: Text(
+                      answerObjs[i2]['point'].toString().replaceAll(".0", ""),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    margin: EdgeInsets.only(left: 7),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Colors.red,
+                    ),
+                  );
       }
     }
     return Container();
@@ -496,6 +517,12 @@ class _ListExersiceStudentState extends State<ListExersiceStudent> {
                                           alignment: Alignment.center,
                                           child: Container(
                                             child: _showAnswer(
+                                              fullName: item['studentObj']
+                                                      ['fullName']
+                                                  .toString(),
+                                              className: item['classroomObj']
+                                                      ['name']
+                                                  .toString(),
                                               hashId: itemm['hashId'],
                                               content: itemm['content'],
                                               homeworkId: itemm['id'],

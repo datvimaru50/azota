@@ -1,12 +1,10 @@
 import 'dart:convert';
+import 'package:azt/view/view_mark_student.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:azt/config/connect.dart';
-import 'package:azt/config/global.dart';
 
 // ignore: must_be_immutable
 class GradedExersice extends StatefulWidget {
@@ -29,13 +27,6 @@ class GradedExersice extends StatefulWidget {
 
 class _GradedExersiceState extends State<GradedExersice> {
   final f = new DateFormat('yyyy-MM-dd hh:mm');
-  Future<String> _buildWebUrl(String answerId) async {
-    final token = await Prefs.getPref(ANONYMOUS_TOKEN);
-    final baseAccess =
-        '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
-
-    return '$baseAccess/en/xem-bai-tap/$answerId';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,10 +139,16 @@ class _GradedExersiceState extends State<GradedExersice> {
                     Padding(
                         padding: EdgeInsets.all(10),
                         child: GestureDetector(
-                          onTap: () async {
-                            final String url = await _buildWebUrl(
-                                widget.answerObj["id"].toString());
-                            launch(url);
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ViewMarking(
+                                    answerId: widget.answerObj["id"].toString(),
+                                    fullName: widget.studentObj["fullName"],
+                                    className: widget.classroomObj["name"]),
+                              ),
+                            );
                           },
                           child: RichText(
                             text: TextSpan(

@@ -1,11 +1,11 @@
 import 'dart:convert';
+import 'package:azt/view/view_mark_student.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:azt/config/connect.dart';
 import 'package:azt/config/global.dart';
@@ -15,24 +15,20 @@ class HistorySubmit extends StatefulWidget {
   HistorySubmit({
     this.homeworkObj,
     this.answerHistoryObjs,
+    this.studentObj,
+    this.classroomObj,
   });
 
   final Iterable answerHistoryObjs;
   final dynamic homeworkObj;
+  final dynamic studentObj;
+  final dynamic classroomObj;
 
   @override
   _HistorySubmitState createState() => _HistorySubmitState();
 }
 
 class _HistorySubmitState extends State<HistorySubmit> {
-  Future<String> _buildWebUrl(String homeworkId, String answerId) async {
-    final token = await Prefs.getPref(ANONYMOUS_TOKEN);
-    final baseAccess =
-        '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
-
-    return '$baseAccess/en/xem-bai-tap/$homeworkId/$answerId';
-  }
-
   @override
   void initState() {
     super.initState();
@@ -116,10 +112,19 @@ class _HistorySubmitState extends State<HistorySubmit> {
                               padding: EdgeInsets.all(10),
                               child: GestureDetector(
                                 onTap: () async {
-                                  final String url = await _buildWebUrl(
-                                      item["homeworkId"].toString(),
-                                      item["id"].toString());
-                                  launch(url);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ViewMarking(
+                                        viewScreen: 'history',
+                                        answerId: item["id"].toString(),
+                                        homeworkId:
+                                            item["homeworkId"].toString(),
+                                        fullName: widget.studentObj["fullName"],
+                                        className: widget.classroomObj["name"],
+                                      ),
+                                    ),
+                                  );
                                 },
                                 child: RichText(
                                   text: TextSpan(
