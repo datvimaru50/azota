@@ -84,39 +84,13 @@ class MarkingScreenState extends State<MarkingScreen> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Chấm bài', style: TextStyle(fontSize: 18)),
-          leading: IconButton(
-            icon: Icon(Icons.keyboard_arrow_left),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailExersice(
-                    hashId: widget.hashId,
-                    deadline: widget.deadline,
-                    exerciseId: widget.exerciseId,
-                    content: widget.content,
-                    countStudents: widget.countStudents,
-                    className: widget.className,
-                    homeworkId: widget.homeworkId,
-                    homeworks: widget.homeworks,
-                    idClassroom: widget.idClassroom,
-                    idExersice: widget.idExersice,
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
         body: Column(
           children: <Widget>[
             Stack(
               children: [
                 Container(
-                  height: Platform.isIOS
-                      ? MediaQuery.of(context).size.height / 1.148389
-                      : MediaQuery.of(context).size.height / 1.1483871,
+                  padding: EdgeInsets.only(top: 90),
+                  height: MediaQuery.of(context).size.height / 1,
                   child: WebView(
                     initialUrl: baseAccess +
                         '/en/admin/mark-exercise/' +
@@ -124,21 +98,54 @@ class MarkingScreenState extends State<MarkingScreen> {
                     javascriptMode: JavascriptMode.unrestricted,
                   ),
                 ),
-                Positioned(
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 42,
-                    child: Text(
-                      widget.fullName + ', ' + widget.className,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                Container(
+                  child: Column(
+                    children: [
+                      AppBar(
+                        title: Text(
+                          'Chấm điểm',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        leading: IconButton(
+                          icon: Icon(Icons.keyboard_arrow_left),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailExersice(
+                                  hashId: widget.hashId,
+                                  deadline: widget.deadline,
+                                  exerciseId: widget.exerciseId,
+                                  content: widget.content,
+                                  countStudents: widget.countStudents,
+                                  className: widget.className,
+                                  homeworkId: widget.homeworkId,
+                                  homeworks: widget.homeworks,
+                                  idClassroom: widget.idClassroom,
+                                  idExersice: widget.idExersice,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    color: Colors.white,
+                      Container(
+                        height: 40,
+                        color: Colors.white,
+                        alignment: Alignment.center,
+                        child: Text(
+                          widget.fullName + ', ' + widget.className,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                )
               ],
-            )
+            ),
           ],
         ),
       ),
