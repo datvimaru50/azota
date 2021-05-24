@@ -148,8 +148,7 @@ class _DetailExersiceState extends State<DetailExersice>
 
   // ignore: unused_element
   Future<void> _copyToClipboard() async {
-    await Clipboard.setData(
-        ClipboardData(text: "https://azota.vn/en/bai-tap/" + widget.hashId));
+    await Clipboard.setData(ClipboardData(text: widget.hashId));
   }
 
   // ignore: missing_return
@@ -220,7 +219,7 @@ class _DetailExersiceState extends State<DetailExersice>
                             _copyToClipboard();
                             print('Button Clicked.');
                             Fluttertoast.showToast(
-                                msg: 'Sao chép thành công đường dẫn nộp bài',
+                                msg: 'Sao chép thành công mã bài tập',
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.TOP,
                                 timeInSecForIos: 1,
@@ -232,7 +231,7 @@ class _DetailExersiceState extends State<DetailExersice>
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5.0))),
                           label: Text(
-                            'COPY LINK',
+                            'COPY MÃ',
                             style: TextStyle(color: Colors.black, fontSize: 12),
                           ),
                           icon: Icon(Icons.copy_sharp, color: Colors.black),
