@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:azt/config/connect.dart';
@@ -99,53 +100,48 @@ class MarkingScreenState extends State<MarkingScreen> {
                   ),
                 ),
                 Container(
-                  color: Colors.blue,
-                  height: 89,
-                ),
-                Container(
-                  child: Column(
-                    children: [
-                      AppBar(
-                        backgroundColor: Colors.blue[600],
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(''),
-                            Text(
-                              widget.fullName + ', ' + widget.className,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
+                  height: 90,
+                  child: AppBar(
+                    backgroundColor: Colors.blue[600],
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(''),
+                        Text(
+                          widget.fullName + ', ' + widget.className,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                    leading: IconButton(
+                      icon: Icon(Icons.keyboard_arrow_left),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailExersice(
+                              hashId: widget.hashId,
+                              deadline: widget.deadline,
+                              exerciseId: widget.exerciseId,
+                              content: widget.content,
+                              countStudents: widget.countStudents,
+                              className: widget.className,
+                              homeworkId: widget.homeworkId,
+                              homeworks: widget.homeworks,
+                              idClassroom: widget.idClassroom,
+                              idExersice: widget.idExersice,
                             ),
-                          ],
-                        ),
-                        leading: IconButton(
-                          icon: Icon(Icons.keyboard_arrow_left),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailExersice(
-                                  hashId: widget.hashId,
-                                  deadline: widget.deadline,
-                                  exerciseId: widget.exerciseId,
-                                  content: widget.content,
-                                  countStudents: widget.countStudents,
-                                  className: widget.className,
-                                  homeworkId: widget.homeworkId,
-                                  homeworks: widget.homeworks,
-                                  idClassroom: widget.idClassroom,
-                                  idExersice: widget.idExersice,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
+                  // ],
+                  // ),
                 )
               ],
             ),
