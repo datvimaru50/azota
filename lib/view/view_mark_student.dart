@@ -62,7 +62,7 @@ class ViewMarkingState extends State<ViewMarking> {
             Stack(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 90),
+                  padding: EdgeInsets.only(top: 55),
                   height: MediaQuery.of(context).size.height / 1,
                   child: WebView(
                     initialUrl: widget.viewScreen == 'history'
@@ -75,32 +75,27 @@ class ViewMarkingState extends State<ViewMarking> {
                   ),
                 ),
                 Container(
+                  color: Colors.blue,
+                  height: 92,
+                ),
+                Container(
                   child: Column(
                     children: [
                       AppBar(
-                        title: Text(
-                          'Chấm điểm',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        leading: IconButton(
-                          icon: Icon(Icons.keyboard_arrow_left),
-                          onPressed: () {
-                            Navigator.pop(
-                              context,
-                            );
-                          },
-                        ),
-                      ),
-                      Container(
-                        height: 40,
-                        color: Color(0xFF00a7d0),
-                        alignment: Alignment.center,
-                        child: Text(
-                          widget.fullName + ', ' + widget.className,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        backgroundColor: Colors.blue[600],
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(''),
+                            Text(
+                              widget.fullName + ', ' + widget.className,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],

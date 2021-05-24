@@ -89,7 +89,7 @@ class MarkingScreenState extends State<MarkingScreen> {
             Stack(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 90),
+                  padding: EdgeInsets.only(top: 55),
                   height: MediaQuery.of(context).size.height / 1,
                   child: WebView(
                     initialUrl: baseAccess +
@@ -99,9 +99,14 @@ class MarkingScreenState extends State<MarkingScreen> {
                   ),
                 ),
                 Container(
+                  color: Colors.blue,
+                  height: 92,
+                ),
+                Container(
                   child: Column(
                     children: [
                       AppBar(
+                        backgroundColor: Colors.blue[600],
                         title: Text(
                           'Chấm điểm',
                           style: TextStyle(fontSize: 18),
