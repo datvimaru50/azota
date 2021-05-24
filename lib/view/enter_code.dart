@@ -119,25 +119,25 @@ class _CodeFormState extends State<CodeForm> {
                             ),
                           ),
                         ),
-                        Container(
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(top: 10, left: 20, right: 20),
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('Bạn đã có tài khoản,'),
-                                Text(
-                                  ' Đăng Nhập',
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                        // Container(
+                        //   alignment: Alignment.center,
+                        //   margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+                        //   child: GestureDetector(
+                        //     onTap: () {},
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: [
+                        //         Text('Bạn đã có tài khoản,'),
+                        //         Text(
+                        //           ' Đăng Nhập',
+                        //           style: TextStyle(
+                        //             color: Colors.blue,
+                        //           ),
+                        //         )
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
