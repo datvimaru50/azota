@@ -89,7 +89,7 @@ class MarkingScreenState extends State<MarkingScreen> {
             Stack(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 55),
+                  padding: EdgeInsets.only(top: 50),
                   height: MediaQuery.of(context).size.height / 1,
                   child: WebView(
                     initialUrl: baseAccess +
@@ -100,16 +100,26 @@ class MarkingScreenState extends State<MarkingScreen> {
                 ),
                 Container(
                   color: Colors.blue,
-                  height: 92,
+                  height: 89,
                 ),
                 Container(
                   child: Column(
                     children: [
                       AppBar(
                         backgroundColor: Colors.blue[600],
-                        title: Text(
-                          'Chấm điểm',
-                          style: TextStyle(fontSize: 18),
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(''),
+                            Text(
+                              widget.fullName + ', ' + widget.className,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
                         leading: IconButton(
                           icon: Icon(Icons.keyboard_arrow_left),
@@ -132,18 +142,6 @@ class MarkingScreenState extends State<MarkingScreen> {
                               ),
                             );
                           },
-                        ),
-                      ),
-                      Container(
-                        height: 40,
-                        color: Color(0xFF00a7d0),
-                        alignment: Alignment.center,
-                        child: Text(
-                          widget.fullName + ', ' + widget.className,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
                         ),
                       ),
                     ],

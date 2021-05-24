@@ -429,12 +429,6 @@ class _ListExersiceStudentState extends State<ListExersiceStudent> {
       onWillPop: _onBackPressed,
       child: Scaffold(
         backgroundColor: Color(0xFFecf0f5),
-        appBar: AppBar(
-          title: Text(
-            'Danh sách bài tập trong lớp',
-            style: TextStyle(fontSize: 18),
-          ),
-        ),
         body: ListView(
           children: [
             FutureBuilder<GetAnswersOfParent>(

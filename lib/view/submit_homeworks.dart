@@ -35,12 +35,6 @@ class _SubmitFormState extends State<SubmitForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFecf0f5),
-      appBar: AppBar(
-        title: Text(
-          'Nộp bài',
-          style: TextStyle(fontSize: 18),
-        ),
-      ),
       body: FutureBuilder<HomeworkHashIdInfo>(
         future: homeworkHashIdInfo,
         builder: (context, snapshot) {

@@ -62,7 +62,7 @@ class ViewMarkingState extends State<ViewMarking> {
             Stack(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 55),
+                  padding: EdgeInsets.only(top: 35),
                   height: MediaQuery.of(context).size.height / 1,
                   child: WebView(
                     initialUrl: widget.viewScreen == 'history'
@@ -76,7 +76,7 @@ class ViewMarkingState extends State<ViewMarking> {
                 ),
                 Container(
                   color: Colors.blue,
-                  height: 92,
+                  height: 75,
                 ),
                 Container(
                   child: Column(
