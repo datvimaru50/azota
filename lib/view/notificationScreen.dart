@@ -54,8 +54,9 @@ class _NotificationScreenState extends State<NotificationScreen>
       baseAccess =
           '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
     });
-
-    print('accesstoken::: ' + token);
+    widget.role == 'parent'
+        ? print('accesstoken:::1 ' + token)
+        : print('accesstoken:::2 ' + token);
   }
 
   Future<void> _showUpdateDialog(
@@ -129,6 +130,8 @@ class _NotificationScreenState extends State<NotificationScreen>
                                     answerId: _notiArr
                                         .elementAt(index)['answerId']
                                         .toString(),
+                                    webUrl:
+                                        '$baseAccess/en/xem-bai-tap/${_notiArr.elementAt(index)['answerId']}',
                                   )
                                 : NotificationTeacherItem(
                                     noticeId: _notiArr.elementAt(index)['id'],

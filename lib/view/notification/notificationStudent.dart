@@ -5,6 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:azt/controller/notification_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:azt/store/notification_store.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NotificationStudentItem extends StatefulWidget {
   NotificationStudentItem(
@@ -17,7 +18,8 @@ class NotificationStudentItem extends StatefulWidget {
       this.submitTime,
       this.token,
       this.answerId,
-      this.resendNote});
+      this.resendNote,
+      this.webUrl});
 
   final int noticeId;
   final bool read;
@@ -29,6 +31,7 @@ class NotificationStudentItem extends StatefulWidget {
   final String submitTime;
   final String token;
   final String answerId;
+  final String webUrl;
 
   @override
   _NotifStudentItemState createState() => _NotifStudentItemState();
@@ -83,10 +86,11 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
               noticeId: widget.noticeId, accType: 'parent');
           await Provider.of<NotiModel>(context, listen: false)
               .setTotal(accType: 'parent');
-
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => GroupScreenStudent()),
-              (Route<dynamic> route) => false);
+          launch(widget.webUrl);
+          print(widget.webUrl);
+          // Navigator.of(context).pushAndRemoveUntil(
+          //     MaterialPageRoute(builder: (context) => GroupScreenStudent()),
+          //     (Route<dynamic> route) => false);
         },
         child: Container(
           child: Row(
