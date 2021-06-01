@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:azt/config/connect.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
+import 'package:azt/view/notificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:azt/view/register_screen.dart';
@@ -71,7 +72,9 @@ class _LoginFormState extends State<LoginForm> {
 
   void _enterNotificationScreenTeacher() {
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
+        // MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
+        MaterialPageRoute(
+            builder: (context) => NotificationScreen(role: 'teacher')),
         (Route<dynamic> route) => false);
   }
 

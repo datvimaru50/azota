@@ -3,6 +3,7 @@ import 'package:azt/config/global.dart';
 import 'package:azt/controller/homework_controller.dart';
 import 'package:azt/controller/update_controller.dart';
 import 'package:azt/view/groupScreenStudent.dart';
+import 'package:azt/view/notificationScreen.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/models/core_mo.dart';
@@ -200,7 +201,10 @@ class _ChooseStudentState extends State<ChooseStudent> {
                                                       MaterialPageRoute(
                                                           builder: (context) =>
                                                               // ignore: missing_required_param
-                                                              GroupScreenStudent()),
+                                                              // GroupScreenStudent()),
+                                                              NotificationScreen(
+                                                                  role:
+                                                                      'parent')),
                                                       (Route<dynamic> route) =>
                                                           false);
                                             } catch (err) {

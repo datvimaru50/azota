@@ -1,5 +1,6 @@
 import 'package:azt/view/groupScreenStudent.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
+import 'package:azt/view/notificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/config/global.dart';
 import 'package:azt/view/mainHome.dart';
@@ -26,7 +27,8 @@ class _MyAppState extends State<Splash> {
         future: accessToken,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return GroupScreenTeacher();
+            // return GroupScreenTeacher();
+            return NotificationScreen(role: 'teacher');
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -34,7 +36,8 @@ class _MyAppState extends State<Splash> {
             future: anonymousToken,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return GroupScreenStudent();
+                return NotificationScreen(role: 'parent');
+                // return GroupScreenStudent();
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }

@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'dart:io';
+import 'package:azt/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:azt/view/notification/notificationStudent.dart';
@@ -277,22 +278,22 @@ class _NotificationScreenState extends State<NotificationScreen>
               widget.role == 'teacher' ? 'Thông báo' : 'Thông báo phụ huynh',
               style: TextStyle(fontSize: 18),
             ),
-            _notiArr.length != 0
-                ? IconButton(
-                    icon: Icon(Icons.delete_forever_outlined),
-                    onPressed: () {
-                      showAnimatedDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext context) {
-                          return ClassicGeneralDialogWidget(
-                            actions: [
-                              Container(
-                                width: 300,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    TextButton(
+            IconButton(
+              icon: Icon(Icons.more_vert),
+              onPressed: () {
+                showAnimatedDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (BuildContext context) {
+                    return ClassicGeneralDialogWidget(
+                      actions: [
+                        Container(
+                          width: 300,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              _notiArr.length != 0
+                                  ? TextButton(
                                       onPressed: () async {
                                         Navigator.pop(context);
                                         await NotiController.markAllAsRead(
@@ -309,8 +310,10 @@ class _NotificationScreenState extends State<NotificationScreen>
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    TextButton(
+                                    )
+                                  : Container(),
+                              _notiArr.length != 0
+                                  ? TextButton(
                                       onPressed: () async {
                                         Navigator.pop(context);
                                         await NotiController.deleteAllNotif(
@@ -327,20 +330,70 @@ class _NotificationScreenState extends State<NotificationScreen>
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
+                                    )
+                                  : Container(),
+                              widget.role == "teacher"
+                                  ? TextButton(
+                                      onPressed: () {
+                                        SavedToken.deleteToken(accessToken);
+                                        Prefs.deletePref();
+                                        _firebaseMessaging.deleteInstanceID();
+                                        Navigator.pop(context);
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  Splash()),
+                                          ModalRoute.withName('/'),
+                                        );
+                                      },
+                                      child: Container(
+                                        // color: Colors.black,
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Đăng xuất',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : TextButton(
+                                      onPressed: () {
+                                        Prefs.deletePref();
+                                        // _firebaseMessaging.deleteInstanceID();
+                                        Navigator.pop(context);
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  Splash()),
+                                          ModalRoute.withName('/'),
+                                        );
+                                      },
+                                      child: Container(
+                                        // color: Colors.black,
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'Đăng xuất',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      ),
+                                    )
                             ],
-                          );
-                        },
-                        animationType: DialogTransitionType.size,
-                        curve: Curves.fastOutSlowIn,
-                        duration: Duration(seconds: 1),
-                      );
-                    },
-                  )
-                : Container()
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                  animationType: DialogTransitionType.size,
+                  curve: Curves.fastOutSlowIn,
+                  duration: Duration(seconds: 1),
+                );
+              },
+            )
           ],
         ),
       ),
