@@ -129,7 +129,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                         .elementAt(index)['answerId']
                                         .toString(),
                                     webUrl:
-                                        '$baseAccess/en/xem-bai-tap/${_notiArr.elementAt(index)['answerId']}',
+                                        '$baseAccess/en/homework/view-homework/${_notiArr.elementAt(index)['answerId']}',
                                   )
                                 : NotificationTeacherItem(
                                     noticeId: _notiArr.elementAt(index)['id'],
@@ -146,7 +146,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                                     submitTime:
                                         _notiArr.elementAt(index)['createdAt'],
                                     webUrl:
-                                        '$baseAccess/en/admin/mark-exercise/${_notiArr.elementAt(index)['answerId']}',
+                                        '$baseAccess/en/admin/homework/mark-exercise/${_notiArr.elementAt(index)['answerId']}',
                                   );
                           }),
                     )

@@ -82,15 +82,10 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
           setState(() {
             _clickedStatus = true;
           });
-          await NotiController.markAsRead(
-              noticeId: widget.noticeId, accType: 'parent');
-          await Provider.of<NotiModel>(context, listen: false)
-              .setTotal(accType: 'parent');
+          await NotiController.markAsRead(noticeId: widget.noticeId);
+          await Provider.of<NotiModel>(context, listen: false).setTotal();
           launch(widget.webUrl);
           print(widget.webUrl);
-          // Navigator.of(context).pushAndRemoveUntil(
-          //     MaterialPageRoute(builder: (context) => GroupScreenStudent()),
-          //     (Route<dynamic> route) => false);
         },
         child: Container(
           child: Row(
