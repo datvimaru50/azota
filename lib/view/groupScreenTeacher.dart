@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class GroupScreenTeacher extends StatefulWidget {
+  GroupScreenTeacher({@required this.role});
+  final String role;
   @override
   _GroupScreenTeacherState createState() => _GroupScreenTeacherState();
 }
@@ -49,8 +51,8 @@ class _GroupScreenTeacherState extends State<GroupScreenTeacher> {
     return Scaffold(
       body: new PageView(
         children: [
-          ListClass(),
-          NotificationScreen(role: 'teacher'),
+          // ListClass(),
+          NotificationScreen(role: widget.role),
           Center(
             child: Text(
               'Tính năng đang cập nhật!',
@@ -63,11 +65,11 @@ class _GroupScreenTeacherState extends State<GroupScreenTeacher> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.room_preferences_outlined),
-            label: 'Lớp học',
-            backgroundColor: Color(0xff17A2B8),
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.room_preferences_outlined),
+          //   label: 'Lớp học',
+          //   backgroundColor: Color(0xff17A2B8),
+          // ),
           BottomNavigationBarItem(
             // icon: Icon(Icons.notifications_none),
             icon: Stack(

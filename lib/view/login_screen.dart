@@ -70,11 +70,22 @@ class _LoginFormState extends State<LoginForm> {
         fontSize: 16.0);
   }
 
-  void _enterNotificationScreenTeacher() {
+  String _getUserRole(String roles){
+    var role = 'teacher';
+    var rolesJson = json.decode(roles);
+
+    if(rolesJson['STUDENT'] == 1){
+      role =  'student';
+    }
+
+    return role;
+  }
+
+  void _enterNotificationScreenTeacher(String role) {
     Navigator.of(context).pushAndRemoveUntil(
         // MaterialPageRoute(builder: (context) => GroupScreenTeacher()),
         MaterialPageRoute(
-            builder: (context) => NotificationScreen(role: 'teacher')),
+            builder: (context) => GroupScreenTeacher(role: role,)),
         (Route<dynamic> route) => false);
   }
 
@@ -83,8 +94,9 @@ class _LoginFormState extends State<LoginForm> {
       setState(() {
         _isSigningIn = true;
       });
-      await LoginController.login('NORMAL', params);
-      _enterNotificationScreenTeacher();
+      var user = await LoginController.login('NORMAL', params);
+      var role = _getUserRole(user.roles);
+      _enterNotificationScreenTeacher(role);
     } catch (err) {
       _showErrorToast(err.toString());
       setState(() {
@@ -99,8 +111,9 @@ class _LoginFormState extends State<LoginForm> {
         _isSigningIn = true;
       });
       ZaloLoginResult res = await ZaloLogin().logIn();
-      await LoginController.login('ZALO', {"code": res.oauthCode, "role": 1});
-      _enterNotificationScreenTeacher();
+      var user = await LoginController.login('ZALO', {"code": res.oauthCode, "role": 1});
+      var role = _getUserRole(user.roles);
+      _enterNotificationScreenTeacher(role);
     } catch (err) {
       _showErrorToast(err.toString());
       setState(() {
@@ -123,9 +136,10 @@ class _LoginFormState extends State<LoginForm> {
             });
             var bytes = utf8.encode(SECRET_KEY + result.credential.user);
             var digest = md5.convert(bytes);
-            await LoginController.login('APPLE',
+            var user = await LoginController.login('APPLE',
                 {'md5': digest.toString(), 'email': result.credential.user});
-            _enterNotificationScreenTeacher();
+            var role = _getUserRole(user.roles);
+            _enterNotificationScreenTeacher(role);
           } catch (err) {
             _showErrorToast(err.toString());
             setState(() {
@@ -316,19 +330,19 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RegisterScreen()),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Text('Đăng ký tài khoản'),
-                        ),
-                      )
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => RegisterScreen()),
+                      //     );
+                      //   },
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.only(top: 10),
+                      //     child: Text('Đăng ký tài khoản'),
+                      //   ),
+                      // )
                     ],
                   ),
                   margin:

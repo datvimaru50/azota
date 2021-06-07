@@ -59,6 +59,7 @@ dependencies:
   flutter_absolute_path: ^1.0.6
   flutter_slidable: ^0.5.7
   share: ^2.0.1
+  jwt_decoder: ^2.0.1
   adaptive_action_sheet: ^1.0.8
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

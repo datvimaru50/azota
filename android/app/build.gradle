@@ -38,8 +38,8 @@ android {
         applicationId "azt.azt"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 20
-        versionName '1.1.2'
+        versionCode 28
+        versionName '2.3.2'
     }
 
     signingConfigs {

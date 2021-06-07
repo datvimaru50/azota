@@ -37,7 +37,7 @@ class _NotificationScreenState extends State<NotificationScreen>
 
   void fetchNoti() async {
     var result = await Provider.of<NotiModel>(context, listen: false)
-        .setTotal(accType: widget.role == 'parent' ? 'parent' : 'teacher');
+        .setTotal();
 
     setState(() {
       doneLoading = true;
@@ -46,17 +46,15 @@ class _NotificationScreenState extends State<NotificationScreen>
   }
 
   void setBaseAccess() async {
-    var token = widget.role == 'parent'
-        ? await Prefs.getPref(ANONYMOUS_TOKEN)
-        : await Prefs.getPref(ACCESS_TOKEN);
+    var token = await Prefs.getPref(ACCESS_TOKEN);
     setState(() {
       accessToken = token;
       baseAccess =
           '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
     });
-    widget.role == 'parent'
-        ? print('accesstoken:::1 ' + token)
-        : print('accesstoken:::2 ' + token);
+    widget.role == 'student'
+        ? print('accesstoken:::student ' + token)
+        : print('accesstoken:::teacher ' + token);
   }
 
   Future<void> _showUpdateDialog(
@@ -109,7 +107,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                           padding: EdgeInsets.all(8),
                           itemCount: _notiArr.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return widget.role == 'parent'
+                            return widget.role == 'student'
                                 ? NotificationStudentItem(
                                     noticeId: _notiArr.elementAt(index)['id'],
                                     notiType: _notiArr.elementAt(index)['type'],
@@ -169,14 +167,6 @@ class _NotificationScreenState extends State<NotificationScreen>
     });
   }
 
-  // Future<void> _checkNewVersion() async {
-  //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
-  //   NewVersionInfo newVersionInfo = await UpdateController.getNewVersionInfo();
-  //   if(packageInfo.version != newVersionInfo.version){
-  //     _showUpdateDialog(newVersionInfo.description);
-  //   }
-  // }
-
   _checkUpdateNoticeType(dynamic message) {
     final String type =
         Platform.isAndroid ? message['data']['type'] : message['type'];
@@ -235,25 +225,13 @@ class _NotificationScreenState extends State<NotificationScreen>
     _firebaseMessaging.getToken().then((String token) {
       print('type_acc::::: ' + widget.role);
       assert(token != null);
-      if (widget.role == 'parent') {
-        SavedToken.saveAnonymousToken(token);
-        print('FCManonymous::: ' + token);
-      }
-      if (widget.role == 'teacher') {
         SavedToken.saveToken(token);
         print('FCM::' + token);
-      }
     });
 
     _firebaseMessaging.onTokenRefresh.listen((token) {
       assert(token != null);
-      if (widget.role == 'parent') {
-        SavedToken.saveAnonymousToken(token);
-      }
-      if (widget.role == 'teacher') {
         SavedToken.saveToken(token);
-      }
-      // print('Refresh token: ' + token);
     });
   }
 
@@ -278,7 +256,7 @@ class _NotificationScreenState extends State<NotificationScreen>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.role == 'teacher' ? 'Thông báo' : 'Thông báo phụ huynh',
+              'Thông báo',
               style: TextStyle(fontSize: 18),
             ),
             IconButton(

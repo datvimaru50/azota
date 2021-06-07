@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'package:azt/view/groupScreenStudent.dart';
 import 'package:azt/view/groupScreenTeacher.dart';
 import 'package:azt/view/notificationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:azt/config/global.dart';
-import 'package:azt/view/mainHome.dart';
+import 'package:azt/view/login_screen.dart';
+
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -12,13 +15,11 @@ class Splash extends StatefulWidget {
 
 class _MyAppState extends State<Splash> {
   Future<String> accessToken;
-  Future<String> anonymousToken;
 
   @override
   void initState() {
     super.initState();
     accessToken = Prefs.getPref(ACCESS_TOKEN);
-    anonymousToken = Prefs.getPref(ANONYMOUS_TOKEN);
   }
 
   @override
@@ -27,23 +28,20 @@ class _MyAppState extends State<Splash> {
         future: accessToken,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            // return GroupScreenTeacher();
-            return NotificationScreen(role: 'teacher');
+            Map<String, dynamic> decodedToken = JwtDecoder.decode(snapshot.data);
+
+            var role = 'teacher';
+            var rolesJson = json.decode(decodedToken['roles']);
+
+            if(rolesJson['STUDENT'] == 1){
+              role =  'student';
+            }
+
+            return GroupScreenTeacher(role: role);
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
-          return FutureBuilder(
-            future: anonymousToken,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return NotificationScreen(role: 'parent');
-                // return GroupScreenStudent();
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-              return MainHome();
-            },
-          );
+          return LoginForm();
         });
   }
 }
