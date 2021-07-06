@@ -1,4 +1,5 @@
-import 'package:azt/view/groupScreenStudent.dart';
+import 'package:azt/config/connect.dart';
+import 'package:azt/config/global.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -8,30 +9,9 @@ import 'package:azt/store/notification_store.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NotificationStudentItem extends StatefulWidget {
-  NotificationStudentItem(
-      {this.notiType,
-      this.noticeId,
-      this.read,
-      this.className,
-      this.deadline,
-      this.score,
-      this.submitTime,
-      this.token,
-      this.answerId,
-      this.resendNote,
-      this.webUrl});
+  NotificationStudentItem({@required this.notificationItem,});
 
-  final int noticeId;
-  final bool read;
-  final String resendNote;
-  final String notiType;
-  final String className;
-  final String score;
-  final String deadline;
-  final String submitTime;
-  final String token;
-  final String answerId;
-  final String webUrl;
+  final Map<String, dynamic> notificationItem;
 
   @override
   _NotifStudentItemState createState() => _NotifStudentItemState();
@@ -39,7 +19,8 @@ class NotificationStudentItem extends StatefulWidget {
 
 class _NotifStudentItemState extends State<NotificationStudentItem>
     with AutomaticKeepAliveClientMixin {
-  bool _clickedStatus = false;
+  var baseAccess;
+  var accessToken;
 
   String _buildText(String notiType) {
     switch (notiType) {
@@ -63,6 +44,15 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
     }
   }
 
+  void setBaseAccess() async {
+    var token = await Prefs.getPref(ACCESS_TOKEN);
+    setState(() {
+      accessToken = token;
+      baseAccess =
+      '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
+    });
+  }
+
   @override
   bool get wantKeepAlive => true;
 
@@ -71,6 +61,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
     super.initState();
     Intl.defaultLocale = 'vi_VN';
     initializeDateFormatting();
+    setBaseAccess();
   }
 
   @override
@@ -79,13 +70,10 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
     return Center(
       child: GestureDetector(
         onTap: () async {
-          setState(() {
-            _clickedStatus = true;
-          });
-          await NotiController.markAsRead(noticeId: widget.noticeId);
+          await NotiController.markAsRead(noticeId: widget.notificationItem["id"]);
           await Provider.of<NotiModel>(context, listen: false).setTotal();
-          launch(widget.webUrl);
-          print(widget.webUrl);
+          launch('$baseAccess/en/homework/view-homework/${widget.notificationItem['answerId']}');
+          print('$baseAccess/en/homework/view-homework/${widget.notificationItem['answerId']}');
         },
         child: Container(
           child: Row(
@@ -104,7 +92,7 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                       padding: EdgeInsets.only(top: 10, left: 10, right: 10),
                       child: Center(
                         child: Text(
-                          widget.className,
+                          widget.notificationItem["classroomName"],
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
@@ -132,13 +120,13 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                                   style: DefaultTextStyle.of(context).style,
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: _buildText(widget.notiType),
+                                      text: _buildText(widget.notificationItem["type"]),
                                       style: TextStyle(fontSize: 16),
                                     ),
                                     TextSpan(
                                       text: ' Ngày ' +
                                           DateFormat.yMd().format(
-                                              DateTime.parse(widget.deadline)),
+                                              DateTime.parse(widget.notificationItem["deadline"])),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16),
@@ -152,20 +140,20 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
                               padding: EdgeInsets.only(
                                   left: 10, top: 10, bottom: 10),
                               child: Text(
-                                TimeAgo.timeAgoSinceDate(widget.submitTime),
+                                TimeAgo.timeAgoSinceDate(widget.notificationItem["createdAt"]),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      widget.notiType == 'RESEND_ANSWER'
+                      widget.notificationItem["type"] == 'RESEND_ANSWER'
                           ? Text('')
                           : Container(
                               alignment: Alignment.center,
                               height: 40,
                               width: 40,
                               child: Text(
-                                widget.score,
+                                widget.notificationItem["point"].toString(),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -186,13 +174,13 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
             ],
           ),
           margin: EdgeInsets.only(
-            top: 10,
-            left: 10,
-            right: 10,
+            top: 5,
+            left: 5,
+            right: 5,
           ),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black12),
-            color: _clickedStatus || widget.read
+            color: widget.notificationItem["readAt"] != null
                 ? Colors.black38
                 : Color(0xff00c0ef),
           ),
@@ -210,7 +198,7 @@ class TimeAgo {
     final difference = date2.difference(notificationDate);
 
     if (difference.inDays > 8) {
-      return 'nộp ngày' + DateFormat.yMd().format(DateTime.parse(dateString));
+      return DateFormat.yMd().format(DateTime.parse(dateString));
     } else if ((difference.inDays / 7).floor() >= 1) {
       return (numericDates) ? '1 tuần trước' : '1 tuần trước';
     } else if (difference.inDays >= 2) {

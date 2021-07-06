@@ -292,13 +292,13 @@ class _LoginFormState extends State<LoginForm> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: Text(
-                          '---Hoặc---',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      //   child: Text(
+                      //     '---Hoặc---',
+                      //     style: TextStyle(fontSize: 15),
+                      //   ),
+                      // ),
                       Platform.isAndroid
                           ? Container()
                           : Container(
@@ -307,29 +307,29 @@ class _LoginFormState extends State<LoginForm> {
                                 onPressed: _appleLogIn,
                               ),
                             ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        // ignore: deprecated_member_use
-                        child: OutlineButton.icon(
-                          disabledBorderColor: Colors.blue,
-                          padding: EdgeInsets.only(
-                              top: 5.0, bottom: 5, left: 15, right: 15),
-                          onPressed: _isSigningIn
-                              ? null
-                              : () {
-                                  _loginZalo();
-                                },
-                          icon: Image(
-                            image: AssetImage('assets/zalo.png'),
-                            width: 35,
-                          ),
-                          label: Text(
-                            'Đăng nhập bằng Zalo',
-                            style: TextStyle(
-                                color: Color(0xff17A2B8), fontSize: 15),
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      //   // ignore: deprecated_member_use
+                      //   child: OutlineButton.icon(
+                      //     disabledBorderColor: Colors.blue,
+                      //     padding: EdgeInsets.only(
+                      //         top: 5.0, bottom: 5, left: 15, right: 15),
+                      //     onPressed: _isSigningIn
+                      //         ? null
+                      //         : () {
+                      //             _loginZalo();
+                      //           },
+                      //     icon: Image(
+                      //       image: AssetImage('assets/zalo.png'),
+                      //       width: 35,
+                      //     ),
+                      //     label: Text(
+                      //       'Đăng nhập bằng Zalo',
+                      //       style: TextStyle(
+                      //           color: Color(0xff17A2B8), fontSize: 15),
+                      //     ),
+                      //   ),
+                      // ),
                       // GestureDetector(
                       //   onTap: () {
                       //     Navigator.push(

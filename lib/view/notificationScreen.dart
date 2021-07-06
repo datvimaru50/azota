@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:azt/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
-import 'package:azt/view/notification/notificationStudent.dart';
-import 'package:azt/view/notification/notificationTeacher.dart';
 import 'package:azt/controller/notification_controller.dart';
 import 'package:azt/store/notification_store.dart';
 import 'package:azt/models/firebase_mo.dart';
@@ -13,6 +11,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:azt/config/global.dart';
 import 'package:azt/config/connect.dart';
+
+import 'notification/notificationCardItem.dart';
 
 class NotificationScreen extends StatefulWidget {
   NotificationScreen({@required this.role});
@@ -107,47 +107,7 @@ class _NotificationScreenState extends State<NotificationScreen>
                           padding: EdgeInsets.all(8),
                           itemCount: _notiArr.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return widget.role == 'student'
-                                ? NotificationStudentItem(
-                                    noticeId: _notiArr.elementAt(index)['id'],
-                                    notiType: _notiArr.elementAt(index)['type'],
-                                    read: _notiArr.elementAt(index)['readAt'] !=
-                                            null
-                                        ? true
-                                        : false,
-                                    className: _notiArr
-                                        .elementAt(index)['classroomName'],
-                                    score: _notiArr
-                                        .elementAt(index)['point']
-                                        .toString(),
-                                    deadline:
-                                        _notiArr.elementAt(index)['deadline'],
-                                    submitTime:
-                                        _notiArr.elementAt(index)['createdAt'],
-                                    token: accessToken,
-                                    answerId: _notiArr
-                                        .elementAt(index)['answerId']
-                                        .toString(),
-                                    webUrl:
-                                        '$baseAccess/en/homework/view-homework/${_notiArr.elementAt(index)['answerId']}',
-                                  )
-                                : NotificationTeacherItem(
-                                    noticeId: _notiArr.elementAt(index)['id'],
-                                    read: _notiArr.elementAt(index)['readAt'] !=
-                                            null
-                                        ? true
-                                        : false,
-                                    className: _notiArr
-                                        .elementAt(index)['classroomName'],
-                                    student: _notiArr
-                                        .elementAt(index)['studentName'],
-                                    deadline:
-                                        _notiArr.elementAt(index)['deadline'],
-                                    submitTime:
-                                        _notiArr.elementAt(index)['createdAt'],
-                                    webUrl:
-                                        '$baseAccess/en/admin/homework/mark-exercise/${_notiArr.elementAt(index)['answerId']}',
-                                  );
+                            return NotificationCardItem(notifItem: _notiArr.elementAt(index));
                           }),
                     )
                   ],

@@ -4,7 +4,7 @@ class NotiModel extends ChangeNotifier {
   int totalUnread = 0;
 
   Future<ListNotification> setTotal({String accType='teacher'}) async{
-    ListNotification notiData = accType == 'teacher'? await NotiController.getNoti(1): await NotiController.getNotiAnonymous(1);
+    ListNotification notiData = await NotiController.getNoti(1);
     totalUnread =  notiData.objs.length == 0 ? 0 : notiData.objs.where((item) => item['readAt'] == null).toList().length;
     notifyListeners();
     return notiData;
