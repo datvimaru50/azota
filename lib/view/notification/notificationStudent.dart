@@ -46,10 +46,12 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
 
   void setBaseAccess() async {
     var token = await Prefs.getPref(ACCESS_TOKEN);
+    var base_url = await Prefs.getPref(BASE_URL);
+    print('zzzzz '+base_url);
     setState(() {
       accessToken = token;
       baseAccess =
-      '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
+      '$base_url/en/auth/login?access_token=$token&return_url=';
     });
   }
 
@@ -72,8 +74,20 @@ class _NotifStudentItemState extends State<NotificationStudentItem>
         onTap: () async {
           await NotiController.markAsRead(noticeId: widget.notificationItem["id"]);
           await Provider.of<NotiModel>(context, listen: false).setTotal();
-          launch('$baseAccess/en/homework/view-homework/${widget.notificationItem['answerId']}');
-          print('$baseAccess/en/homework/view-homework/${widget.notificationItem['answerId']}');
+
+          switch (widget.notificationItem["type"]) {
+            case 'HAS_MARK':
+              {
+                launch('$baseAccess/en/homework/view-homework/${widget.notificationItem['answerId']}');
+              }
+              break;
+
+            default: // NEW_HOMEWORK, RESEND_ANSWER
+              {
+                launch('$baseAccess/en/bai-tap/${widget.notificationItem['hashId']}');
+              }
+              break;
+          }
         },
         child: Container(
           child: Row(

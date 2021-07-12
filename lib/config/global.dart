@@ -3,7 +3,7 @@
   * Usage: save, get, delete data from device storage, same as local storage in browser
  */
 import 'package:shared_preferences/shared_preferences.dart';
-
+const BASE_URL = "baseUrl";
 const ACCESS_TOKEN = "accessToken";
 const ANONYMOUS_TOKEN = "anonymousToken";
 const UPLOAD_TOKEN = "uploadToken";

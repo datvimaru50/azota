@@ -25,10 +25,11 @@ class _NotifTeacherItemState extends State<NotificationTeacherItem>
 
   void setBaseAccess() async {
     var token = await Prefs.getPref(ACCESS_TOKEN);
+    var base_url = await Prefs.getPref(BASE_URL);
     setState(() {
       accessToken = token;
       baseAccess =
-      '$AZT_DOMAIN_NAME/en/auth/login?access_token=$token&return_url=';
+      '$base_url/en/auth/login?access_token=$token&return_url=';
     });
   }
 
